@@ -1,0 +1,175 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Cloud Bank - Customer Portal FrontEnd Deployment"
+Parameters:
+  S3BucketAssets:
+    Type: String
+    Description: Bucket name that contains assests.
+Resources:
+  WebSiteS3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      AccessControl: Private
+
+  CloudFrontCloudFrontOriginAccessIdentity:
+    Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "CloudFrontOriginAccessIdentityConfig"
+
+  CloudFrontDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        DefaultRootObject: "index.html"
+        Origins:
+          - DomainName: !Sub "${WebSiteS3Bucket}.s3.amazonaws.com"
+            Id: "cloud-bank-web"
+            OriginPath: ""
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontCloudFrontOriginAccessIdentity}"
+        OriginGroups:
+          Quantity: 0
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - "HEAD"
+            - "GET"
+          CachedMethods:
+            - "HEAD"
+            - "GET"
+          Compress: false
+          DefaultTTL: 86400
+          ForwardedValues:
+            Cookies:
+              Forward: "none"
+            QueryString: false
+          MaxTTL: 31536000
+          MinTTL: 0
+          SmoothStreaming: false
+          TargetOriginId: "cloud-bank-web"
+          ViewerProtocolPolicy: "allow-all"
+        Comment: "Cloud Bank - Customer Portal"
+        PriceClass: "PriceClass_All"
+        Enabled: true
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+          MinimumProtocolVersion: "TLSv1"
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: "none"
+        HttpVersion: "http2"
+        IPV6Enabled: true
+
+  WebSiteS3BucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref WebSiteS3Bucket
+      PolicyDocument:
+        Version: "2008-10-17"
+        Id: "PolicyForCloudFrontPrivateContent"
+        Statement:
+          - Sid: "1"
+            Effect: "Allow"
+            Principal:
+              AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontCloudFrontOriginAccessIdentity}"
+            Action: "s3:GetObject"
+            Resource: !Sub "arn:aws:s3:::${WebSiteS3Bucket}/*"
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: CloudWatchLogsPermissions
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:*
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: WebSiteS3BucketPermissions
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:GetObjectAcl
+                  - s3:GetObjectTagging
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                  - s3:PutObjectTagging
+                  - s3:DeleteObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub "arn:aws:s3:::${WebSiteS3Bucket}/*"
+                  - !Sub "arn:aws:s3:::${WebSiteS3Bucket}"
+        - PolicyName: OriginS3BucketPermissions
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub "arn:aws:s3:::${S3BucketAssets}/*"
+                  - !Sub "arn:aws:s3:::${S3BucketAssets}"
+  
+  crhelperLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.7
+      Content:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: crhelper_lambda_layer.zip
+      Description: CloudFormation Custom Resource Helper
+      LayerName: cr-helper
+      LicenseInfo: MIT                
+
+  CopyWebSite:
+    Type: AWS::Lambda::Function
+    DependsOn: ["LambdaExecutionRole"]
+    Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: "python3.7"
+      Timeout: 600
+      Description: "Download web site static content to local bucket"
+      Handler: "lambda_function.lambda_handler"
+      Environment:
+        Variables:
+          s3sourceBucket: !Ref S3BucketAssets
+          s3sourcePrefix: "customer-portal/"
+          s3destinationBucket: !Ref WebSiteS3Bucket
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: "function_copy_website.zip"
+      Layers:
+        - {Ref: crhelperLayer}
+
+  CustomResourceCopyWebSite:
+    Type: "Custom::CopyWebSiteContent"
+    DependsOn: ["CopyWebSite"]
+    Properties:
+      ServiceToken: !GetAtt "CopyWebSite.Arn"
+
+Outputs:
+  BucketName:
+    Value: !Ref WebSiteS3Bucket
+    Description: Name of the Amazon S3 bucket that contains the static web site objects.
+  CloudFrontDistribution:
+    Value: !Ref CloudFrontDistribution
+    Description: Cloud Front Distribution ID.
+  DomainName:
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Description: Web site endpoint.

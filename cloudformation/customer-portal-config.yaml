@@ -1,0 +1,160 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Cloud Bank - Configuration"
+Parameters:
+  S3BucketAssets:
+    Type: String
+    Description: Bucket name that contains assests.
+  CustomerPortalS3Bucket:
+    Type: String
+    Description: Bucket name that contains static web site of Customer Portal.
+  AgentPortalS3Bucket:
+    Type: String
+    Description: Bucket name that contains static web site of Agent Portal.
+  CustomerPortalUrl:
+    Type: String
+    Description: URL of the Customer Portal Website Domain (Cloudfront Domain).
+  AgentPortalUrl:
+    Type: String
+    Description: URL of the Agent Portal Website Domain (Cloudfront Domain).
+  cognitoIdentityPoolId:
+    Type: String
+    Description: Cognito Identity Pool Id
+  cognitoUserPoolId:
+    Type: String
+    Description: Cognito Identity Pool Id URL
+  cognitoDomain:
+    Type: String
+  cognitoCustomerPortalClientId:
+    Type: String
+    Description: Cognito Identity Customer Portal App Client Id
+  cognitoAgentPortalClientId:
+    Type: String
+    Description: Cognito Identity Agent Portal App Client Id    
+  apiGatewayEndpoint:
+    Type: String
+    Description: API Gateway Endpoint URL
+  connectInstanceId:
+    Type: String
+    Description: Connect Instance Id
+  connectContactFlowId:
+    Type: String
+    Description: Connect Contact Flow Id
+  kinesisStreamName:
+    Type: String
+    Description: Kinesis Stream Name
+  pinPointAppId:
+    Type: String
+    Description: PinPoint Application ID
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: CloudWatchLogsPermissions
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:*
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: CustomerPortalS3BucketPermissions
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                Resource:
+                  - !Sub "arn:aws:s3:::${CustomerPortalS3Bucket}/*"
+                  - !Sub "arn:aws:s3:::${AgentPortalS3Bucket}/*"
+
+  crhelperLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.7
+      Content:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: crhelper_lambda_layer.zip
+      Description: CloudFormation Custom Resource Helper
+      LayerName: cr-helper
+      LicenseInfo: MIT                   
+
+  CustomerPortalCreateConfigFile:
+    Type: AWS::Lambda::Function
+    DependsOn: ["LambdaExecutionRole"]
+    Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: "python3.7"
+      Timeout: 60
+      Description: "Create web site JSON config file"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: "function_create_config.zip"
+      Layers:
+        - {Ref: crhelperLayer}    
+
+  CustomResourceCustomerPortalCreateConfigFile:
+    Type: "Custom::CustomerPortalCreateConfigFile"
+    DependsOn: ["CustomerPortalCreateConfigFile"]
+    Properties:
+      ServiceToken: !GetAtt "CustomerPortalCreateConfigFile.Arn"
+      siteBucketName: !Ref CustomerPortalS3Bucket
+      region: !Ref "AWS::Region"
+      siteUrl: !Ref CustomerPortalUrl
+      cognitoIdentityPoolId: !Ref cognitoIdentityPoolId
+      cognitoUserPoolId: !Ref cognitoUserPoolId
+      cognitoDomain: !Ref cognitoDomain
+      cognitoClientId: !Ref cognitoCustomerPortalClientId
+      apiGatewayEndpoint: !Ref apiGatewayEndpoint
+      connectInstanceId: !Ref connectInstanceId
+      connectContactFlowId: !Ref connectContactFlowId
+      kinesisStreamName: !Ref kinesisStreamName
+      pinPointAppId: !Ref pinPointAppId
+
+  AgentPortalCreateConfigFile:
+    Type: AWS::Lambda::Function
+    DependsOn: ["LambdaExecutionRole"]
+    Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: "python3.7"
+      Timeout: 60
+      Description: "Create web site JSON config file"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: "function_create_config.zip"
+      Layers:
+        - {Ref: crhelperLayer}    
+
+  CustomResourceAgentPortalCreateConfigFile:
+    Type: "Custom::AgentPortalCreateConfigFile"
+    DependsOn: ["AgentPortalCreateConfigFile"]
+    Properties:
+      ServiceToken: !GetAtt "AgentPortalCreateConfigFile.Arn"
+      siteBucketName: !Ref AgentPortalS3Bucket
+      region: !Ref "AWS::Region"
+      siteUrl: !Ref AgentPortalUrl
+      cognitoIdentityPoolId: !Ref cognitoIdentityPoolId
+      cognitoUserPoolId: !Ref cognitoUserPoolId
+      cognitoDomain: !Ref cognitoDomain
+      cognitoClientId: !Ref cognitoAgentPortalClientId
+      apiGatewayEndpoint: !Ref apiGatewayEndpoint
+      connectInstanceId: !Ref connectInstanceId
+      connectContactFlowId: !Ref connectContactFlowId
+      kinesisStreamName: !Ref kinesisStreamName
+      pinPointAppId: !Ref pinPointAppId
+

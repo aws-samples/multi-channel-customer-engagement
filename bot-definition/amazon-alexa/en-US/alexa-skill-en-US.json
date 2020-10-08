@@ -1,0 +1,525 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "my cloud bank",
+            "modelConfiguration": {
+                "fallbackIntentSensitivity": {
+                    "level": "LOW"
+                }
+            },
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "savingsAccountBalance",
+                    "slots": [
+                        {
+                            "name": "pin",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "samples": [
+                                "It is {pin}",
+                                "{pin}",
+                                "My PIN is {pin}",
+                                "The PIN code is {pin}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "savings account",
+                        "about my savings account",
+                        "savings account balance"
+                    ]
+                },
+                {
+                    "name": "creditCardBalance",
+                    "slots": [
+                        {
+                            "name": "pin",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "samples": [
+                                "It is {pin}",
+                                "{pin}",
+                                "PIN is {pin}",
+                                "PIN code is {pin}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "credit card payment due",
+                        "credit card balance",
+                        "credit card payment due",
+                        "how much is my available credit",
+                        "payment due date",
+                        "when is my payment due",
+                        "how much should I pay on my credit card",
+                        "when is my credit card payment due"
+                    ]
+                },
+                {
+                    "name": "startSession",
+                    "slots": [],
+                    "samples": [
+                        "log in with my pin",
+                        "start session with pin",
+                        "request a pin",
+                        "I want a pin",
+                        "looking for a pin",
+                        "my pin",
+                        "pin",
+                        "send me a pin"
+                    ]
+                },
+                {
+                    "name": "creditAdvance",
+                    "slots": [
+                        {
+                            "name": "pin",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "samples": [
+                                "It is {pin}",
+                                "{pin}",
+                                "My PIN is {pin}",
+                                "The PIN code is {pin}"
+                            ]
+                        },
+                        {
+                            "name": "cashAdvance",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "I need a cash advance",
+                                "I need {cashAdvance}",
+                                "Cash advance for {cashAdvance}",
+                                "I want {cashAdvance}",
+                                "request {cashAdvance} ",
+                                "please transfer {cashAdvance} to my savings account",
+                                "I need {cashAdvance} in my savings account"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "credit card cash advance",
+                        "cash advance from my credit card",
+                        "I want a cash advance ",
+                        "I want a credit card cash advance",
+                        "credit card advance",
+                        "request a credit card cash advance",
+                        "request a cash advance",
+                        "I need a cash advance"
+                    ]
+                },
+                {
+                    "name": "creditCardPay",
+                    "slots": [
+                        {
+                            "name": "pin",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "samples": [
+                                "It is {pin}",
+                                "{pin}",
+                                "My PIN is {pin}",
+                                "The PIN code is {pin}"
+                            ]
+                        },
+                        {
+                            "name": "payment",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "Please transfer {payment} from my savings account",
+                                "{payment}",
+                                "Please transfer {payment}",
+                                "I want to pay {payment}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "pay the credit card debt",
+                        "pay my credit card debt",
+                        "credit card payment",
+                        "process my minimal payment for my credit card",
+                        "pay the credit card",
+                        "pay my credit card"
+                    ]
+                },
+                {
+                    "name": "officeSchedule",
+                    "slots": [
+                        {
+                            "name": "location",
+                            "type": "Office",
+                            "samples": [
+                                "I'd like to know about {location}",
+                                "I need information about {location}",
+                                "{location}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "office hours",
+                        "{location} hours",
+                        "{location} schedule",
+                        "What time does {location} close",
+                        "What time does {location} open",
+                        "What time does {location} customer service hours",
+                        "is {location} branch open on weekends",
+                        "Office hours of {location}",
+                        "Opening Hours of {location}",
+                        "Customer services hours of {location}"
+                    ]
+                },
+                {
+                    "name": "callRequest",
+                    "slots": [],
+                    "samples": [
+                        "agent calls me",
+                        "calls me",
+                        "request a call from a contact center agent",
+                        "please request a call from an agent",
+                        "I request that a customer contact center call me"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "Office",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Hollywood street"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Downtown"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Huge Center"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Central park"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "East park"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "West park"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Square tower"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Clock Tower",
+                                "synonyms": [
+                                    "central tower",
+                                    "bell tower"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "savingsAccountBalance",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "pin",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.819820091945.661117283353"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "creditCardBalance",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "pin",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1056642771144.1333403577470"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "creditAdvance",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "pin",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.668565135199.23532556669"
+                            }
+                        },
+                        {
+                            "name": "cashAdvance",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.162304968572.782303914929",
+                                "elicitation": "Elicit.Slot.668565135199.1226933038580"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "creditCardPay",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "pin",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1165757836733.1276576771024"
+                            }
+                        },
+                        {
+                            "name": "payment",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.527596660594.1208255402209",
+                                "elicitation": "Elicit.Slot.527596660594.1208255402209"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "officeSchedule",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "location",
+                            "type": "Office",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.533665215691.158272436215"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "callRequest",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.62995905633"
+                    },
+                    "slots": []
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.819820091945.661117283353",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "To process your request, give me the PIN that I sent you to your mobile phone and email."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Hey, please give me your PIN"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Please, remember me the PIN"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1056642771144.1333403577470",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "To process your request, give me the PIN that I sent you to your mobile phone and email."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Hey, please give me your PIN"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Please, remember me the PIN"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.668565135199.1226933038580",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "tell me, how much do you need?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "how much money do you need?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.668565135199.23532556669",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "To process your request, give me the PIN that I sent you to your mobile phone and email."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Hey, please give me your PIN"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Please, remember me the PIN"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.162304968572.782303914929",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Do you need USD {cashAdvance} in your savings account?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Do you want to transfer USD {cashAdvance} to your savings account?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Do you want a cash advance for USD {cashAdvance} ?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1165757836733.1276576771024",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "To process your request, give me the PIN that I sent you to your mobile phone and email."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Hey, please give me your PIN"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Please, remember me the PIN"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.527596660594.1208255402209",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "How much do you want to pay off of your debt?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "How much do you want to transfer?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "How much do you want to pay?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.527596660594.1208255402209",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "do you want pay USD {payment} ?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Do you want to pay USD {payment} from your savings account?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Do you want to transfer USD {payment} to pay your credit card?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.533665215691.158272436215",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Do you need information about with branch?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Which branch do you need information about?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.62995905633",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "do you want to be contacted now?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Are you sure that you want to be called by an agent at your registered phone number?"
+                    }
+                ]
+            }
+        ]
+    }
+}

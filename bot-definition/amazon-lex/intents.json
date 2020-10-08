@@ -1,0 +1,62 @@
+{
+    "intents": [
+        {
+            "intentVersion": "1",
+            "intentName": "transferToAgent"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "creditAdvance"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "callRequest"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "creditCardBalance"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "savingsAcctBalance"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "creditCardPay"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "welcomeMessage"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "startSession"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "officeSchedule"
+        }
+    ],
+    "name": "ommnichannel_bot",
+    "locale": "en-US",
+    "checksum": "###checksum###",
+    "abortStatement": {
+        "messages": [
+            {
+                "content": "Sorry, I could not understand.",
+                "contentType": "PlainText"
+            }
+        ]
+    },
+    "clarificationPrompt": {
+        "maxAttempts": 5,
+        "messages": [
+            {
+                "content": "Sorry, can you please repeat that?",
+                "contentType": "PlainText"
+            }
+        ]
+    },
+    "childDirected": false,
+    "idleSessionTTLInSeconds": 300
+}

@@ -1,0 +1,363 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0",
+    "importType": "LEX",
+    "importFormat": "JSON"
+  },
+  "resource": {
+    "name": "ommnichannel_bot",
+    "version": "1",
+    "intents": [
+      {
+        "name": "creditAdvance",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "credit advance",
+          "I need a credit advance",
+          "I need an advance",
+          "advance from my credit card"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "How much do you need?"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "cashAdvance"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Please give me your PIN. If you haven't received one, you can ask me to send you a new PIN."
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 2,
+            "name": "pin"
+          }
+        ]
+      },
+      {
+        "name": "savingsAcctBalance",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "balance of my debit card",
+          "how much do I have in my debit card",
+          "what is my debit card balance",
+          "what is my saving card balance",
+          "savings card balance"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Please give me your PIN. If you haven't received one, you can ask me to send you a new PIN."
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "pin"
+          }
+        ]
+      },
+      {
+        "name": "startSession",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "pin",
+          "I want a pin",
+          "send me a pin",
+          "my pin",
+          "I need a pin"
+        ],
+        "slots": []
+      },
+      {
+        "name": "callRequest",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "I need you to call me",
+          "I want a call",
+          "request a call"
+        ],
+        "slots": []
+      },
+      {
+        "name": "creditCardBalance",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "what is my credit card balance",
+          "credit card balance",
+          "credit card due date",
+          "how much do I owe in my credit card",
+          "balance of my credit card"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Please give me your PIN. If you haven't received one, you can ask me to send you a new PIN."
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "pin"
+          }
+        ]
+      },
+      {
+        "name": "officeSchedule",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "openning hours of {location}",
+          "what time does the {location} branch open",
+          "what time does the {location} branch close",
+          "what time does the {location} open",
+          "what time does the {location} close",
+          "what are the openning hours for the {location} branch",
+          "openning hours {location}",
+          "business hours",
+          "office schedule",
+          "office schedule of {location}"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "location",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Which branch are you looking information about?"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "location"
+          }
+        ]
+      },
+      {
+        "name": "transferToAgent",
+        "version": "1",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [
+          "agent",
+          "talk to an agent",
+          "I would like to speak with an agent",
+          "speak with an agent"
+        ],
+        "slots": []
+      },
+      {
+        "name": "creditCardPay",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "pay my credit card",
+          "pay balance of my credit card",
+          "pay what I owe in my credit card",
+          "pay card",
+          "pay card balance"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "How much do you want to pay?"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "payment"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Please give me your PIN. If you haven't received one, you can ask me to send you a new PIN."
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 2,
+            "name": "pin"
+          }
+        ]
+      },
+      {
+        "name": "welcomeMessage",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "hello",
+          "Good Morning",
+          "Good Day",
+          "Good Afternoon",
+          "Good Night"
+        ],
+        "slots": []
+      }
+    ],
+    "slotTypes": [
+      {
+        "description": "Offices",
+        "name": "location",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "new york"
+          },
+          {
+            "value": "london"
+          },
+          {
+            "value": "L.A"
+          },
+          {
+            "value": "Miami"
+          },
+          {
+            "value": "Chicago"
+          },
+          {
+            "value": "Orlando"
+          },
+          {
+            "value": "Toronto"
+          },
+          {
+            "value": "Seattle"
+          }
+        ],
+        "valueSelectionStrategy": "ORIGINAL_VALUE"
+      }
+    ],
+    "voiceId": "Matthew",
+    "childDirected": false,
+    "locale": "en-US",
+    "idleSessionTTLInSeconds": 120,
+    "clarificationPrompt": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Sorry, I dont understand your question, can you repeat it?"
+        }
+      ],
+      "maxAttempts": 5
+    },
+    "abortStatement": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Sorry, I could not understand your request. Please start over again."
+        }
+      ]
+    },
+    "detectSentiment": true
+  }
+}

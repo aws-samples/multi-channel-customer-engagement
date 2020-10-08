@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Cloud Bank</title>
+
+    <link href="vendors/bower_components/morris.js/morris.css" rel="stylesheet" type="text/css" />
+    <link href="vendors/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="vendors/bower_components/jquery-toast-plugin/dist/jquery.toast.min.css" rel="stylesheet"
+        type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/chatbot-style.css" rel="stylesheet" type="text/css">
+
+    <script src="vendors/bower_components/jquery/dist/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="preloader-it">
+        <div class="la-anim-1"></div>
+    </div>
+    <!-- /Preloader -->
+    <div class="wrapper theme-1-active pimary-color-green">
+        <!-- Top Menu Items -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="mobile-only-brand pull-left">
+                <div class="nav-header pull-left">
+                    <div class="logo-wrap">
+                        <a href="index.html">
+                            <span class="brand-text">Cloud Bank</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav navbar-right top-nav pull-right">
+                <li>
+                    <a id="open_right_sidebar" href="#"><i class="zmdi zmdi-home top-nav-icon"
+                            define-custom-id="Home"></i></a>
+                </li>
+                <li>
+                    <a id="open_right_sidebar" href="#"><i class="zmdi zmdi-card top-nav-icon"
+                            define-custom-id="Credit Card"></i></a>
+                </li>
+                <li>
+                    <a id="open_right_sidebar" href="#"><i class="zmdi zmdi-money-box top-nav-icon"
+                            define-custom-id="Savings Account"></i></a>
+                </li>
+                <li>
+                    <a id="open_right_sidebar" href="#"><i class="zmdi zmdi-notifications  top-nav-icon"
+                            define-custom-id="Notifications"></i><span class="top-nav-icon-badge">5</span></a>
+                </li>
+                <li>
+                    <a id="open_right_sidebar" href="#"><i class="zmdi zmdi-settings top-nav-icon"
+                            define-custom-id="Settings"></i></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a id="open_right_sidebar" href="#"><img src="img/user-profile.png" alt="user_auth"
+                            class="user-auth-img img-circle" define-custom-id="Profile" /><span
+                            class="user-online-status"></span></a>
+                </li>
+                <li class="dropdown auth-drp" style="padding-top: 15px; text-align: right;">
+                    <div id="CustomerName"></div>
+                    <div class="label label-danger" id="PIN" style="font-size: 12px;"></div>
+                </li>
+            </ul>
+    </div>
+    </nav>
+    <!-- /Top Menu Items -->
+
+    <!-- Main Content -->
+    <div class="page-wrapper">
+        <div class="container-fluid pt-25">
+            <!-- Row -->
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="panel panel-default card-view pa-0">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body pa-0">
+                                <div class="sm-data-box">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
+                                                <span class="txt-dark block counter"><span>
+                                                        <div id="SavingsAccountBalance"></div>
+                                                    </span></span>
+                                                <span class="weight-500 uppercase-font block font-13">Savings Account
+                                                    Balance</span>
+                                            </div>
+                                            <div class="col-xs-6 text-center  pl-0 pr-0 data-wrap-right">
+                                                <i
+                                                    class="glyphicon glyphicon-usd data-right-rep-icon txt-light-grey"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="panel panel-default card-view pa-0">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body pa-0">
+                                <div class="sm-data-box">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
+                                                <span class="txt-dark block counter"><span>
+                                                        <div id="CreditCardBalance"></div>
+                                                    </span></span>
+                                                <span class="weight-500 uppercase-font block font-13">Credit Card
+                                                    Balance</span>
+                                            </div>
+                                            <div class="col-xs-6 text-center  pl-0 pr-0 data-wrap-right">
+                                                <i
+                                                    class="glyphicon glyphicon-credit-card data-right-rep-icon txt-light-grey"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="panel panel-default card-view pa-0">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body pa-0">
+                                <div class="sm-data-box">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
+                                                <span class="txt-dark block counter"><span>
+                                                        <div id="CreditCardDueDate"></div>
+                                                    </span></span>
+                                                <span class="weight-500 uppercase-font block font-13">
+                                                    Payment Due Date</span>
+                                            </div>
+                                            <div class="col-xs-6 text-center  pl-0 pr-0 data-wrap-right">
+                                                <i
+                                                    class="glyphicon glyphicon-calendar data-right-rep-icon txt-light-grey"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Row -->
+
+            <!-- Row -->
+            <div class="row" id="divProgress">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body sm-data-box-1">
+                                <span class="uppercase-font weight-500 font-14 block text-center txt-dark">Credit
+                                    Utilization
+                                </span>
+                                <div class="cus-sat-stat weight-500 txt-success text-center mt-5">
+                                    <span id="CreditUsage" class="counter-anim">0</span><span>%</span>
+                                </div>
+                                <div class="progress-anim mt-20">
+                                    <div class="progress">
+                                        <div id="CreditUsageBar"
+                                            class="progress-bar progress-bar-success wow animated progress-animated"
+                                            role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="panel panel-default card-view panel-refresh">
+                        <div class="refresh-container">
+                            <div class="la-anim-1"></div>
+                        </div>
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">My Expenses</h6>
+                            </div>
+                            <div class="pull-right">
+                                <a href="#" class="pull-left inline-block refresh mr-15">
+                                    <i class="zmdi zmdi-replay"></i>
+                                </a>
+                                <div class="pull-left inline-block dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                                        role="button"><i class="zmdi zmdi-more-vert"></i></a>
+                                    <ul class="dropdown-menu bullet dropdown-menu-right" role="menu">
+                                        <li role="presentation"><a href="javascript:void(0)" role="menuitem"><i
+                                                    class="icon wb-reply" aria-hidden="true"></i>Remove</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div>
+                                    <canvas id="chart_6" height="191"></canvas>
+                                </div>
+                                <hr class="light-grey-hr row mt-10 mb-15" />
+                                <div class="label-chatrs">
+                                    <div class="">
+                                        <span class="clabels clabels-lg inline-block bg-blue mr-10 pull-left"></span>
+                                        <span
+                                            class="clabels-text font-12 inline-block txt-dark capitalize-font pull-left"><span
+                                                class="block font-15 weight-500 mb-5">10% Entertainment</span><span
+                                                class="block txt-grey">$ 289</span></span>
+                                        <div id="sparkline_1" class="pull-right"
+                                            style="width: 100px; overflow: hidden; margin: 0px auto;"></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <hr class="light-grey-hr row mt-10 mb-15" />
+                                <div class="label-chatrs">
+                                    <div class="">
+                                        <span class="clabels clabels-lg inline-block bg-green mr-10 pull-left"></span>
+                                        <span
+                                            class="clabels-text font-12 inline-block txt-dark capitalize-font pull-left"><span
+                                                class="block font-15 weight-500 mb-5">25% Food</span><span
+                                                class="block txt-grey">$ 453</span></span>
+                                        <div id="sparkline_2" class="pull-right"
+                                            style="width: 100px; overflow: hidden; margin: 0px auto;"></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <hr class="light-grey-hr row mt-10 mb-15" />
+                                <div class="label-chatrs">
+                                    <div class="">
+                                        <span class="clabels clabels-lg inline-block bg-yellow mr-10 pull-left"></span>
+                                        <span
+                                            class="clabels-text font-12 inline-block txt-dark capitalize-font pull-left"><span
+                                                class="block font-15 weight-500 mb-5">65% Shopping</span><span
+                                                class="block txt-grey">$ 830</span></span>
+                                        <div id="sparkline_3" class="pull-right"
+                                            style="width: 100px; overflow: hidden; margin: 0px auto;"></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="panel panel-default card-view panel-refresh">
+                        <div class="refresh-container">
+                            <div class="la-anim-1"></div>
+                        </div>
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Chatbot</h6>
+                            </div>
+                            <div class="pull-right">
+                                <a href="#" class="pull-left inline-block refresh mr-15">
+                                    <i class="zmdi zmdi-replay"></i>
+                                </a>
+                                <div class="pull-left inline-block dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                                        role="button"><i class="zmdi zmdi-more-vert"></i></a>
+                                    <ul class="dropdown-menu bullet dropdown-menu-right" role="menu">
+                                        <li role="presentation"><a href="javascript:void(0)" role="menuitem"><i
+                                                    class="icon wb-reply" aria-hidden="true"></i>Remove</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <section class="section-chat" id="section-chat"
+                                    style="display: none; float: right; width: 100%;">
+                                    <div id="root"></div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Row -->
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer container-fluid pl-30 pr-30">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>2020 &copy; Amazon Web Services.</p>
+                </div>
+            </div>
+        </footer>
+        <!-- /Footer -->
+
+    </div>
+    <!-- /Main Content -->
+
+    <!-- JavaScript -->
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Data table JavaScript -->
+    <script src="vendors/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <!-- Progressbar Animation JavaScript -->
+    <script src="vendors/bower_components/waypoints/lib/jquery.waypoints.min.js"></script>
+    <script src="vendors/bower_components/jquery.counterup/jquery.counterup.min.js"></script>
+    <script src="vendors/bower_components/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+    <!-- ChartJS JavaScript -->
+    <script src="vendors/chart.js/Chart.min.js"></script>
+    <!-- Cloud Bank Scripts -->
+    <script src="config/config.js"></script>
+    <script src="dist/main.bundle.js"></script>
+</body>
+
+</html>

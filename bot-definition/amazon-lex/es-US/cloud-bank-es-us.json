@@ -1,0 +1,367 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0",
+    "importType": "LEX",
+    "importFormat": "JSON"
+  },
+  "resource": {
+    "name": "cloud-bank-en-US",
+    "version": "26",
+    "intents": [
+      {
+        "name": "creditAdvance",
+        "version": "4",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:Lex-BankDemo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "necesito un avance",
+          "quiero un avance de crédito",
+          "avance de mi tarjeta",
+          "avance de credito"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Por cuanto deseas el avance de crédito?"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "cashAdvance"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Por favor dame tu PIN. Si no tienes uno, puedes pedirme que te envíe un PIN."
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 2,
+            "name": "pin"
+          }
+        ]
+      },
+      {
+        "name": "startSession",
+        "version": "2",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:Lex-BankDemo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "pin",
+          "quiero un pin",
+          "enviame un pin",
+          "mi pin",
+          "necesito un pin"
+        ],
+        "slots": []
+      },
+      {
+        "name": "callRequest",
+        "version": "4",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:Lex-BankDemo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "necesito una llamada",
+          "quiero una llamada",
+          "solicitar llamada"
+        ],
+        "slots": []
+      },
+      {
+        "name": "creditCardBalance",
+        "version": "3",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:Lex-BankDemo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "cual es mi cupo de tarjeta de credito",
+          "saldo disponible de tarjeta de credito",
+          "cual es la deuda de mi tarjeta de credito",
+          "fecha de pago de mi tarjeta de credito",
+          "fecha de pago de tarjeta de crédito",
+          "saldo tarjeta de credito",
+          "cuanto tengo en mi tarjeta de credito",
+          "saldo a pagar tarjeta de credito",
+          "mi tarjeta de credito"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Por favor dame tu PIN. Si no tienes uno, puedes pedirme que te envíe un PIN."
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "pin"
+          }
+        ]
+      },
+      {
+        "name": "officeSchedule",
+        "version": "2",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:Lex-BankDemo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "horario de la oficina de {location}",
+          "horario de la oficina {location}",
+          "a que hora cierra la oficina {location}",
+          "a que hora abre la oficina {location}",
+          "horario {location}",
+          "horario de oficina",
+          "horario de las oficinas",
+          "a que hora abre {location}",
+          "a que hora cierra {location}"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "location",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "De cúal oficina quieres información?"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "location"
+          }
+        ]
+      },
+      {
+        "name": "savingsAccountBalance",
+        "version": "4",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:Lex-BankDemo",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "saldo de mi cuenta de ahorros",
+          "saldo en cuenta de ahorros",
+          "cuanto tengo en mi cuenta de ahorros",
+          "balance de mi cuenta de ahorros",
+          "mi cuenta ahorros",
+          "saldo cuenta de ahorros"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Por favor dame tu PIN. Si no tienes uno, puedes pedirme que te envíe un PIN."
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "pin"
+          }
+        ]
+      },
+      {
+        "name": "transferToAgent",
+        "version": "1",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [
+          "agente"
+        ],
+        "slots": []
+      },
+      {
+        "name": "creditCardPay",
+        "version": "3",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:alexa-BankDemo-Lex",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "pagar tarjeta de crédito",
+          "pagar saldo de mi tarjeta de credito",
+          "pagar la deuda de mi tarjeta",
+          "pagar mi tarjeta",
+          "pagar la tarjeta"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Por cuanto deseas hacer el pago?"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "payment"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Por favor dame tu PIN. Si no tienes uno, puedes pedirme que te envíe un PIN."
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 2,
+            "name": "pin"
+          }
+        ]
+      },
+      {
+        "name": "welcomeMessage",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:684859963665:function:alexa-BankDemo-Lex",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "hola",
+          "buen dia",
+          "buenos dias",
+          "buenas tardes",
+          "buenas noches"
+        ],
+        "slots": []
+      }
+    ],
+    "slotTypes": [
+      {
+        "description": "Offices",
+        "name": "location",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "norte"
+          },
+          {
+            "value": "centro"
+          },
+          {
+            "value": "usaquen"
+          },
+          {
+            "value": "centro"
+          },
+          {
+            "value": "calle 100"
+          },
+          {
+            "value": "unicentro"
+          },
+          {
+            "value": "chapinero"
+          },
+          {
+            "value": "polanco"
+          },
+          {
+            "value": "santa fe"
+          }
+        ],
+        "valueSelectionStrategy": "ORIGINAL_VALUE"
+      }
+    ],
+    "voiceId": "Matthew",
+    "childDirected": false,
+    "locale": "en-US",
+    "idleSessionTTLInSeconds": 120,
+    "clarificationPrompt": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Disculpa, no te entiendo. Puedes repetirlo?"
+        }
+      ],
+      "maxAttempts": 5
+    },
+    "abortStatement": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Lo siento, no pude entender tu solicitud. Intenta de nuevo."
+        }
+      ]
+    },
+    "detectSentiment": true
+  }
+}

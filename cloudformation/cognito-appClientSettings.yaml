@@ -1,0 +1,154 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  S3BucketAssets:
+    Type: String
+    Default: "omnichannel-assets-us-east-1"
+    Description: You can update this value if you have changed the original code
+
+  cognitoUserPoolId:
+    Type: String
+    Description: UserPool Id to be modified
+
+  cognitoCustomerPortalClientId:
+    Type: String
+    Description: Customer App Client Id to be modified
+
+  callbackLogOutCustomerURL:
+    Type: String
+    Description: "CallBackURL and LogOutURL for Customer App Client Settings"
+
+  cognitoAgentPortalClientId:
+    Type: String
+    Description: Agent App Client Id to be modified
+
+  callbackLogOutAgentURL:
+    Type: String
+    Description: "CallBackURL and LogOutURL for Agent App Client Settings"
+
+Resources:
+  IAMRoleLambdaCFNCognito:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+              Service: lambda.amazonaws.com
+      Policies:
+        - PolicyName: WriteCloudWatchLogs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: UpdateUserPoolClient
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: cognito-idp:UpdateUserPoolClient
+                Resource: arn:aws:cognito-idp:*:*:userpool/*
+        - PolicyName: ManageUserPoolDomain
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: cognito-idp:CreateUserPoolDomain
+                Resource: arn:aws:cognito-idp:*:*:userpool/*
+              - Effect: Allow
+                Action: cognito-idp:DeleteUserPoolDomain
+                Resource: arn:aws:cognito-idp:*:*:userpool/*
+              - Effect: Allow
+                Action: cognito-idp:DescribeUserPoolDomain
+                Resource: arn:aws:cognito-idp:*:*:userpool/*
+        - PolicyName: InvokeLambdaFunction
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: arn:aws:lambda:*:*:function:*
+
+  LambdaCustomResourceSendResponse:
+    Type: AWS::Lambda::Function
+    Properties:
+      #      FunctionName: !Sub "omnichannel-customerResourceSEND-${AWS::AccountId}"
+      Runtime: nodejs12.x
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: omnichannel-customResourceResponse.zip
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - IAMRoleLambdaCFNCognito
+          - Arn
+
+  LambdaCustomResourceUserPoolAppClientSettings:
+    Type: AWS::Lambda::Function
+    Properties:
+      #      FunctionName: !Sub "omnichannel-userPool-AppClientSettings-${AWS::AccountId}"
+      Environment:
+        Variables:
+          "LAMBDA_SEND_FUNCTION": !Ref LambdaCustomResourceSendResponse
+      Runtime: nodejs12.x
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: omnichannel-cognitoUserPool-ClientSettings.zip
+      Handler: CloudFormationCognitoUserPoolClientSettings.handler
+      Role:
+        Fn::GetAtt:
+          - IAMRoleLambdaCFNCognito
+          - Arn
+    DependsOn: LambdaCustomResourceSendResponse
+
+  CustomResourceAppClientSettingsCustomer:
+    Type: Custom::CognitoUserPoolClientSettings
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LambdaCustomResourceUserPoolAppClientSettings
+          - Arn
+      UserPoolId: !Ref cognitoUserPoolId
+      UserPoolClientId: !Ref cognitoCustomerPortalClientId
+      SupportedIdentityProviders:
+        - COGNITO
+      CallbackURL: !Sub "https://${callbackLogOutCustomerURL}"
+      LogoutURL: !Sub "https://${callbackLogOutCustomerURL}"
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthFlows:
+        - implicit
+      AllowedOAuthScopes:
+        - aws.cognito.signin.user.admin
+        - phone
+        - email
+        - openid
+        - profile
+
+  CustomResourceAppClientSettingsAgent:
+    Type: Custom::CognitoUserPoolClientSettings
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LambdaCustomResourceUserPoolAppClientSettings
+          - Arn
+      UserPoolId: !Ref cognitoUserPoolId
+      UserPoolClientId: !Ref cognitoAgentPortalClientId
+      SupportedIdentityProviders:
+        - COGNITO
+      CallbackURL: !Sub "https://${callbackLogOutAgentURL}"
+      LogoutURL: !Sub "https://${callbackLogOutAgentURL}"
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthFlows:
+        - implicit
+      AllowedOAuthScopes:
+        - aws.cognito.signin.user.admin
+        - phone
+        - email
+        - openid
+        - profile

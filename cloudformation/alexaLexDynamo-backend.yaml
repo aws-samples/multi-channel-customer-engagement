@@ -1,0 +1,710 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ""
+Parameters:
+  ContactFlowId: 
+    Type: String
+    Default:  f0a9543e-73c4-44d9-8b35-7adcde79c796
+  DestinationPhoneNumber: 
+    Type: Number
+    Default:  +573108741528
+  InstanceId: 
+    Type: String
+    Default:  4cc70bdb-cb91-4b87-8bce-a7a06769fa21
+  QueueId: 
+    Type: String
+    Default:  b14669cc-8359-4d6a-adc6-6d186b235b95
+  Currency: 
+    Type: String
+    Default:  USD
+  Language:
+    Type: String
+    Default: en
+    AllowedValues: 
+        - en
+        - es
+  S3BucketAssets: 
+    Type: String 
+    Default: "omnichannel-assets-us-east-1"
+    
+Mappings: 
+  LanguageMap: 
+    es: 
+      "code": "es-MX"
+    en: 
+      "code": "en-US"
+
+Resources:
+##DynamoTables
+    TableInteractionsApp:
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+            AttributeDefinitions: 
+              - 
+                AttributeName: "customerId"
+                AttributeType: "S"
+              - 
+                AttributeName: "interactionDateTime"
+                AttributeType: "S"
+            TableName: "omnichannel-interactions-app"
+            KeySchema: 
+              - 
+                AttributeName: "customerId"
+                KeyType: "HASH"
+              - 
+                AttributeName: "interactionDateTime"
+                KeyType: "RANGE"
+            ProvisionedThroughput: 
+                ReadCapacityUnits: 10
+                WriteCapacityUnits: 10
+
+    TableInteractionsVoice:
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+            AttributeDefinitions: 
+              - 
+                AttributeName: "customerId"
+                AttributeType: "S"
+              - 
+                AttributeName: "interactionId"
+                AttributeType: "S"
+            TableName: "omnichannel-interactions-voice"
+            KeySchema: 
+              - 
+                AttributeName: "customerId"
+                KeyType: "HASH"
+              - 
+                AttributeName: "interactionId"
+                KeyType: "RANGE"
+            ProvisionedThroughput: 
+                ReadCapacityUnits: 5
+                WriteCapacityUnits: 5
+
+    TableInteractionsChat:
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+            AttributeDefinitions: 
+              - 
+                AttributeName: "customerId"
+                AttributeType: "S"
+              - 
+                AttributeName: "interactionDateTime"
+                AttributeType: "S"
+            TableName: "omnichannel-interactions-chatbot"
+            KeySchema: 
+              - 
+                AttributeName: "customerId"
+                KeyType: "HASH"
+              - 
+                AttributeName: "interactionDateTime"
+                KeyType: "RANGE"
+            ProvisionedThroughput: 
+                ReadCapacityUnits: 5
+                WriteCapacityUnits: 5
+
+    TableOffices:
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+            AttributeDefinitions: 
+              - 
+                AttributeName: "name"
+                AttributeType: "S"
+            TableName: "omnichannel-offices"
+            KeySchema: 
+              - 
+                AttributeName: "name"
+                KeyType: "HASH"
+            ProvisionedThroughput: 
+                ReadCapacityUnits: 5
+                WriteCapacityUnits: 5
+
+    TableCustomerInfo:
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+            AttributeDefinitions: 
+              - 
+                AttributeName: "Id"
+                AttributeType: "S"
+
+            TableName: "omnichannel-customer-info"
+            KeySchema: 
+              - 
+                AttributeName: "Id"
+                KeyType: "HASH"
+            ProvisionedThroughput: 
+                ReadCapacityUnits: 5
+                WriteCapacityUnits: 5
+    
+    TableLocalization:
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+            AttributeDefinitions: 
+              - 
+                AttributeName: "messageId"
+                AttributeType: "S"
+              - 
+                AttributeName: "locale"
+                AttributeType: "S"
+            TableName: "omnichannel-localization"
+            KeySchema: 
+              - 
+                AttributeName: "messageId"
+                KeyType: "HASH"
+              - 
+                AttributeName: "locale"
+                KeyType: "RANGE"
+
+            ProvisionedThroughput: 
+                ReadCapacityUnits: 5
+                WriteCapacityUnits: 5
+
+##Lambda Functions
+
+    PopulateDynamoLambda:
+        Type: AWS::Lambda::Function
+        DependsOn: [ "LambdaPopulateRole"]
+        Properties:
+          Role: !GetAtt 'LambdaPopulateRole.Arn'
+          Runtime: "nodejs12.x"
+          Timeout: 20
+          Handler: "index.handler"
+          Code: 
+            S3Bucket: !Ref S3BucketAssets
+            S3Key: PopulateDynamoLambda.zip
+          Environment: 
+                Variables: 
+                    "bucketName": !Ref S3BucketAssets
+                    "key" : "omnichannel360-localization.csv"
+                    "tableNameLocalization" : !Ref TableLocalization
+                    "tableNameCustomer" : !Ref TableCustomerInfo
+                    "Phone" : !Ref DestinationPhoneNumber
+  
+    MyCustomResource1:
+        Type: "Custom::LambdatoDynamoStart"
+        DependsOn: ['PopulateDynamoLambda']
+        Properties: 
+          ServiceToken:
+            !GetAtt 'PopulateDynamoLambda.Arn'
+
+    LambdaLex:
+        Type: AWS::Lambda::Function
+        DependsOn: [ "LambdalexRole"]
+        Properties:
+          FunctionName: lex-bank-demo
+          Role: !GetAtt 'LambdalexRole.Arn'
+          Runtime: "python3.7"
+          Timeout: 20
+          Handler: "lambda_function.lambda_handler"
+          Code: 
+            S3Bucket: !Ref S3BucketAssets
+            S3Key: omnichannel-lambda-lex.zip
+          Layers: 
+            - !Ref LambdaLayer
+          Environment: 
+                Variables: 
+                    "EVENT_TABLE_NAME": !Ref TableInteractionsChat
+                    "SKILL_NAME": "Banca Nube - Bot"
+                    "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
+                    "CONNECT_CONTACT_FLOW_ID": 
+                      Ref: ContactFlowId
+                    "CONNECT_INSTANCE_ID": 
+                      Ref: InstanceId
+                    "CONNECT_QUEUE_ID": 
+                      Ref: QueueId
+                    "LOCALE" : !FindInMap
+                      - LanguageMap
+                      - !Ref 'Language'
+                      - code                    
+                    "ENABLE_OMNICHANNEL_INTEGRATION": "1"
+                    "LOCALIZATION_TABLE_NAME": !Ref TableLocalization
+                    "CUSTOMER_TABLE_NAME": !Ref TableCustomerInfo
+                    "OFFICE_TABLE_NAME": !Ref TableOffices
+                    "CURRENCY_CODE": 
+                      Ref: Currency
+
+    LambdaAlexa:
+        Type: AWS::Lambda::Function
+        DependsOn: [ "LambdalexRole"]
+        Properties:
+          FunctionName: alexa-bank-demo
+          Role: !GetAtt 'LambdalexRole.Arn'
+          Runtime: "python3.7"
+          Timeout: 20
+          Layers: 
+            - !Ref LambdaLayer
+          Handler: "lambda_function.lambda_handler"
+          Code: 
+            S3Bucket: !Ref S3BucketAssets
+            S3Key: banca-nube-alexa-skill.zip
+          Environment: 
+                Variables: 
+                    "EVENT_TABLE_NAME": !Ref TableInteractionsChat
+                    "SKILL_NAME": "Banca Nube - Bot"
+                    "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
+                    "CONNECT_CONTACT_FLOW_ID": 
+                      Ref: ContactFlowId
+                    "CONNECT_INSTANCE_ID": 
+                      Ref: InstanceId
+                    "CONNECT_QUEUE_ID": 
+                      Ref: QueueId
+                    "ENABLE_OMNICHANNEL_INTEGRATION": "1"
+                    "LOCALIZATION_TABLE_NAME": !Ref TableLocalization
+                    "CUSTOMER_TABLE_NAME": !Ref TableCustomerInfo
+                    "OFFICE_TABLE_NAME": !Ref TableOffices
+                    "CURRENCY_CODE": 
+                      Ref: Currency
+
+    DeleteLambdaLex:
+      Type: AWS::Lambda::Function
+      DependsOn: [ "DeleteCodeBuildRole"]
+      Properties:
+          Role: !GetAtt 'DeleteCodeBuildRole.Arn'
+          Runtime: "python3.7"
+          Timeout: 13
+          Handler: "index.lambda_handler"
+          Code: 
+            ZipFile: |
+              import json
+              import cfnresponse
+              import boto3
+              import os
+              import time
+              from botocore.exceptions import ClientError
+
+              def lambda_handler(event, context):
+                  client = boto3.client('lex-models')
+                  cb = boto3.client('codebuild')
+                  
+                  print(event)
+                  
+                  if event['RequestType'] == "Delete" :
+                      try:
+                          bot= client.get_bot(
+                          name='ommnichannel_bot',
+                          versionOrAlias='prod',
+                          )
+                          response = client.delete_bot_alias(name='prod', botName='ommnichannel_bot')
+                          time.sleep(1)
+                          response2 = client.delete_bot(name='ommnichannel_bot')
+                          print ('Lex Deleted')
+                          print (response2)
+                          cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+                      except ClientError as e:
+                          if e.response['Error']['Code'] == 'BadRequestException':
+                              cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+                              return("No such Bot yet")
+                          else:
+                              print ('error')
+                              cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+                              return("Unexpected error: %s" % e.response['Error']['Code'])
+                              
+                          raise
+                  if event['RequestType'] == 'Create':
+                      response= cb.start_build(projectName='Omnichannel-CodeBuild-Lex')
+                      print (response)
+                      cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+                      return ('Created')   
+
+
+    MyCustomResource2: 
+      Type: "Custom::DeleteLambdaLex"
+      DependsOn: ['DeleteLambdaLex','CodeBuildProject']
+      Properties: 
+        ServiceToken:
+          !GetAtt 'DeleteLambdaLex.Arn'
+
+    LambdaLayer:
+        Type: "AWS::Lambda::LayerVersion"
+        Properties:
+            Description: ""
+            CompatibleRuntimes: 
+              - "python3.7"
+            LayerName: "DynamoBackend"
+            Content: 
+              S3Bucket: !Ref S3BucketAssets
+              S3Key: backend.zip
+
+##IAM Roles and policies
+
+    LambdaPopulateRole:
+        DependsOn: ["IAMDynamoDBManagedPolicy"]
+        Type: AWS::IAM::Role
+        Properties:
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: /
+          ManagedPolicyArns:
+            - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/DynamoDbPolicy-${AWS::Region}"
+            - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+
+    LambdalexRole:
+        DependsOn: ["IAMDynamoDBManagedPolicy","IAMSNSManagedPolicy"]
+        Type: AWS::IAM::Role
+        Properties:
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: /
+          ManagedPolicyArns:
+            - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/DynamoDbPolicy-${AWS::Region}"
+            - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/SNSPolicy-${AWS::Region}"
+
+    executeQueryRoleConnect:
+        Type: AWS::IAM::Role
+        Properties:
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: /
+          ManagedPolicyArns:
+            - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            - arn:aws:iam::aws:policy/AmazonConnectFullAccess
+
+    DeleteCodeBuildRole:
+        Type: AWS::IAM::Role
+        Properties:
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: /
+          ManagedPolicyArns:
+            - arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
+            - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            - arn:aws:iam::aws:policy/AmazonLexFullAccess
+
+    IAMManagedPolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "Omnichannel-CodeBuildS3ReadOnlyPolicy-bash-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "s3:GetObject",
+                                "s3:GetObjectVersion"
+                            ],
+                            "Resource": [
+                                "arn:aws:s3:::${S3BucketAssets}",
+                                "arn:aws:s3:::${S3BucketAssets}/*"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::${S3BucketAssets}"
+                            ],
+                            "Action": [
+                                "s3:ListBucket",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        }
+                    ]
+                }
+
+
+    IAMDynamoDBManagedPolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "DynamoDbPolicy-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                  {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                          {
+                              "Sid": "VisualEditor0",
+                              "Effect": "Allow",
+                              "Action": [
+                                  "dynamodb:BatchGetItem",
+                                  "dynamodb:BatchWriteItem",
+                                  "dynamodb:ConditionCheckItem",
+                                  "dynamodb:PutItem",
+                                  "dynamodb:DescribeContributorInsights",
+                                  "dynamodb:Scan",
+                                  "dynamodb:Query",
+                                  "dynamodb:UpdateItem",
+                                  "dynamodb:DescribeTimeToLive",
+                                  "dynamodb:DescribeTable",
+                                  "dynamodb:GetItem",
+                                  "dynamodb:DescribeContinuousBackups",
+                                  "dynamodb:UpdateTable",
+                                  "dynamodb:GetRecords"
+                              ],
+                              "Resource": [
+                                  "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableCustomerInfo}",
+                                  "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableOffices}",
+                                  "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableInteractionsChat}",
+                                  "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableLocalization}"
+                              ]
+                          },
+                          {
+                              "Sid": "VisualEditor1",
+                              "Effect": "Allow",
+                              "Action": "dynamodb:ListTables",
+                              "Resource": "*"
+                          }
+                      ]
+                  }
+
+    IAMSNSManagedPolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "SNSPolicy-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                  {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                          {
+                              "Sid": "VisualEditor0",
+                              "Effect": "Allow",
+                              "Action": "sns:Publish",
+                              "Resource": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
+                          }
+                      ]
+                  }
+
+    IAMManagedPolicy2:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-bash-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/bash",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/bash:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetObject",
+                                "s3:GetObjectVersion",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases"
+                            ],
+                            "Resource": [
+                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/bash-*"
+                            ]
+                        }
+                    ]
+                }
+
+    executeCodeBuildRole:
+        DependsOn: ["IAMManagedPolicy2", "IAMManagedPolicy"]
+        Type: AWS::IAM::Role
+        Properties:
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - codebuild.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: "/service-role/"
+          ManagedPolicyArns:
+            - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+            - arn:aws:iam::aws:policy/AmazonLexFullAccess
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/Omnichannel-CodeBuildS3ReadOnlyPolicy-bash-${AWS::Region}"
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/CodeBuildBasePolicy-bash-${AWS::Region}"
+
+## CodeBuild
+    CodeBuildProject:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn: ['executeCodeBuildRole']
+        Properties:
+            Name: "Omnichannel-CodeBuild-Lex"
+            Source: 
+                BuildSpec:  
+                  !Sub |
+                    version: 0.2
+                    
+                    #env:
+                      #variables:
+                         # key: "value"
+                         # key: "value"
+                      #parameter-store:
+                         # key: "value"
+                         # key: "value"
+                      #secrets-manager:
+                         # key: secret-id:json-key:version-stage:version-id
+                         # key: secret-id:json-key:version-stage:version-id
+                      #exported-variables:
+                         # - variable
+                         # - variable
+                      #git-credential-helper: yes
+                    
+                    phases:
+                      #install:
+                        #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
+                        #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
+                        #runtime-versions:
+                          # name: version
+                          # name: version
+                        #commands:
+                          # - command
+                          # - command
+                      pre_build:
+                        commands:
+                           - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                           - unzip awscliv2.zip
+                           - chmod +x ./aws/install
+                           - ./aws/install
+                           - aws --version
+                          # - command
+                      build:
+                        commands:
+                        - echo ${Language}
+                        - chmod +x import-bot.sh 
+                        - ./import-bot.sh ${Language}
+                          # - command
+                          # - command
+                      #post_build:
+                        #commands:
+                          # - command
+                          # - command
+                    #reports:
+                      #report-name-or-arn:
+                        #files:
+                          # - location
+                          # - location
+                        #base-directory: location
+                        #discard-paths: yes
+                        #file-format: JunitXml | CucumberJson
+                    #artifacts:
+                      #files:
+                        # - location
+                        # - location
+                      #name: $(date +%Y-%m-%d)
+                      #discard-paths: yes
+                      #base-directory: location
+                    #cache:
+                      #paths:
+                        # - paths
+
+                InsecureSsl: false
+                Location: !Sub "${S3BucketAssets}/cloudformation/lex/"
+                Type: "S3"
+            Artifacts: 
+                Type: "NO_ARTIFACTS"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_MEDIUM"
+                Image: "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !GetAtt executeCodeBuildRole.Arn
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+## SNS Topic
+
+    SNSTopic:
+        Type: "AWS::SNS::Topic"
+        Properties:
+            DisplayName: "SNS_Alexa_BankDemo"
+            TopicName: "SNSBankDemoNotification"
+
+    SNSTopicPolicy:
+        Type: "AWS::SNS::TopicPolicy"
+        Properties:
+            PolicyDocument: !Sub "{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\",\"SNS:Receive\"],\"Resource\":\"${SNSTopic}\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"${AWS::AccountId}\"}}}]}"
+            Topics: 
+              - !Ref SNSTopic
+
+    SNSSubscription:
+        Type: "AWS::SNS::Subscription"
+        Properties:
+            TopicArn: !Ref SNSTopic
+            Endpoint: !Ref DestinationPhoneNumber
+            Protocol: "sms"
+            Region: !Ref AWS::Region
+
+Outputs:
+  LambdaLex:
+    Description: ARN of the lambda
+    Value: !GetAtt LambdaLex.Arn
+  DynamoDBTableCustomerInteractionsApp:
+    Description:  Customer Interactions App Table
+    Value: !Ref 'TableInteractionsApp'
+  DynamoDBTableCustomerInteractionsVoice:
+    Description: Customer Interactions Voice Table
+    Value: !Ref 'TableInteractionsVoice'
+  DynamoDBTableCustomerInteractionsChat:
+    Description: Customer Interactions Chatbot Table
+    Value: !Ref 'TableInteractionsChat'
+  DynamoDBTableOffices:
+    Description: Omnichannel 360 oficinas
+    Value: !Ref 'TableOffices'
+  DynamoDBTableCustomerInfo:
+    Description: Bank Demo CRM Table
+    Value: !Ref 'TableCustomerInfo'
+  DynamoDBTableLocalization:
+    Description: Omnichannel Localization Table
+    Value: !Ref 'TableLocalization'

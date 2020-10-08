@@ -1,0 +1,1096 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Cloudformation for setting all the backend functions (AWS Lambda) and the API gateway that will receive all the Function's requests.
+
+Parameters:
+  TableCustomerInfo:
+    Type: String
+    Default: "alexa-bank-demo"
+    Description: DynamoDB Table with customer data
+
+  TableAppInteractions:
+    Type: String
+    Default: "customer-interactions-app"
+    Description: DynamoDB Table with App Interactions
+
+  TableVoiceInteraction:
+    Type: String
+    Default: "customer-interactions-voice"
+    Description: DynamoDB Table with Voice Interactions 
+
+  TableChatInteraction:
+    Type: String
+    Default: "customer-interactions-chatbot"
+    Description: DynamoDB Table with Chatbot Interactions  
+
+  LambdaConnectChatARN:
+    Type: String
+    Default: "arn:aws:lambda:us-east-1:217458111991:function:backend-PopulateDynamoLambda-1G763V688DNB4"
+    Description: "Lambda Function that connect to a chat session in Connect"
+
+  S3BucketAssets:
+    Type: String
+    Default: "omnichannel-assets-us-east-1"
+    Description: You can update this value if you have changed the original code
+       
+Resources:
+## API 
+  ApiGatewayRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      ApiKeySourceType: HEADER
+      Description: API Gateway that supports requests from Customer site to Lambdas
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Name: customer-omnichannel
+      Tags:
+        - Key: "solution"
+          Value: "omnichannel-solution"
+
+  ApiGatewayIamRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "apigateway.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: LambdacloudwatchAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "lambda:Invoke"
+                Resource:
+                  - !GetAtt LambdaGetVoice.Arn
+                  - !GetAtt LambdaGetChatbot.Arn
+                  - !GetAtt LambdaGetCustomerInfo.Arn
+                  - !GetAtt LambdaGetClickstream.Arn
+                  - !Ref LambdaConnectChatARN
+              - Effect: "Allow"
+                Action: 
+                  - "logs:CreateLogDelivery"
+                  - "logs:GetLogDelivery"
+                  - "logs:UpdateLogDelivery"
+                  - "logs:DeleteLogDelivery"
+                  - "logs:ListLogDeliveries"
+                Resource: "*"
+
+  ApiGatewayDeployment:
+    DependsOn: [ApiGatewayMethodVoiceOPTIONS, ApiGatewayMethodChatbotPOST, ApiGatewayMethodAppOPTIONS, ApiGatewayMethodAppPOST, ApiGatewayMethodVoicePOST, ApiGatewayMethodChatbotOPTIONS, ApiGatewayMethodCustomerPOST, ApiGatewayMethodCustomerOPTIONS ]
+    Type: "AWS::ApiGateway::Deployment"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      StageName: "prod"
+
+  ApiGatewayAuthorizer:
+    Type: "AWS::ApiGateway::Authorizer"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      Name: "cognito-authorizer"
+      Type: "COGNITO_USER_POOLS"
+      ProviderARNs:
+        - !Sub "${CognitoUserPool.Arn}"
+      AuthType: "cognito_user_pools"
+      IdentitySource: "method.request.header.Authorization"
+
+## API Gateway Resources definitions (/app,/voice,/customer,/chatbot)
+
+  ApiGatewayResourceApp:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      PathPart: "app"
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+
+  ApiGatewayResourceVoice:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      PathPart: "voice"
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+
+  ApiGatewayResourceChatbot:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      PathPart: "chatbot"
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+
+  ApiGatewayResourceCustomer:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      PathPart: "customer"
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+
+  ApiGatewayResourceConnectChat:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      PathPart: "connect-chat"
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+
+## API Gateway Methods POST/OPTIONS of /app,/voice,/chatbot,/customer
+
+  ApiGatewayMethodVoicePOST:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceVoice
+      HttpMethod: "POST"
+      AuthorizationType: "COGNITO_USER_POOLS"
+      AuthorizerId: !Ref ApiGatewayAuthorizer
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceVoice
+        ContentHandling: "CONVERT_TO_TEXT"
+        IntegrationHttpMethod: "POST"
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        TimeoutInMillis: 29000
+        Type: "AWS"
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetVoice.Arn}/invocations'
+
+  ApiGatewayMethodVoiceOPTIONS:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceVoice
+      HttpMethod: "OPTIONS"
+      AuthorizationType: "NONE"
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Headers": false
+            "method.response.header.Access-Control-Allow-Methods": false
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceVoice
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        RequestTemplates:
+          "application/json": '{"statusCode": 200}'
+        TimeoutInMillis: 29000
+        Type: "MOCK"
+
+  ApiGatewayMethodChatbotPOST:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceChatbot
+      HttpMethod: "POST"
+      AuthorizationType: "COGNITO_USER_POOLS"
+      AuthorizerId: !Ref ApiGatewayAuthorizer
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceChatbot
+        ContentHandling: "CONVERT_TO_TEXT"
+        IntegrationHttpMethod: "POST"
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        TimeoutInMillis: 29000
+        Type: "AWS"
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetChatbot.Arn}/invocations'
+
+  ApiGatewayMethodChatbotOPTIONS:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceChatbot
+      HttpMethod: "OPTIONS"
+      AuthorizationType: "NONE"
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Headers": false
+            "method.response.header.Access-Control-Allow-Methods": false
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceChatbot
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        RequestTemplates:
+          "application/json": '{"statusCode": 200}'
+        TimeoutInMillis: 29000
+        Type: "MOCK"
+
+  ApiGatewayMethodAppPOST:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceApp
+      HttpMethod: "POST"
+      AuthorizationType: "COGNITO_USER_POOLS"
+      AuthorizerId: !Ref ApiGatewayAuthorizer
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceApp
+        ContentHandling: "CONVERT_TO_TEXT"
+        IntegrationHttpMethod: "POST"
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        TimeoutInMillis: 29000
+        Type: "AWS"
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetClickstream.Arn}/invocations'
+
+  ApiGatewayMethodAppOPTIONS:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceApp
+      HttpMethod: "OPTIONS"
+      AuthorizationType: "NONE"
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Headers": false
+            "method.response.header.Access-Control-Allow-Methods": false
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceApp
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        RequestTemplates:
+          "application/json": '{"statusCode": 200}'
+        TimeoutInMillis: 29000
+        Type: "MOCK"
+
+  ApiGatewayMethodCustomerPOST:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceCustomer
+      HttpMethod: "POST"
+      AuthorizationType: "COGNITO_USER_POOLS"
+      AuthorizerId: !Ref ApiGatewayAuthorizer
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses: 
+        - ResponseModels: 
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration: 
+        CacheNamespace: !Ref ApiGatewayResourceCustomer
+        ContentHandling: "CONVERT_TO_TEXT"
+        IntegrationHttpMethod: "POST"
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        TimeoutInMillis: 29000
+        Type: "AWS"
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetCustomerInfo.Arn}/invocations'
+
+  ApiGatewayMethodCustomerOPTIONS:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceCustomer
+      HttpMethod: "OPTIONS"
+      AuthorizationType: "NONE"
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Headers": false
+            "method.response.header.Access-Control-Allow-Methods": false
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceCustomer
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        RequestTemplates:
+          "application/json": '{"statusCode": 200}'
+        TimeoutInMillis: 29000
+        Type: "MOCK"
+
+  ApiGatewayMethodConnectChatPOST:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceConnectChat
+      HttpMethod: "POST"
+      AuthorizationType: "NONE"
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceConnectChat
+        ContentHandling: "CONVERT_TO_TEXT"
+        IntegrationHttpMethod: "POST"
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        TimeoutInMillis: 29000
+        Type: "AWS_PROXY"
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaConnectChatARN}/invocations'
+
+  ApiGatewayMethodConnectChatOPTIONS:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourceConnectChat
+      HttpMethod: "OPTIONS"
+      AuthorizationType: "NONE"
+      ApiKeyRequired: false
+      RequestParameters: {}
+      MethodResponses:
+        - ResponseModels:
+            "application/json": "Empty"
+          ResponseParameters:
+            "method.response.header.Access-Control-Allow-Headers": false
+            "method.response.header.Access-Control-Allow-Methods": false
+            "method.response.header.Access-Control-Allow-Origin": false
+          StatusCode: "200"
+      Integration:
+        CacheNamespace: !Ref ApiGatewayResourceConnectChat
+        IntegrationResponses:
+          - ResponseParameters:
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            ResponseTemplates:
+              "application/json": ""
+            StatusCode: "200"
+        PassthroughBehavior: "WHEN_NO_MATCH"
+        RequestTemplates:
+          "application/json": '{"statusCode": 200}'
+        TimeoutInMillis: 29000
+        Type: "MOCK"
+
+## ROLES IAM LAMBDA
+
+  IAMRoleLambdaSaveData:
+    Type: "AWS::IAM::Role"
+    Properties:
+      Path: "/"
+      AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+      MaxSessionDuration: 3600
+      ManagedPolicyArns: 
+        - !Ref IAMManagedPolicyCloudwatch
+        - !Ref IAMManagedPolicySaveData
+      Description: "Allows Lambda functions to call AWS services on your behalf."
+
+  IAMRoleLambdaGetData:
+    Type: "AWS::IAM::Role"
+    Properties:
+      Path: "/"
+      AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+      MaxSessionDuration: 3600
+      ManagedPolicyArns: 
+        - !Ref IAMManagedPolicyCloudwatch
+        - !Ref IAMManagedPolicyGetData
+
+  IAMManagedPolicyGetData:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Path: "/"
+      PolicyDocument: !Sub |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "VisualEditor0",
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Query"
+              ],
+              "Resource": [
+                "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableCustomerInfo}",
+                "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableAppInteractions}",
+                "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableVoiceInteraction}",
+                "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableChatInteraction}"
+              ]
+            }
+          ]
+        }
+
+  IAMManagedPolicySaveData:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Path: "/"
+      PolicyDocument: !Sub |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "dynamodb:PutItem",
+              "Resource": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableAppInteractions}"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "kinesis:GetRecords",
+                "kinesis:GetShardIterator",
+                "kinesis:DescribeStream",
+                "kinesis:ListStreams"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+  
+  IAMManagedPolicyCloudwatch:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - "logs:CreateLogStream"
+              - "logs:PutLogEvents"
+              - "logs:CreateLogGroup"
+            Resource: "*" 
+
+## BACKEND LAMBDAS
+
+  LambdaGetChatbot:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Lambda to get customer's chat records
+      Environment: 
+        Variables: 
+          "TABLE_INTERACTION_CHATBOT": !Ref TableChatInteraction
+      FunctionName: omnichannel-getChatbot
+      Handler: lambda_function.lambda_handler
+      MemorySize: 128
+      Role: !GetAtt IAMRoleLambdaGetData.Arn
+      Runtime: python3.6
+      Timeout: 3
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: "omnichannel-getChatbot.zip"
+      Tags:
+        - Key: "solution"
+          Value: "omnichannel-solution"
+
+  LambdaGetVoice:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Lambda to get customer's Voice records
+      Environment: 
+        Variables: 
+          "TABLE_INTERACTION_VOICE": !Ref TableVoiceInteraction
+      FunctionName: omnichannel-getVoice
+      Handler: lambda_function.lambda_handler
+      MemorySize: 128
+      Role: !GetAtt IAMRoleLambdaGetData.Arn
+      Runtime: python3.6
+      Timeout: 3
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: "omnichannel-getVoice.zip"
+      Tags:
+        - Key: "solution"
+          Value: "omnichannel-solution"
+
+  LambdaGetCustomerInfo:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Lambda to get customer's financial information
+      Environment: 
+        Variables: 
+          "TABLE_CUSTOMER_DATA": !Ref TableCustomerInfo
+      FunctionName: omnichannel-getCustomerInfo
+      Handler: lambda_function.lambda_handler
+      MemorySize: 128
+      Role: !GetAtt IAMRoleLambdaGetData.Arn
+      Runtime: python3.6
+      Timeout: 3
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: "omnichannel-getCustomerInfo.zip"
+      Tags:
+        - Key: "solution"
+          Value: "omnichannel-solution"
+
+  LambdaGetClickstream:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Lambda to get customer's ClickStream records
+      Environment: 
+        Variables: 
+          "TABLE_INTERACTION_APP": !Ref TableAppInteractions
+      FunctionName: !Sub 'omnichannel-getClickStream'
+      Handler: lambda_function.lambda_handler
+      MemorySize: 128
+      Role: !GetAtt IAMRoleLambdaGetData.Arn
+      Runtime: python3.6
+      Timeout: 3
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: "omnichannel-getClickStream.zip"
+      Tags:
+        - Key: "solution"
+          Value: "omnichannel-solution"
+
+## LAMBDA PERMISSIONS - INTEGRATION FROM API GATEWAY TO BACKEND LAMBDAS
+
+  LambdaPermissionGetChatbot:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt LambdaGetChatbot.Arn
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/POST/chatbot"
+
+  LambdaPermissionGetVoice:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt LambdaGetVoice.Arn
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/POST/voice"
+
+  LambdaPermissionGetCustomerInfo:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt LambdaGetCustomerInfo.Arn
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/POST/customer"
+
+  LambdaPermissionGetClickstream:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt LambdaGetClickstream.Arn
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/POST/app"
+
+  LambdaPermissionInitiateChatLambda1:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !Ref LambdaConnectChatARN
+      Principal:  "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayRestApi}/*/POST/connect-chat"
+
+## LAMBDA THAT GETS INTERACTION FROM KINESIS STREAM AND SAVE THEM TO DYNAMODB ##
+
+  KinesisClickStream:
+    Type: "AWS::Kinesis::Stream"
+    Properties:
+      #Name: !Sub "omnichannel-KinesisClickstream-${AWS::AccountId}"
+      Name: !Sub "omnichannel-KinesisClickstream"
+      RetentionPeriodHours: 24
+      ShardCount: 1
+
+  LambdaSaveClickStream:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Lambda that saves customer's clickstream activities
+      Environment: 
+        Variables: 
+          "TABLE_INTERACTION_APP": !Ref TableAppInteractions
+      FunctionName: omnichannel-saveClickStream
+      Handler: lambda_function.lambda_handler
+      MemorySize: 128
+      Role: !GetAtt IAMRoleLambdaSaveData.Arn
+      Runtime: python3.6
+      Timeout: 3
+      Code:
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: "omnichannel-saveClickStream.zip"
+      Tags:
+        - Key: "solution"
+          Value: "omnichannel-solution"
+
+  LambdaEventSourceMapKinesisClickstream:
+    Type: "AWS::Lambda::EventSourceMapping"
+    Properties:
+      BatchSize: 100
+      EventSourceArn: !GetAtt KinesisClickStream.Arn
+      FunctionName: !GetAtt LambdaSaveClickStream.Arn
+      Enabled: true
+      MaximumBatchingWindowInSeconds: 0
+      ParallelizationFactor: 1
+      MaximumRecordAgeInSeconds: 604800
+      BisectBatchOnFunctionError: false
+      MaximumRetryAttempts: 10000
+      StartingPosition: LATEST
+
+ ## Cognito User Pool
+
+  CognitoUserPool:
+    Type: "AWS::Cognito::UserPool"
+    Properties:
+      UserPoolName: "omnichannel"
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          TemporaryPasswordValidityDays: 7
+      Schema:
+        - Name: "sub"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: false
+          Required: true
+          StringAttributeConstraints:
+            MinLength: "1"
+            MaxLength: "2048"
+        - Name: "name"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: "0"
+            MaxLength: "2048"
+        - Name: "given_name"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: "0"
+            MaxLength: "2048"
+        - Name: "family_name"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: "0"
+            MaxLength: "2048"
+        - Name: "middle_name"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: "0"
+            MaxLength: "2048"
+        - Name: "nickname"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: "0"
+            MaxLength: "2048"
+        - Name: "email"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: true
+          StringAttributeConstraints:
+            MinLength: "0"
+            MaxLength: "2048"
+        - Name: "email_verified"
+          AttributeDataType: "Boolean"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+        - Name: "phone_number"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: "0"
+            MaxLength: "2048"
+        - Name: "customerId"
+          AttributeDataType: "String"
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: "1"
+            MaxLength: "256"
+      AutoVerifiedAttributes:
+        - "email"
+      AliasAttributes:
+        - "email"
+      SmsVerificationMessage: "Your verification code is {####}. "
+      EmailVerificationMessage: "Your verification code is {####}. "
+      EmailVerificationSubject: "Your verification code"
+      SmsAuthenticationMessage: "Your authentication code is {####}. "
+      MfaConfiguration: "OFF"
+      EmailConfiguration:
+        EmailSendingAccount: "COGNITO_DEFAULT"
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+        InviteMessageTemplate:
+          SMSMessage: "Your username is {username} and temporary password is {####}. "
+          EmailMessage: "Your username is {username} and temporary password is {####}. "
+          EmailSubject: "Your temporary password"
+      UserPoolTags: {}
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Priority: 1
+            Name: "verified_email"
+          - Priority: 2
+            Name: "verified_phone_number"
+      UsernameConfiguration:
+        CaseSensitive: false
+      VerificationMessageTemplate:
+        SmsMessage: "Your verification code is {####}. "
+        EmailMessage: "Your verification code is {####}. "
+        EmailSubject: "Your verification code"
+        DefaultEmailOption: "CONFIRM_WITH_CODE"
+
+  CognitoAppClientCustomer:
+    Type: "AWS::Cognito::UserPoolClient"
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      ClientName: "customer"
+      RefreshTokenValidity: 30
+      ReadAttributes:
+        - "address"
+        - "birthdate"
+        - "custom:customerId"
+        - "email"
+        - "email_verified"
+        - "family_name"
+        - "gender"
+        - "given_name"
+        - "locale"
+        - "middle_name"
+        - "name"
+        - "nickname"
+        - "phone_number"
+        - "phone_number_verified"
+        - "picture"
+        - "preferred_username"
+        - "profile"
+        - "updated_at"
+        - "website"
+        - "zoneinfo"
+      WriteAttributes:
+        - "address"
+        - "birthdate"
+        - "custom:customerId"
+        - "email"
+        - "family_name"
+        - "gender"
+        - "given_name"
+        - "locale"
+        - "middle_name"
+        - "name"
+        - "nickname"
+        - "phone_number"
+        - "picture"
+        - "preferred_username"
+        - "profile"
+        - "updated_at"
+        - "website"
+        - "zoneinfo"
+      ExplicitAuthFlows:
+        - "ALLOW_CUSTOM_AUTH"
+        - "ALLOW_REFRESH_TOKEN_AUTH"
+        - "ALLOW_USER_SRP_AUTH"
+      PreventUserExistenceErrors: "ENABLED"
+
+  CognitoAppClientAgent:
+    Type: "AWS::Cognito::UserPoolClient"
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      ClientName: "agent"
+      RefreshTokenValidity: 30
+      ReadAttributes:
+        - "address"
+        - "birthdate"
+        - "custom:customerId"
+        - "email"
+        - "email_verified"
+        - "family_name"
+        - "gender"
+        - "given_name"
+        - "locale"
+        - "middle_name"
+        - "name"
+        - "nickname"
+        - "phone_number"
+        - "phone_number_verified"
+        - "picture"
+        - "preferred_username"
+        - "profile"
+        - "updated_at"
+        - "website"
+        - "zoneinfo"
+      WriteAttributes:
+        - "address"
+        - "birthdate"
+        - "custom:customerId"
+        - "email"
+        - "family_name"
+        - "gender"
+        - "given_name"
+        - "locale"
+        - "middle_name"
+        - "name"
+        - "nickname"
+        - "phone_number"
+        - "picture"
+        - "preferred_username"
+        - "profile"
+        - "updated_at"
+        - "website"
+        - "zoneinfo"
+      ExplicitAuthFlows:
+        - "ALLOW_CUSTOM_AUTH"
+        - "ALLOW_REFRESH_TOKEN_AUTH"
+        - "ALLOW_USER_SRP_AUTH"
+      PreventUserExistenceErrors: "ENABLED"
+
+  CognitoUserPoolDomain:
+    Type: "AWS::Cognito::UserPoolDomain"
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      Domain: !Sub "omnichannel-${AWS::AccountId}"
+
+  ##Cognito IDP
+
+  CognitoIdentityPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: "idp"
+      AllowUnauthenticatedIdentities: true
+      CognitoIdentityProviders:
+        - ProviderName: !Sub "cognito-idp.${AWS::Region}.amazonaws.com/${CognitoUserPool}"
+          ClientId: !Ref CognitoAppClientCustomer
+          ServerSideTokenCheck: false
+        - ProviderName: !Sub "cognito-idp.${AWS::Region}.amazonaws.com/${CognitoUserPool}"
+          ClientId: !Ref CognitoAppClientAgent
+          ServerSideTokenCheck: false
+
+  CognitoIdentityPoolRoleAttachment:
+    Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+    Properties:
+      IdentityPoolId: !Ref CognitoIdentityPool
+      Roles:
+        authenticated: !GetAtt IAMRoleIDPAuthenticated.Arn
+        unauthenticated: !GetAtt IAMRoleIDPUnAuthenticated.Arn
+
+  IAMRoleIDPAuthenticated:
+    Type: "AWS::IAM::Role"
+    Properties:
+      Path: "/"
+      AssumeRolePolicyDocument: !Sub '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"cognito-identity.amazonaws.com"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"cognito-identity.amazonaws.com:aud":"${CognitoIdentityPool}"},"ForAnyValue:StringLike":{"cognito-identity.amazonaws.com:amr":"authenticated"}}}]}'
+      MaxSessionDuration: 3600
+
+  IAMRoleIDPUnAuthenticated:
+    Type: "AWS::IAM::Role"
+    Properties:
+      Path: "/"
+      AssumeRolePolicyDocument: !Sub '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"cognito-identity.amazonaws.com"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"cognito-identity.amazonaws.com:aud":"${CognitoIdentityPool}"},"ForAnyValue:StringLike":{"cognito-identity.amazonaws.com:amr":"unauthenticated"}}}]}'
+      MaxSessionDuration: 3600
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+        - "arn:aws:iam::aws:policy/AmazonPollyReadOnlyAccess"
+        - "arn:aws:iam::aws:policy/AmazonLexRunBotsOnly"
+
+  IAMPolicyAuthenticatedKinesis:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "kinesis:PutRecord"
+              - "kinesis:PutRecords"
+            Resource:
+              - !GetAtt KinesisClickStream.Arn
+      Roles:
+        - !Ref IAMRoleIDPAuthenticated
+      PolicyName: "Kinesis-PutRecords"
+
+  IAMPolicyAuthenticatedCognito:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "mobileanalytics:PutEvents"
+              - "cognito-sync:*"
+              - "cognito-identity:*"
+            Resource:
+              - "*"
+      Roles:
+        - !Ref IAMRoleIDPAuthenticated
+      PolicyName: !Sub "oneClick_${IAMRoleIDPAuthenticated}"
+
+  IAMPolicyAuthUnAuthPinpoint:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "mobiletargeting:PutEvents"
+              - "mobiletargeting:UpdateEndpoint"
+            Resource:
+              - !Sub "arn:aws:mobiletargeting:${AWS::Region}:${AWS::AccountId}:apps/${PinpointApp}/*"
+      Roles:
+        - !Ref IAMRoleIDPUnAuthenticated
+      PolicyName: !Sub "Pinpoint"
+
+  IAMPolicyUnAuthenticatedKinesis:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "kinesis:PutRecord"
+              - "kinesis:PutRecords"
+            Resource:
+              - !GetAtt KinesisClickStream.Arn
+      Roles:
+        - !Ref IAMRoleIDPUnAuthenticated
+      PolicyName: "write-kynesis-stream"
+
+  PinpointApp:
+    Type: "AWS::Pinpoint::App"
+    Properties:
+      Name: "omnichannel-app"
+
+Outputs:
+  URIApiGateway:
+    Description: URL to invoke the API
+    Value: !Sub https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod
+
+  CognitoIdP:
+    Description: Identity Pool
+    Value: !Ref CognitoIdentityPool
+
+  CognitoUserPool:
+    Description: Cognito User Pool
+    Value: !Ref CognitoUserPool
+
+  CognitoAppClientCustomer:
+    Description: Cognito App Client - Customer
+    Value: !Ref CognitoAppClientCustomer
+
+  CognitoAppClientAgent:
+    Description: Cognito App Client - Agent
+    Value: !Ref CognitoAppClientAgent
+
+  CognitoUserPoolDomain:
+    Description: Cognito User Pool Domain
+    Value: !Ref CognitoUserPoolDomain
+
+  UrlCustomDomainCognito:
+    Description: URL Cognito Domain
+    Value: !Sub ${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com
+
+  KinesisClickStreamName:
+    Description: Name of the Kinesis for Clickstreaming
+    Value: !Ref KinesisClickStream
+
+  pinpointAppId: 
+    Description: Pinpoint Application Id
+    Value: !Ref PinpointApp

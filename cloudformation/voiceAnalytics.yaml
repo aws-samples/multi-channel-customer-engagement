@@ -1,0 +1,539 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template to create a pipeline for transcribe and comprehend (sentiment
+  analysis)
+Outputs:
+  ComprehendOutputLocation:
+    Description: S3 sentiment analysis location.
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-ComprehendS3Uri
+    Value:
+      Fn::Join:
+      - ''
+      - - s3://
+        - Ref: S3Bucket
+        - /comprehend/
+  S3Bucket:
+    Description: S3 bucket where recordings, transcriptions and comprehensions will
+      be stored
+    Value:
+      Ref: S3Bucket
+  comprehendTranscriptLambdaArn:
+    Description: "Arn comprehend_transcript_lambda"
+    Value:
+      Fn::GetAtt:
+        - ComprehendTranscriptLambda
+        - Arn
+  executeTranscriptionStateMachineArn:
+    Description: "Arn execute_transcription_state_machine"
+    Value: 
+      Fn::GetAtt:
+        - StartTranscribeExecutionLambda
+        - Arn
+Parameters:
+  RecordingsPrefix:
+    Default: recordings/
+    Description: Name of folder where recordings would be stored
+    Type: String
+  TranscriptionJobCheckWaitTime:
+    Default: 2
+    Description: Time between transcription job checks
+    Type: Number
+  TranscriptsPrefix:
+    Default: transcripts/
+    Description: Name of folder where transcripts would be stored
+    Type: String
+  Language:
+    Type: String
+    Default: en
+    AllowedValues: 
+        - en
+        - es
+  TableInteractionsVoice:
+    Type: String   
+    Default: "TableInteractionsVoice"
+
+  S3BucketAssets:
+    Type: String
+    Default: "omnichannel-assets-us-east-1"
+    Description: You can update this value if you have changed the original code
+
+Resources:
+  ComprehendTranscriptLambda:
+    Properties:
+      CodeUri:
+        Bucket: !Ref S3BucketAssets
+        Key: comprehend_transcript_lambda.zip
+      Description: lambda to submit a transcribe job
+      Environment:
+        Variables:
+          LANGUAGE_CODE: 
+              Ref: Language
+          CUSTOMER_TABLE_NAME:
+              Ref: TableInteractionsVoice
+      Events:
+        ComprehendTranscriptEvent:
+          Properties:
+            Bucket:
+              Ref: S3Bucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                - Name: prefix
+                  Value:
+                    Ref: TranscriptsPrefix
+          Type: S3
+      FunctionName: comprehend_transcript_lambda
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role:
+        Fn::GetAtt:
+        - ComprehendTranscriptLambdaRole
+        - Arn
+      Runtime: python3.6
+      Timeout: 3
+    Type: AWS::Serverless::Function
+    
+  ComprehendTranscriptLambdaRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - comprehend:Detect*
+            - comprehend:BatchDetect*
+            Effect: Allow
+            Resource: '*'
+          Version: '2012-10-17'
+        PolicyName: comprehend_transcript_lambda_comprehend_policy
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - s3:PutObject
+            - s3:GetObject
+            Effect: Allow
+            Resource:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Fn::GetAtt:
+                  - S3BucketNameResource
+                  - BucketName
+                - /*
+          Version: '2012-10-17'
+        PolicyName: comprehend_transcript_lambda_s3_policy
+      ManagedPolicyArns: 
+        - !Ref 'saveTransacriptiondynamoresourcepolicy'
+    Type: AWS::IAM::Role
+
+  LambdaLogPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName: "lambda_logging_policy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+            - logs:CreateLogStream
+            - logs:CreateLogGroup
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+            - arn:aws:logs:*:*:*
+      Roles:
+        - Ref: "ComprehendTranscriptLambdaRole"
+        - Ref: "GetTranscribeJobLambdaTaskRole"
+        - Ref: "S3BucketResourceRole"
+        - Ref: "SaveTranscriptionToS3LambdaTaskRole"
+        - Ref: "StartTranscribeExecutionLambdaRole"
+        - Ref: "SubmitTranscribeJobLambdaTaskRole"
+  GetTranscribeJobLambdaTask:
+    Properties:
+      CodeUri:
+        Bucket: !Ref S3BucketAssets
+        Key: get_transcribe_job_status.zip     
+#       !Sub "s3://${S3BucketAssets}/get_transcribe_job_status.zip"
+      Description: lambda to get a transcribe job status
+      FunctionName: get_transcribe_job_status
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role:
+        Fn::GetAtt:
+        - GetTranscribeJobLambdaTaskRole
+        - Arn
+      Runtime: python3.6
+      Timeout: 3
+    Type: AWS::Serverless::Function
+  GetTranscribeJobLambdaTaskRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonTranscribeFullAccess
+    Type: AWS::IAM::Role
+
+  S3BucketCustomResourceLambda:
+    Properties:
+      CodeUri:
+        Bucket: !Ref S3BucketAssets
+        Key: S3BucketCustomResourceLambda.zip
+#       !Sub "s3://${S3BucketAssets}/S3BucketCustomResourceLambda.zip"
+      Description: custom resoure to create s3 bucket on the fly
+      FunctionName: s3_bucket_custom_resource_for_recordings_lambda
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role:
+        Fn::GetAtt:
+        - S3BucketResourceRole
+        - Arn
+      Runtime: python3.6
+      Timeout: 3
+    Type: AWS::Serverless::Function
+  S3BucketNameResource:
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+        - S3BucketCustomResourceLambda
+        - Arn
+    Type: Custom::CreateS3Bucket  
+
+  S3BucketResourceRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+    Type: AWS::IAM::Role
+
+
+  s3bucketresourcepolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName: "s3_bucket_resource_s3_policy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:HeadObject
+            - s3:CreateBucket
+            Effect: Allow
+            Resource: "*"
+      Roles:
+        - Ref: "S3BucketResourceRole"
+
+  SaveTranscriptionToS3LambdaTask:
+    Properties:
+      CodeUri:
+        Bucket: !Ref S3BucketAssets
+        Key: save_transcription_to_s3.zip
+#       !Sub "s3://${S3BucketAssets}/save_transcription_to_s3.zip"
+      Description: lambda to save transcription to S3
+      FunctionName: save_transcription_to_s3
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role:
+        Fn::GetAtt:
+        - SaveTranscriptionToS3LambdaTaskRole
+        - Arn
+      Runtime: python3.6
+      Timeout: 3
+      Environment:
+        Variables:
+          CUSTOMER_TABLE_NAME:
+            Ref: TableInteractionsVoice
+    Type: AWS::Serverless::Function
+
+
+  SaveTranscriptionToS3LambdaTaskRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+    Type: AWS::IAM::Role
+  saveTransacriptions3resourcepolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName: "save_transcription_to_s3_policy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+            - s3:PutObject
+            - s3:PutObjectTagging
+            - s3:RestoreObject
+            Effect: Allow
+            Resource:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Fn::GetAtt:
+                  - S3BucketNameResource
+                  - BucketName
+                - /*
+      Roles:
+        - Ref: "SaveTranscriptionToS3LambdaTaskRole"
+
+  saveTransacriptiondynamoresourcepolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName: "save_transcription_to_dynamo_policy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action: dynamodb:*
+            Effect: Allow
+            Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableInteractionsVoice}' 
+      Roles:
+        - Ref: "SaveTranscriptionToS3LambdaTaskRole"
+
+  StartTranscribeExecutionLambda:
+    Properties:
+      CodeUri:
+        Bucket: !Ref S3BucketAssets
+        Key: execute_transcription_state_machine.zip
+#       !Sub "s3://${S3BucketAssets}/execute_transcription_state_machine.zip"
+      Description: lambda to save transcription to S3
+      Environment:
+        Variables:
+          LANGUAGE_CODE: !Sub '${Language}-US'
+          MEDIA_FORMAT: wav
+          TRANSCRIBE_STATE_MACHINE_ARN:
+            Ref: TranscribeStateMachine
+          TRANSCRIPTS_DESTINATION:
+            Fn::GetAtt:
+            - S3BucketNameResource
+            - BucketName
+          WAIT_TIME:
+            Ref: TranscriptionJobCheckWaitTime
+      Events:
+        StartTranscribeExecutionEvent:
+          Properties:
+            Bucket:
+              Ref: S3Bucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                - Name: prefix
+                  Value:
+                    Ref: RecordingsPrefix
+          Type: S3
+      FunctionName: execute_transcription_state_machine
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role:
+        Fn::GetAtt:
+        - StartTranscribeExecutionLambdaRole
+        - Arn
+      Runtime: python3.6
+      Timeout: 3
+    Type: AWS::Serverless::Function
+  
+  S3Bucket:
+    DeletionPolicy: Retain
+    Properties:
+      BucketName:
+        Fn::GetAtt:
+        - S3BucketNameResource
+        - BucketName
+    Type: AWS::S3::Bucket
+
+  StartTranscribeExecutionLambdaRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - states:StartExecution
+            - states:StopExecution
+            Effect: Allow
+            Resource: '*'
+          Version: '2012-10-17'
+        PolicyName: start_transcribe_execution_step_function_policy
+    Type: AWS::IAM::Role
+  stepfunctionpolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName: "start_transcribe_execution_step_function_policy"
+      PolicyDocument:
+          Statement:
+          - Action:
+            - states:StartExecution
+            - states:StopExecution
+            Effect: Allow
+            Resource: '*'
+          Version: '2012-10-17'
+      Roles:
+        - Ref: "StartTranscribeExecutionLambdaRole"
+  SubmitTranscribeJobLambdaTask:
+    Properties:
+      CodeUri:
+        Bucket: !Ref S3BucketAssets
+        Key: submit_transcribe_job.zip
+#       !Sub "s3://${S3BucketAssets}/submit_transcribe_job.zip"
+      Description: lambda to submit a transcribe job
+      FunctionName: submit_transcribe_job
+      Handler: index.lambda_handler
+      MemorySize: 128
+      Role:
+        Fn::GetAtt:
+        - SubmitTranscribeJobLambdaTaskRole
+        - Arn
+      Runtime: python3.6
+      Timeout: 3
+    Type: AWS::Serverless::Function
+  SubmitTranscribeJobLambdaTaskRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonTranscribeFullAccess
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - s3:GetObject
+            - s3:GetObjectAcl
+            Effect: Allow
+            Resource:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Fn::GetAtt:
+                  - S3BucketNameResource
+                  - BucketName
+                - /*
+          Version: '2012-10-17'
+        PolicyName: submit_transcribe_job_transcribe_s3_policy
+    Type: AWS::IAM::Role
+  submittranscribes3Policy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName: "submit_transcribe_job_transcribe_s3_policy"
+      PolicyDocument:
+          Statement:
+          - Action:
+            - s3:GetObject
+            - s3:GetObjectAcl
+            Effect: Allow
+            Resource:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Fn::GetAtt:
+                  - S3BucketNameResource
+                  - BucketName
+                - /*
+          Version: '2012-10-17'
+      Roles:
+        - Ref: "SubmitTranscribeJobLambdaTaskRole"
+  
+  S3Bucket:
+    DeletionPolicy: Retain
+    Properties:
+      BucketName:
+        Fn::GetAtt:
+        - S3BucketNameResource
+        - BucketName
+    Type: AWS::S3::Bucket
+
+  TranscribeStateMachine:
+    Properties:
+      DefinitionString:
+        Fn::Sub: "{\n  \"Comment\": \"A state machine that submits a Job to transcribe\
+          \ audio\",\n  \"StartAt\": \"Submit Transcription Job\",\n  \"States\":\
+          \ {\n    \"Submit Transcription Job\": {\n      \"Type\": \"Task\",\n  \
+          \    \"Resource\": \"${SubmitTranscribeJobLambdaTask.Arn}\",\n      \"ResultPath\"\
+          : \"$.TranscriptionJob\",\n      \"Next\": \"Wait X Seconds\",\n      \"\
+          Retry\": [\n        {\n          \"ErrorEquals\": [\n            \"States.ALL\"\
+          \n          ],\n          \"IntervalSeconds\": 1,\n          \"MaxAttempts\"\
+          : 3,\n          \"BackoffRate\": 2\n        }\n      ]\n    },\n    \"Wait\
+          \ X Seconds\": {\n      \"Type\": \"Wait\",\n      \"SecondsPath\": \"$.wait_time\"\
+          ,\n      \"Next\": \"Get Transcription Job Status\"\n    },\n    \"Get Transcription\
+          \ Job Status\": {\n      \"Type\": \"Task\",\n      \"Resource\": \"${GetTranscribeJobLambdaTask.Arn}\"\
+          ,\n      \"Next\": \"Job Complete?\",\n      \"InputPath\": \"$.TranscriptionJob\"\
+          ,\n      \"ResultPath\": \"$.TranscriptionJob\",\n      \"Retry\": [\n \
+          \       {\n          \"ErrorEquals\": [\n            \"States.ALL\"\n  \
+          \        ],\n          \"IntervalSeconds\": 1,\n          \"MaxAttempts\"\
+          : 3,\n          \"BackoffRate\": 2\n        }\n      ]\n    },\n    \"Job\
+          \ Complete?\": {\n      \"Type\": \"Choice\",\n      \"Choices\": [\n  \
+          \      {\n          \"Variable\": \"$.TranscriptionJob.TranscriptionJob.TranscriptionJobStatus\"\
+          ,\n          \"StringEquals\": \"FAILED\",\n          \"Next\": \"Job Failed\"\
+          \n        },\n        {\n          \"Variable\": \"$.TranscriptionJob.TranscriptionJob.TranscriptionJobStatus\"\
+          ,\n          \"StringEquals\": \"COMPLETED\",\n          \"Next\": \"Save\
+          \ Transcription to S3\"\n        }\n      ],\n      \"Default\": \"Wait\
+          \ X Seconds\"\n    },\n    \"Job Failed\": {\n      \"Type\": \"Fail\",\n\
+          \      \"Cause\": \"Transcription job Failed\",\n      \"Error\": \"Transcription\
+          \ job FAILED\"\n    },\n    \"Save Transcription to S3\": {\n      \"Type\"\
+          : \"Task\",\n      \"Resource\": \"${SaveTranscriptionToS3LambdaTask.Arn}\"\
+          ,\n      \"InputPath\": \"$\",\n      \"End\": true,\n      \"Retry\": [\n\
+          \        {\n          \"ErrorEquals\": [\n            \"States.ALL\"\n \
+          \         ],\n          \"IntervalSeconds\": 1,\n          \"MaxAttempts\"\
+          : 3,\n          \"BackoffRate\": 2\n        }\n      ]\n    }\n  }\n}\n"
+      RoleArn:
+        Fn::GetAtt:
+        - TranscribeStatesExecutionRole
+        - Arn
+    Type: AWS::StepFunctions::StateMachine
+  TranscribeStatesExecutionRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - Fn::Sub: states.${AWS::Region}.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaRole
+    Type: AWS::IAM::Role
+Transform: AWS::Serverless-2016-10-31
