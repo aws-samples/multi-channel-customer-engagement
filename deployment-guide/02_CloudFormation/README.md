@@ -68,6 +68,8 @@ After stack creation is complete, go to the **Outputs** tab and get the values.
 
 **CustomerDomainName**: Web Portal for Customers
 
+**S3ConnectBucket**: S3 Bucket that will be used to store Amazon Connect recordings and transcripts.
+
 ![connect](./images/image%20(23).png)
 
 > After deploying the stack if you see an S3 permission error when viewing the web portal urls, it means the domain is not ready yet. The CDN can take up to an hour to be ready. Be patient and meawhile continue with the next steps.
@@ -112,6 +114,14 @@ Now go to the **Main Flow** Contact Flow select the box **Get Customer Input** a
 
 ## Configure the Data storage
 
-1. Go to CloudFormation - outputs and you should see S3ConnectBucket. Go to the Amazon Connect Console, select you Instance and go to **Data streaming** - Call recordings - Call recording will be stored here	and click Edit and choose the s3 Bucket from the CloudFormation output
+1. Go to CloudFormation - outputs and you should see S3ConnectBucket. Go to the Amazon Connect Console, select you Instance and go to **Data storage** - **Call recordings** - **Call recording will be stored here** and click **Edit**
+
+**Enable call recordings**, select the S3ConnectBucket name from the CloudFormation output and set **Path prefix** to **CallRecordings**
+
+**Enable chat transcripts**, select the S3ConnectBucket name from the CloudFormation output and set **Path prefix** to **ChatTranscripts**
+
+**Save** the changes.
 
 ![connect](./images/image-datastorage.png)
+
+You are now ready to continue with step 3: [Create an Alexa Skill](./03_AlexaSkill/README.md)

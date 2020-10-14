@@ -33,8 +33,6 @@ After you complete this step, the console provides a callback URL. Write down th
 
         The console creates the bot channel association and returns a callback URL. Write down this URL
 
-
-
 2. On the Facebook developer portal, choose your app.
 
 3. Choose the **Messenger** product, and choose **Setup webhooks** in the **Webhooks** section of the page.
