@@ -26,4 +26,4 @@ For this walkthrough, you should have the following prerequisites:
 
 + An Amazon Alexa Developer account. [Create one here](https://developer.amazon.com/alexa)
 
-Go to step 1 [Amazon Connect setup](./deployment-guide/01_AmazonConnect//README.md)
+Go to step 1 [Amazon Connect setup](../01_AmazonConnect/README.md)
