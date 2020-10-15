@@ -1,4 +1,4 @@
-# Alexa Skill Configuration
+# Alexa Skill setup
 
 The Omnichannel architecture includes Alexa Skills as one of the channels that enables the customers to communicate with Cloud Bank. In this guidance you will create an Alexa Skill, and you will setup this skill to have the same interaction model that already have with Amazon Lex, this Lex bot was deployed with the cloudformation template from the previous step. 
 
@@ -57,4 +57,4 @@ Now, you will replace the Default Region ARN in the Lambda with the ARN of the L
 11. If your interaction model builds successfully, you are now able to test the interaction model
 
 
-You are now ready to go to step 4 : [Integrating your Amazon Lex Bot with Facebook Messenger](../04_CloudFormationFacebookMessenger/README.md)
+You are now ready to go to step 4 : [Integrating your Amazon Lex Bot with Facebook Messenger](../04_FacebookMessenger/README.md)
