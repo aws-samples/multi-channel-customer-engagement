@@ -51,7 +51,7 @@ After you complete this step, the console provides a callback URL. Write down th
 
 6. You can now start a conversation from Facebook Messenger with your Amazon Lex bot. Open your Facebook page, and choose Message.
 
-You are now ready to go to step 5: [Using the solution](./05_UserGuide/README.md)
+You are now ready to go to step 5: [Using the solution](../05_UserGuide/README.md)
 
 
 

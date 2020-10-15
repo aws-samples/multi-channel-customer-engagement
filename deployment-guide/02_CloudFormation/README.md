@@ -124,4 +124,4 @@ Now go to the **Main Flow** Contact Flow select the box **Get Customer Input** a
 
 ![connect](./images/image-datastorage.png)
 
-You are now ready to continue with step 3: [Create an Alexa Skill](./03_AlexaSkill/README.md)
+You are now ready to continue with step 3: [Create an Alexa Skill](../03_AlexaSkill/README.md)

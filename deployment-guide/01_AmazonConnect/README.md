@@ -137,4 +137,4 @@ To claim a number for your contact center:
 
 Now you have a phone number for your customers to contact you.
 
-You are now ready to go to step 2 : [Deploy CloudFormation](./02_CloudFormation/README.md)
+You are now ready to go to step 2 : [Deploy CloudFormation](../02_CloudFormation/README.md)
