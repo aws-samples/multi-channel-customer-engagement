@@ -13,9 +13,9 @@ Search for [Amazon Connect](https://console.aws.amazon.com/connect) in your aws 
 1. Choose Get started. If you have previously created an instance, choose Add an instance instead.
 
 2. Choose one of the following options:
-- Store users within Amazon Connect - Use Amazon Connect to create and manage user accounts.
-- Link to an existing directory - Use an AWS Directory Service directory to manage your users. You can use each directory with one Amazon Connect instance at a time.
-- SAML 2.0-based authentication - Use an existing identity provider (IdP) to federate users with Amazon Connect.
+   - Store users within Amazon Connect - Use Amazon Connect to create and manage user accounts.
+   - Link to an existing directory - Use an AWS Directory Service directory to manage your users. You can use each directory with one Amazon Connect instance at a time.
+   - SAML 2.0-based authentication - Use an existing identity provider (IdP) to federate users with Amazon Connect.
 
 3. If you chose Store users within Amazon Connect or SAML 2.0-based authentication, provide the left-most label for Access URL. This label must be unique across all Amazon Connect instances in all Regions. You can't change the access URL after you create your instance.
 
@@ -78,9 +78,9 @@ Log in to your contact center using your access URL (https://domain.awsapps.com/
 
 4. Select the 
 
-- [File in english](../01_Connect/files/[ENGLISH]InboudCallwLex) 
+- [Download Contact Flow in english](../01_Connect/files/[ENGLISH]InboudCallwLex) 
 
-- [Archivo en español](../01_Connect/files/[ENGLISH]InboudCallwLex) 
+- [Descargar Contact Flow en español](../01_Connect/files/[ENGLISH]InboudCallwLex) 
 
    to import, and choose Import. When the contact flow is imported into an existing contact flow, the name of the existing contact flow is updated, too.
 
@@ -88,21 +88,18 @@ Log in to your contact center using your access URL (https://domain.awsapps.com/
 
 NOTE - After we deploy the Cloudformation in the next step, we will come back to this contact flow to add our Amazon lex bot.
 
-
- 
 ![connect](./images/image%20(14).png)
 
-Once created, you should be seeing something similar at this flow
-
+Once created, you should be seeing something similar to this flow
 
 ![connect](./images/image%20(16).png)
-
 
 Please repeat the previous steps and import the following flows as well.
 
 #### For English
 
 - [[ENGLISH]BasicChat](../01_Connect/files/[ENGLISH]BasicChat)
+
 - [BasicChatDisconnectFlow](../01_Connect/files/BasicChatDisconnectFlow)
 
 #### Para Español
