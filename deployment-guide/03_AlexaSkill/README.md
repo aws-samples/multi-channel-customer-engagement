@@ -54,4 +54,7 @@ Now, you will replace the Default Region ARN in the Lambda with the ARN of the L
 12. After this 
 
 
-11. If your interaction model builds successfully, you are now able to test the interaction model 
+11. If your interaction model builds successfully, you are now able to test the interaction model
+
+
+You are now ready to go to step 4 : [Integrating your Amazon Lex Bot with Facebook Messenger](./04_CloudFormationFacebookMessenger/README.md)
