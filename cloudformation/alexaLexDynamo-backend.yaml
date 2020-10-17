@@ -688,8 +688,11 @@ Resources:
 
 Outputs:
   LambdaLex:
-    Description: ARN of the lambda
+    Description: ARN of the lambda backend Amazon Lex
     Value: !GetAtt LambdaLex.Arn
+  LambdaAlexa:
+    Description: ARN of the Lambda Backend Amazon Alexa
+    Value: !GetAtt LambdaAlexa.Arn
   DynamoDBTableCustomerInteractionsApp:
     Description:  Customer Interactions App Table
     Value: !Ref 'TableInteractionsApp'
