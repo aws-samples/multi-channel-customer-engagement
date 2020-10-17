@@ -129,7 +129,6 @@ Resources:
           cognitoUserPoolId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoUserPool
 
 Outputs: 
-
   AgentDomainName:
     Value: !GetAtt stackAgentPortalFrontEnd.Outputs.DomainName
     Description: Web site endpoint for Agent Portal
