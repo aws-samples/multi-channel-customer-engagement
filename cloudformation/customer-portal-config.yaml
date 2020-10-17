@@ -33,10 +33,10 @@ Parameters:
   apiGatewayEndpoint:
     Type: String
     Description: API Gateway Endpoint URL
-  connectInstanceId:
+  ConnectInstanceARN:
     Type: String
     Description: Connect Instance Id
-  connectContactFlowId:
+  connectContactFlowARN:
     Type: String
     Description: Connect Contact Flow Id
   kinesisStreamName:
@@ -120,8 +120,8 @@ Resources:
       cognitoDomain: !Ref cognitoDomain
       cognitoClientId: !Ref cognitoCustomerPortalClientId
       apiGatewayEndpoint: !Ref apiGatewayEndpoint
-      connectInstanceId: !Ref connectInstanceId
-      connectContactFlowId: !Ref connectContactFlowId
+      connectInstanceId: !Ref ConnectInstanceARN
+      connectContactFlowId: !Ref connectContactFlowARN
       kinesisStreamName: !Ref kinesisStreamName
       pinPointAppId: !Ref pinPointAppId
 
@@ -153,8 +153,8 @@ Resources:
       cognitoDomain: !Ref cognitoDomain
       cognitoClientId: !Ref cognitoAgentPortalClientId
       apiGatewayEndpoint: !Ref apiGatewayEndpoint
-      connectInstanceId: !Ref connectInstanceId
-      connectContactFlowId: !Ref connectContactFlowId
+      connectInstanceId: !Ref ConnectInstanceARN
+      connectContactFlowId: !Ref connectContactFlowARN
       kinesisStreamName: !Ref kinesisStreamName
       pinPointAppId: !Ref pinPointAppId
 

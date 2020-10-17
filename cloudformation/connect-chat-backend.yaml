@@ -11,11 +11,11 @@ Parameters:
   customerPortalUrl:
     Type: String
     Description: domain name (without https://) of the Customer Portal CloudFront distribution.
-  connectContactFlowId:
+  connectContactFlowARN:
     Type: String
     Description: The contact flow id that the customer will interact with while chatting. This should be the id of the Basic Contact Flow you uploaded.
     AllowedPattern: '\w{8}-\w{4}-\w{4}-\w{4}-\w{12}'
-  connectInstanceId:
+  connectInstanceARN:
     Type: String
     Description: The instance id of the Amazon Connect instance that the customer will interact with while chatting. You can find this in the Amazon Connect console when viewing your instance details.
     AllowedPattern: '\w{8}-\w{4}-\w{4}-\w{4}-\w{12}'
@@ -70,8 +70,8 @@ Resources:
         - !Ref ChatSDKLayer
       Environment:
         Variables:
-          INSTANCE_ID: !Ref connectInstanceId
-          CONTACT_FLOW_ID: !Ref connectContactFlowId
+          INSTANCE_ID: !Ref connectConnectInstanceARN
+          CONTACT_FLOW_ID: !Ref connectContactFlowARN
           CF_DISTRIBUTION: !Ref customerPortalUrl
           CHAT_DATA_TABLE: !Ref chatContactDataTable
       Code:
@@ -117,8 +117,8 @@ Resources:
                 Action:
                   - "connect:StartChatContact"
                 Resource:
-                  - !Sub "arn:${AWS::Partition}:connect:${AWS::Region}:${AWS::AccountId}:instance/${connectInstanceId}"
-                  - !Sub "arn:${AWS::Partition}:connect:${AWS::Region}:${AWS::AccountId}:instance/${connectInstanceId}/*"
+                  - !Sub "arn:${AWS::Partition}:connect:${AWS::Region}:${AWS::AccountId}:instance/${connectConnectInstanceARN}"
+                  - !Sub "arn:${AWS::Partition}:connect:${AWS::Region}:${AWS::AccountId}:instance/${connectConnectInstanceARN}/*"
               - Effect: "Allow"
                 Action:
                   - "dynamodb:Query"
