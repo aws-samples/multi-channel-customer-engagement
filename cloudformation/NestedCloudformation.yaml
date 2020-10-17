@@ -141,3 +141,7 @@ Outputs:
   S3ConnectBucket:
     Value: !GetAtt stackVoiceAnalytics.Outputs.S3Bucket
     Description: S3 Bucket to store call recording/transcript/comprehend outputs
+
+  AlexaLambdaBackendARN:
+    Value: !GetAtt stackAlexaLexBackend.Outputs.LambdaAlexa
+    Description: This is the Lambda ARN you will require to setup your Alexa Skill
