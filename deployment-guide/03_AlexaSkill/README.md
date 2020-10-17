@@ -35,7 +35,7 @@ slots and other attributes manually, however, we already use the interaction mod
 
 ![](./images/AlexaSkill_6.png)
 
-9. Replace the entire code in the JSON Editor textfield with the Interaction model according to the Default Language you chose in the Step 4. [AlexaSkill English-US](./assets/en-US/alexa-skill-en-US.json) or [AlexaSkill Spanish-MX](./assets/es-MX/alexa-skill-es-MX.json).You can do it with the drag-and-drop tool in the upper-side of the JSON Editor, or manually replacing the code (Copy+Paste). After replacing the code you will see something similar to the following image:
+9. Replace the entire code in the JSON Editor textfield with the Interaction model according to the Default Language you chose in the Step 4. [AlexaSkill English-US](./assets/en-US/alexa-skill-en-US.json) or [AlexaSkill Spanish-MX](./assets/es-MX/alexa-skill-es-MX.json).You can do it with the drag-and-drop tool in the upper-side of the JSON Editor, or manually replacing the code (Copy+Paste). After replacing the code you will see something similar as the following image:
 
 ![](./images/AlexaSkill_7.png)
 

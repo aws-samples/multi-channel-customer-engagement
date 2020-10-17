@@ -62,9 +62,11 @@ When you are finished configuring your instance, you can create it.
 
 ### Step 1. Import the Contact Flow
 
-Log in to your contact center using your access URL (https://domain.awsapps.com/connect/login).
+Log in to your contact center using your access URL, provided by Amazon Connect (https://{your-domain}.awsapps.com/connect/login) and login with the credentials created previosly, or you can just click into Get Started Button. 
 
-1. Choose Routing, Contact Flows.
+
+
+1. In the left-hand menu, choose **Routing**, **Contact Flows**.
 
 ![connect](./images/image%20(11).png)
 
@@ -78,7 +80,7 @@ Log in to your contact center using your access URL (https://domain.awsapps.com/
 
 4. Select the 
 
-- [Download Contact Flow in english](../01_Connect/files/[ENGLISH]InboudCallwLex) 
+- [Download Contact Flow in english](../../bot-definition/amazon-connect/contact-flow/en-US/[en-US]InboudCallwLex) 
 
 - [Descargar Contact Flow en español](../01_Connect/files/[ENGLISH]InboudCallwLex) 
 
