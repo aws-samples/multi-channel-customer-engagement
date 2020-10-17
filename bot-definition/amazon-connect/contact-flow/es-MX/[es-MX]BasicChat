@@ -1,1 +1,245 @@
-{"modules":[{"id":"2badefc0-ae32-4707-9080-59bdc0fd2ae3","type":"Disconnect","branches":[],"parameters":[],"metadata":{"position":{"x":1350.9999738267547,"y":339}}},{"id":"b9362d6b-eb16-42c9-8184-256617a71588","type":"Transfer","branches":[{"condition":"AtCapacity","transition":"2badefc0-ae32-4707-9080-59bdc0fd2ae3"},{"condition":"Error","transition":"2badefc0-ae32-4707-9080-59bdc0fd2ae3"}],"parameters":[],"metadata":{"position":{"x":1095.9999738267547,"y":397},"useDynamic":false,"queue":null},"target":"Queue"},{"id":"2db78269-2720-41b1-8928-5a5684d7788f","type":"PlayPrompt","branches":[{"condition":"Success","transition":"cd5abeef-5bee-4b93-8a86-ac4ee6a3eb26"}],"parameters":[{"name":"Text","value":"Hola. Bienvenid@ a Banca Nube ¿Cuentanos en qué te podemos ayudar?","namespace":null},{"name":"TextToSpeechType","value":"text"}],"metadata":{"position":{"x":189.99997382675474,"y":7},"useDynamic":false}},{"id":"57827b66-13bf-44fc-bec6-369c13dad6e4","type":"SetQueue","branches":[{"condition":"Success","transition":"b9362d6b-eb16-42c9-8184-256617a71588"},{"condition":"Error","transition":"b9362d6b-eb16-42c9-8184-256617a71588"}],"parameters":[{"name":"Queue","value":"arn:aws:connect:us-east-1:684859963665:instance/4cc70bdb-cb91-4b87-8bce-a7a06769fa21/queue/b14669cc-8359-4d6a-adc6-6d186b235b95","namespace":null,"resourceName":"BasicQueue"}],"metadata":{"position":{"x":813.9999738267547,"y":443},"useDynamic":false,"queue":{"id":"arn:aws:connect:us-east-1:684859963665:instance/4cc70bdb-cb91-4b87-8bce-a7a06769fa21/queue/b14669cc-8359-4d6a-adc6-6d186b235b95","text":"BasicQueue"}}},{"id":"69bc29a2-100a-41ff-b0a7-59d8ecc246b5","type":"CheckAttribute","branches":[{"condition":"Evaluate","conditionType":"Contains","conditionValue":"transferToAgent","transition":"57827b66-13bf-44fc-bec6-369c13dad6e4"},{"condition":"NoMatch","transition":"3113b669-41ef-41b0-9358-6318ae7deb5f"}],"parameters":[{"name":"Attribute","value":"Lex.IntentName"},{"name":"Namespace","value":"System"}],"metadata":{"position":{"x":512.9999738267547,"y":447},"conditionMetadata":[{"id":"5bcb9984-469f-4fd3-81e3-76fe4693d300","operator":{"name":"Contains","value":"Contains","shortDisplay":"contains"},"value":"transferToAgent"}]}},{"id":"cd5abeef-5bee-4b93-8a86-ac4ee6a3eb26","type":"SetRecordingBehavior","branches":[{"condition":"Success","transition":"3113b669-41ef-41b0-9358-6318ae7deb5f"}],"parameters":[{"name":"RecordingBehaviorOption","value":"Enable"},{"name":"RecordingParticipantOption","value":"Both"},{"name":"AnalyticsBehaviorOption","value":"Enable"},{"name":"AnalyticsLanguageLocaleCode","value":"en-US","namespace":null},{"name":"AnalyticsCustomVocabulary","value":"None"}],"metadata":{"position":{"x":170,"y":306}}},{"id":"3113b669-41ef-41b0-9358-6318ae7deb5f","type":"GetUserInput","branches":[{"condition":"NoMatch","transition":"69bc29a2-100a-41ff-b0a7-59d8ecc246b5"},{"condition":"Error","transition":"57827b66-13bf-44fc-bec6-369c13dad6e4"}],"parameters":[{"name":"Text","value":"Si quieres una atención personalizada escribe \"Agente\" en el chat, de lo contrario, escribe una pregunta que nuestro BOT estará dispuesto a ayudarte.","namespace":null},{"name":"TextToSpeechType","value":"text"},{"name":"BotName","value":"CallCenterCallRouting_es"},{"name":"BotAlias","value":"$LATEST"},{"name":"BotRegion","value":"us-east-1"}],"metadata":{"position":{"x":507.99997382675474,"y":86},"conditionMetadata":[],"useDynamic":false,"dynamicMetadata":{}},"target":"Lex"}],"version":"1","type":"contactFlow","start":"2db78269-2720-41b1-8928-5a5684d7788f","metadata":{"entryPointPosition":{"x":14.99997382675474,"y":20},"snapToGrid":false,"name":"Basic Chat","description":null,"type":"contactFlow","status":"published","hash":"70a99f80e37dc2d756281500ae6c573d03c90815e282580cf59292a5ea7e1a32"}}
+{
+  "modules": [
+    {
+      "id": "2badefc0-ae32-4707-9080-59bdc0fd2ae3",
+      "type": "Disconnect",
+      "branches": [],
+      "parameters": [],
+      "metadata": {
+        "position": {
+          "x": 1350.9999738267547,
+          "y": 339
+        }
+      }
+    },
+    {
+      "id": "b9362d6b-eb16-42c9-8184-256617a71588",
+      "type": "Transfer",
+      "branches": [
+        {
+          "condition": "AtCapacity",
+          "transition": "2badefc0-ae32-4707-9080-59bdc0fd2ae3"
+        },
+        {
+          "condition": "Error",
+          "transition": "2badefc0-ae32-4707-9080-59bdc0fd2ae3"
+        }
+      ],
+      "parameters": [],
+      "metadata": {
+        "position": {
+          "x": 1095.9999738267547,
+          "y": 397
+        },
+        "useDynamic": false,
+        "queue": null
+      },
+      "target": "Queue"
+    },
+    {
+      "id": "2db78269-2720-41b1-8928-5a5684d7788f",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "cd5abeef-5bee-4b93-8a86-ac4ee6a3eb26"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Hola. Bienvenid@ a Banca Nube ¿Cuentanos en qué te podemos ayudar?",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 189.99997382675474,
+          "y": 7
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "57827b66-13bf-44fc-bec6-369c13dad6e4",
+      "type": "SetQueue",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "b9362d6b-eb16-42c9-8184-256617a71588"
+        },
+        {
+          "condition": "Error",
+          "transition": "b9362d6b-eb16-42c9-8184-256617a71588"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Queue",
+          "value": "arn:aws:connect:us-east-1:684859963665:instance/4cc70bdb-cb91-4b87-8bce-a7a06769fa21/queue/b14669cc-8359-4d6a-adc6-6d186b235b95",
+          "namespace": null,
+          "resourceName": "BasicQueue"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 813.9999738267547,
+          "y": 443
+        },
+        "useDynamic": false,
+        "queue": {
+          "id": "arn:aws:connect:us-east-1:684859963665:instance/4cc70bdb-cb91-4b87-8bce-a7a06769fa21/queue/b14669cc-8359-4d6a-adc6-6d186b235b95",
+          "text": "BasicQueue"
+        }
+      }
+    },
+    {
+      "id": "69bc29a2-100a-41ff-b0a7-59d8ecc246b5",
+      "type": "CheckAttribute",
+      "branches": [
+        {
+          "condition": "Evaluate",
+          "conditionType": "Contains",
+          "conditionValue": "transferToAgent",
+          "transition": "57827b66-13bf-44fc-bec6-369c13dad6e4"
+        },
+        {
+          "condition": "NoMatch",
+          "transition": "3113b669-41ef-41b0-9358-6318ae7deb5f"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Attribute",
+          "value": "Lex.IntentName"
+        },
+        {
+          "name": "Namespace",
+          "value": "System"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 512.9999738267547,
+          "y": 447
+        },
+        "conditionMetadata": [
+          {
+            "id": "5bcb9984-469f-4fd3-81e3-76fe4693d300",
+            "operator": {
+              "name": "Contains",
+              "value": "Contains",
+              "shortDisplay": "contains"
+            },
+            "value": "transferToAgent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cd5abeef-5bee-4b93-8a86-ac4ee6a3eb26",
+      "type": "SetRecordingBehavior",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "3113b669-41ef-41b0-9358-6318ae7deb5f"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "RecordingBehaviorOption",
+          "value": "Enable"
+        },
+        {
+          "name": "RecordingParticipantOption",
+          "value": "Both"
+        },
+        {
+          "name": "AnalyticsBehaviorOption",
+          "value": "Enable"
+        },
+        {
+          "name": "AnalyticsLanguageLocaleCode",
+          "value": "en-US",
+          "namespace": null
+        },
+        {
+          "name": "AnalyticsCustomVocabulary",
+          "value": "None"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 170,
+          "y": 306
+        }
+      }
+    },
+    {
+      "id": "3113b669-41ef-41b0-9358-6318ae7deb5f",
+      "type": "GetUserInput",
+      "branches": [
+        {
+          "condition": "NoMatch",
+          "transition": "69bc29a2-100a-41ff-b0a7-59d8ecc246b5"
+        },
+        {
+          "condition": "Error",
+          "transition": "57827b66-13bf-44fc-bec6-369c13dad6e4"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Si quieres una atención personalizada escribe \"Agente\" en el chat, de lo contrario, escribe una pregunta que nuestro BOT estará dispuesto a ayudarte.",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        },
+        {
+          "name": "BotName",
+          "value": "CallCenterCallRouting_es"
+        },
+        {
+          "name": "BotAlias",
+          "value": "$LATEST"
+        },
+        {
+          "name": "BotRegion",
+          "value": "us-east-1"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 507.99997382675474,
+          "y": 86
+        },
+        "conditionMetadata": [],
+        "useDynamic": false,
+        "dynamicMetadata": {}
+      },
+      "target": "Lex"
+    }
+  ],
+  "version": "1",
+  "type": "contactFlow",
+  "start": "2db78269-2720-41b1-8928-5a5684d7788f",
+  "metadata": {
+    "entryPointPosition": {
+      "x": 14.99997382675474,
+      "y": 20
+    },
+    "snapToGrid": false,
+    "name": "Basic Chat",
+    "description": null,
+    "type": "contactFlow",
+    "status": "published",
+    "hash": "70a99f80e37dc2d756281500ae6c573d03c90815e282580cf59292a5ea7e1a32"
+  }
+}
