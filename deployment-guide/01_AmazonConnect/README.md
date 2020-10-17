@@ -49,7 +49,7 @@ This bucket and key are used for both recordings of conversations and exported r
 
 In case you want to customize it - Please see documentation [here](https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-instances.html)
 
-Choose **Next step.
+Choose **Next step**.
 
 ![connect](./images/image%20(7).png)
 
@@ -62,15 +62,15 @@ When you are finished configuring your instance, you can create it.
 
 ### Step 1. Import the Contact Flow
 
-Log in to your contact center using your access URL, provided by Amazon Connect (https://{your-domain}.awsapps.com/connect/login) and login with the credentials created previosly, or you can just click into Get Started Button. 
+Log in to your contact center using your access URL, provided by Amazon Connect (https://your-domain.awsapps.com/connect/login), and login with your credentials created above. Or you can just click **Get started** Button. 
 
-
+![connect](./images/ConnectInstance_Created.png)
 
 1. In the left-hand menu, choose **Routing**, **Contact Flows**.
 
 ![connect](./images/image%20(11).png)
 
-2. Create a new contact flow of the same type as the one you are importing.
+2. Create a new contact flow clicking the upper-right **Create contact flow** button
 
 ![connect](./images/image%20(12).png)
 
@@ -80,13 +80,13 @@ Log in to your contact center using your access URL, provided by Amazon Connect 
 
 4. Select the 
 
-- [Download Contact Flow in english](../../bot-definition/amazon-connect/contact-flow/en-US/[en-US]InboudCallwLex) 
+- [Download Contact Flow in English](../../bot-definition/amazon-connect/contact-flow/en-US/[en-US]InboudCallwLex) 
 
-- [Descargar Contact Flow en español](../01_Connect/files/[ENGLISH]InboudCallwLex) 
+- [Descargar Contact Flow en Español](../../bot-definition/amazon-connect/contact-flow/es-MX/[es-MX]InboudCallwLex) 
 
-   to import, and choose Import. When the contact flow is imported into an existing contact flow, the name of the existing contact flow is updated, too.
+   To import, and choose Import. When the contact flow is imported into an existing contact flow, the name of the existing contact flow is updated, too.
 
-5. To save the imported flow, choose Save. To publish, choose Save and Publish.
+5. To save the imported flow, choose **Save**. To publish, choose **Publish**.
 
 NOTE - After we deploy the Cloudformation in the next step, we will come back to this contact flow to add our Amazon lex bot.
 
