@@ -1,13 +1,13 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: ""
 Parameters:
-  ContactFlowARN: 
+  ContactFlowId: 
     Type: String
   DestinationPhoneNumber: 
     Type: Number
-  ConnectInstanceARN: 
+  connectInstanceId: 
     Type: String
-  BasicQueueARN: 
+  QueueId: 
     Type: String
   Currency: 
     Type: String
@@ -20,6 +20,7 @@ Parameters:
         - es
   S3BucketAssets: 
     Type: String 
+
     
 Mappings: 
   LanguageMap: 
@@ -200,11 +201,11 @@ Resources:
                     "SKILL_NAME": "Banca Nube - Bot"
                     "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
                     "CONNECT_CONTACT_FLOW_ID": 
-                      Ref: ContactFlowARN
+                      Ref: ContactFlowId
                     "CONNECT_INSTANCE_ID": 
-                      Ref: ConnectInstanceARN
+                      Ref: connectInstanceId
                     "CONNECT_QUEUE_ID": 
-                      Ref: BasicQueueARN
+                      Ref: QueueId
                     "LOCALE" : !FindInMap
                       - LanguageMap
                       - !Ref 'Language'
@@ -236,11 +237,11 @@ Resources:
                     "SKILL_NAME": "Banca Nube - Bot"
                     "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
                     "CONNECT_CONTACT_FLOW_ID": 
-                      Ref: ContactFlowARN
+                      Ref: ContactFlowId
                     "CONNECT_INSTANCE_ID": 
-                      Ref: ConnectInstanceARN
+                      Ref: connectInstanceId
                     "CONNECT_QUEUE_ID": 
-                      Ref: BasicQueueARN
+                      Ref: QueueId
                     "ENABLE_OMNICHANNEL_INTEGRATION": "1"
                     "LOCALIZATION_TABLE_NAME": !Ref TableLocalization
                     "CUSTOMER_TABLE_NAME": !Ref TableCustomerInfo
