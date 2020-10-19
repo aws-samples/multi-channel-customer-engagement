@@ -40,30 +40,13 @@ US West (Oregon) | us-west-2 | [![Launch Stack](https://cdn.rawgit.com/buildkite
 
 Parameter | Description |
 --- | --- | 
-**Amazon Connect Configuration** |
-Connect Instance ID | Amazon Connect Instance ID |
-Chat Contact Flow ID| Amazon Connect - Basic Chat Contat Flow ID |
-QueueId | Amazon Connect Queue ID |
-
-
-**General Configuration** |
-Phone Number | Phone number to send SMS notifications |
-Currency | [ISO Currency Code](https://en.wikipedia.org/wiki/ISO_4217ISO) to use in the solution |
-Language | Language to be used by Amazon Lex and Alexa Skill (English or Spanish) |
-S3 Bucket | Bucket where all resources for the solution deployment are hosted. Select according to the region you are deploying to |
-
-### Amazon Connect Configuration
-
-
-<table>
-  <tr>
-    <td>Parameter</td>
-    <td>Description</td>
-  </tr>
-  <tr>
-    <td colspan="2">Three</td>
-  </tr>
-</table>
+**Connect Instance ID** | Amazon Connect Instance ID |
+**Chat Contact Flow ID**| Amazon Connect - Chat Contat Flow ID |
+**QueueId**| Amazon Connect Queue ID |
+**Phone Number** | Phone number to send SMS notifications |
+**Currency** | [ISO Currency Code](https://en.wikipedia.org/wiki/ISO_4217ISO) to use in the solution |
+**Language** | Language to be used by Amazon Lex and Alexa Skill (English or Spanish) |
+**S3 Bucket** | Bucket where all resources for the solution deployment are hosted. Select according to the region you are deploying to |
 
 
 ![connect](./images/Cloudformation_Setup.png)
@@ -76,13 +59,15 @@ Deployment can take about 15 - 20 to complete
 
 After stack creation is complete, go to the **Outputs** tab and get the values.
 
-**AgentDomainName**: Web Portal for Contact Center Agents
+Key | Value |
+--- | --- | 
+**AgentDomainName** | Web Portal for Contact Center Agents |
+**AlexaLambdaBackendARN** | Lambda ARN that supports the Alexa backend |
+**CustomerDomainName** | Web Portal for Customers |
+**S3ConnectBucket** | S3 Bucket that will be used to store Amazon Connect recordings and transcripts. |
 
-**CustomerDomainName**: Web Portal for Customers
 
-**S3ConnectBucket**: S3 Bucket that will be used to store Amazon Connect recordings and transcripts.
-
-![connect](./images/image%20(23).png)
+![connect](./images/Outputs.png)
 
 > After deploying the stack if you see an S3 permission error when viewing the web portal urls, it means the domain is not ready yet. The CDN can take up to an hour to be ready. Be patient and meawhile continue with the next steps.
 
