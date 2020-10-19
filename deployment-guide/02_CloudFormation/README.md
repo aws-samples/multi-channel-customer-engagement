@@ -57,6 +57,8 @@ Deployment can take about 15 - 20 to complete
 
 ![connect](./images/image%20(22).png)
 
+## Outputs
+
 After stack creation is complete, go to the **Outputs** tab and get the values.
 
 Key | Value |

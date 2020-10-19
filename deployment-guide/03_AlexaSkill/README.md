@@ -49,10 +49,9 @@ slots and other attributes manually, however, we already use the interaction mod
 
 Now, you will replace the Default Region ARN in the Lambda with the ARN of the Lambda deployed in the [Start lab 1 directly](./02_CloudFormation/README.md), you will have to copy the ARN from the Outputs, in this case, you will pick the one with the name: ---- . The you will have to click on **Save Endpoints** button.
 
-
-
 12. After this 
 
+[Some Test](../02_CloudFormation/README.md#Outputs)
 
 11. If your interaction model builds successfully, you are now able to test the interaction model
 
