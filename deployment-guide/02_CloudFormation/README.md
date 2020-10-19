@@ -44,6 +44,8 @@ Parameter | Description |
 Connect Instance ID | Amazon Connect Instance ID |
 Chat Contact Flow ID| Amazon Connect - Basic Chat Contat Flow ID |
 QueueId | Amazon Connect Queue ID |
+
+
 **General Configuration** |
 Phone Number | Phone number to send SMS notifications |
 Currency | [ISO Currency Code](https://en.wikipedia.org/wiki/ISO_4217ISO) to use in the solution |
