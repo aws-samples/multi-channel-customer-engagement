@@ -51,7 +51,7 @@ Now, you will replace the Default Region ARN in the Lambda with the ARN of the L
 
 12. After this 
 
-[Some Test](../02_CloudFormation/README.md#Outputs)
+[Some Test](../02_CloudFormation/README.md#markdown-header-outputs)
 
 11. If your interaction model builds successfully, you are now able to test the interaction model
 
