@@ -10,7 +10,7 @@ Search for [Amazon Connect](https://console.aws.amazon.com/connect) in your aws 
 
 ### Step 1
 
-1. Choose Get started. If you have previously created an instance, choose Add an instance instead.
+1. Choose **Get started**. If you have previously created an instance, choose Add an instance instead.
 
 2. Choose one of the following options:
    - Store users within Amazon Connect - Use Amazon Connect to create and manage user accounts.
@@ -21,7 +21,7 @@ Search for [Amazon Connect](https://console.aws.amazon.com/connect) in your aws 
 
 4. If you chose Link to an existing directory, select the AWS Directory Service directory for Directory. The directory name is used as the left-most label for Access URL.
 
-5. Choose Next step.
+5. Choose **Next step**.
 
 
 ![connect](./images/image%20(3).png)
@@ -30,7 +30,7 @@ Search for [Amazon Connect](https://console.aws.amazon.com/connect) in your aws 
 
 ### Step 2: Administrator
 
-After you specify the user name of the administrator for the Amazon Connect instance, a user account is created in Amazon Connect and the user is assigned the Admin security profile. Specify the administrator for your instance and choose **to Next step.
+After you specify the user name of the administrator for the Amazon Connect instance, a user account is created in Amazon Connect and the user is assigned the Admin security profile. Specify the administrator for your instance and choose **Next step**.
 
 
 ![connect](./images/image%20(5).png)
@@ -66,7 +66,7 @@ Log in to your contact center using your access URL, provided by Amazon Connect 
 
 ![connect](./images/ConnectInstance_Created.png)
 
-1. In the left-hand menu, choose **Routing**, **Contact Flows**.
+1. In the left-hand menu, choose **Routing** - **Contact Flows**.
 
 ![connect](./images/image%20(11).png)
 
@@ -74,17 +74,17 @@ Log in to your contact center using your access URL, provided by Amazon Connect 
 
 ![connect](./images/image%20(12).png)
 
-3. Choose Save, Import flow.
+3. Choose **Save** - **Import flow**.
 
 ![connect](./images/image%20(13).png)
 
-4. Select the 
+4. Select the Contact flow file based on your case:
 
 - [Download Contact Flow in English](../../bot-definition/amazon-connect/contact-flow/en-US/[en-US]InboudCallwLex) 
 
 - [Descargar Contact Flow en Español](../../bot-definition/amazon-connect/contact-flow/es-MX/[es-MX]InboudCallwLex) 
 
-   To import, and choose Import. When the contact flow is imported into an existing contact flow, the name of the existing contact flow is updated, too.
+   To import, select your file, and click **Import**. When the contact flow is imported into an existing contact flow, the name of the existing contact flow is updated, too.
 
 5. To save the imported flow, choose **Save**. To publish, choose **Publish**.
 
@@ -100,18 +100,17 @@ Please repeat the previous steps and import the following flows as well.
 
 #### For English
 
-- [[ENGLISH]BasicChat](../01_Connect/files/[ENGLISH]BasicChat)
-
-- [BasicChatDisconnectFlow](../01_Connect/files/BasicChatDisconnectFlow)
+- [[en-US] Basic Chat flow](../../bot-definition/amazon-connect/contact-flow/en-US/[en-US]BasicChat)
+- [Basic Chat Disconnect Flow](../../bot-definition/amazon-connect/contact-flow/BasicChatDisconnectFlow)
 
 #### Para Español
 
-- [[SPANISH]BasicChat](../01_Connect/files/[SPANISH]BasicChat)
-- [BasicChatDisconnectFlow](../01_Connect/files/BasicChatDisconnectFlow)
+- [[es-MX] Basic Chat flow](../../bot-definition/amazon-connect/contact-flow/es-MX/[es-MX]BasicChat)
+- [Basic Chat Disconnect Flow](../../bot-definition/amazon-connect/contact-flow/BasicChatDisconnectFlow)
 
 ### Step 2. Setup Queues
 
-1. Choose Routing, Queues, Edit basic  queue.
+1. In the left-hand menu, choose **Routing** - **Queues**, then click  *BasicQueue*.
 
 2. Assign the queue to the routing profile; for information, see Create a routing profile. The routing profile links the queue and agents together.
 
@@ -135,7 +134,7 @@ To claim a number for your contact center:
 
 ![connect](./images/image%20(44)2.png)
 
-4. Choose Save.
+4. Choose **Save**.
 
 Now you have a phone number for your customers to contact you.
 

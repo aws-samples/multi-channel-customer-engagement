@@ -6,9 +6,9 @@ Metadata:
       - Label:
           default: "Amazon Connect Configuration"
         Parameters:
-          - ConnectInstanceARN
-          - ContactFlowARN
-          - BasicQueueARN
+          - connectInstanceId
+          - ContactFlowId
+          - QueueId
       - Label:
           default: "General Configuration"
         Parameters:
@@ -19,32 +19,32 @@ Metadata:
     ParameterLabels:
       S3BucketAssetsMain:
         default: "Deploy based on your region"
-      ContactFlowARN:
-        default: "Basic Contact Flow ARN"
+      ContactFlowId:
+        default: "Contact Flow ID"
       DestinationPhoneNumber:
         default: "Phone Number"
-      ConnectInstanceARN:
-        default: "Connect Instance ARN"
-      BasicQueueARN:
-        default: "Basic Queue ARN"
+      connectInstanceId:
+        default: "Connect Instance ID"
+      QueueId:
+        default: "Queue ID"
       Currency:
         default: "What is your currency?"
       Language:
         default: "What is your prefered language?"
 
 Parameters:
-  ContactFlowARN:
+  connectInstanceId:
     Type: String
-    Description: "This is the ARN of the Contact Flow you created in Amazon Connect - It comes in a format similar to ccccccc-1111-bbcc-dddd-eeeeeeeeeeee"
+    Description: "Connect Instance ID - It comes in a format similar to 11111111-1111-1111-1111-111111111111"
+  ContactFlowId:
+    Type: String
+    Description: "Contact Flow ID you created in the Amazon Connect setup - It comes in a format similar to 22222222-2222-2222-2222-222222222222"
+  QueueId:
+    Type: String
+    Description: "Queue ID - It comes with this format 99999999-9999-9999-9999-999999999999"
   DestinationPhoneNumber:
     Type: String
     Description: "Phone Number to receive SMS messages (PIN code), use your country code (e.g. +573001234567) "
-  ConnectInstanceARN:
-    Type: String
-    Description: "This is the ARN of your Amazon Connect Instance - It comes in a format similar to aaaaaaaa-1111-bbcc-dddd-eeeeeeeeeeee"
-  BasicQueueARN:
-    Type: String
-    Description: "This is the ARN of your Amazon Connect Instance - It comes in a format similar to bbbbbbbb-1111-bbcc-dddd-eeeeeeeeeeee"
   Currency:
     Type: String
     Default: USD
@@ -70,10 +70,10 @@ Resources:
     Properties:
       TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/alexaLexDynamo-backend.yaml"
       Parameters:
-        ContactFlowARN: !Ref ContactFlowARN
+        ContactFlowId: !Ref ContactFlowId
         DestinationPhoneNumber: !Ref DestinationPhoneNumber
-        ConnectInstanceARN: !Ref ConnectInstanceARN
-        BasicQueueARN: !Ref BasicQueueARN
+        connectInstanceId: !Ref connectInstanceId
+        QueueId: !Ref QueueId
         Currency: !Ref Currency
         Language: !Ref Language
         S3BucketAssets: !Ref S3BucketAssetsMain
@@ -109,8 +109,8 @@ Resources:
         comprehendTranscriptLambdaArn: !GetAtt stackVoiceAnalytics.Outputs.comprehendTranscriptLambdaArn
         executeTranscriptionStateMachineArn: !GetAtt stackVoiceAnalytics.Outputs.executeTranscriptionStateMachineArn
         customerPortalUrl: !GetAtt stackCustomerPortalFrontEnd.Outputs.DomainName
-        connectContactFlowARN: !Ref ContactFlowARN
-        connectInstanceARN: !Ref ConnectInstanceARN
+        connectContactFlowId: !Ref ContactFlowId
+        connectInstanceId: !Ref connectInstanceId
         connectS3BucketName: !GetAtt stackVoiceAnalytics.Outputs.S3Bucket
         transcriptPath: "/ChatTranscripts"
         S3BucketAssets: !Ref S3BucketAssetsMain
@@ -153,8 +153,8 @@ Resources:
         cognitoCustomerPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientCustomer
         cognitoAgentPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientAgent
         cognitoDomain: !GetAtt stackAPIGatewayBackend.Outputs.UrlCustomDomainCognito
-        ConnectInstanceARN: !Ref ConnectInstanceARN
-        connectContactFlowARN: !Ref ContactFlowARN
+        connectInstanceId: !Ref connectInstanceId
+        connectContactFlowId: !Ref ContactFlowId
         apiGatewayEndpoint: !GetAtt stackAPIGatewayBackend.Outputs.URIApiGateway
         kinesisStreamName: !GetAtt stackAPIGatewayBackend.Outputs.KinesisClickStreamName
         pinPointAppId: !GetAtt stackAPIGatewayBackend.Outputs.pinpointAppId
