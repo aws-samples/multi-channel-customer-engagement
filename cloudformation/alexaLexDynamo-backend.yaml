@@ -3,16 +3,12 @@ Description: ""
 Parameters:
   ContactFlowId: 
     Type: String
-    Default:  f0a9543e-73c4-44d9-8b35-7adcde79c796
   DestinationPhoneNumber: 
     Type: Number
-    Default:  +573108741528
-  InstanceId: 
+  connectInstanceId: 
     Type: String
-    Default:  4cc70bdb-cb91-4b87-8bce-a7a06769fa21
   QueueId: 
     Type: String
-    Default:  b14669cc-8359-4d6a-adc6-6d186b235b95
   Currency: 
     Type: String
     Default:  USD
@@ -24,7 +20,7 @@ Parameters:
         - es
   S3BucketAssets: 
     Type: String 
-    Default: "omnichannel-assets-us-east-1"
+
     
 Mappings: 
   LanguageMap: 
@@ -207,7 +203,7 @@ Resources:
                     "CONNECT_CONTACT_FLOW_ID": 
                       Ref: ContactFlowId
                     "CONNECT_INSTANCE_ID": 
-                      Ref: InstanceId
+                      Ref: connectInstanceId
                     "CONNECT_QUEUE_ID": 
                       Ref: QueueId
                     "LOCALE" : !FindInMap
@@ -243,7 +239,7 @@ Resources:
                     "CONNECT_CONTACT_FLOW_ID": 
                       Ref: ContactFlowId
                     "CONNECT_INSTANCE_ID": 
-                      Ref: InstanceId
+                      Ref: connectInstanceId
                     "CONNECT_QUEUE_ID": 
                       Ref: QueueId
                     "ENABLE_OMNICHANNEL_INTEGRATION": "1"
@@ -688,8 +684,11 @@ Resources:
 
 Outputs:
   LambdaLex:
-    Description: ARN of the lambda
+    Description: ARN of the lambda backend Amazon Lex
     Value: !GetAtt LambdaLex.Arn
+  LambdaAlexa:
+    Description: ARN of the Lambda Backend Amazon Alexa
+    Value: !GetAtt LambdaAlexa.Arn
   DynamoDBTableCustomerInteractionsApp:
     Description:  Customer Interactions App Table
     Value: !Ref 'TableInteractionsApp'

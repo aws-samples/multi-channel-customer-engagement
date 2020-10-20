@@ -35,7 +35,7 @@ slots and other attributes manually, however, we already use the interaction mod
 
 ![](./images/AlexaSkill_6.png)
 
-9. Replace the entire code in the JSON Editor textfield with the Interaction model according to the Default Language you chose in the Step 4. [AlexaSkill English-US](./assets/en-US/alexa-skill-en-US.json) or [AlexaSkill Spanish-MX](./assets/es-MX/alexa-skill-es-MX.json).You can do it with the drag-and-drop tool in the upper-side of the JSON Editor, or manually replacing the code (Copy+Paste). After replacing the code you will see something similar to the following image:
+9. Replace the entire code in the JSON Editor textfield with the Interaction model according to the Default Language you chose in the Step 4. [AlexaSkill English-US](../../bot-definition/amazon-alexa/en-US/alexa-skill-en-US.json) or [AlexaSkill Spanish-MX](../../bot-definition/amazon-alexa/es-MX/alexa-skill-es-MX.json).You can do it with the drag-and-drop tool in the upper-side of the JSON Editor, or manually replacing the code (Copy+Paste). After replacing the code you will see something similar as the following image:
 
 ![](./images/AlexaSkill_7.png)
 
@@ -43,18 +43,34 @@ slots and other attributes manually, however, we already use the interaction mod
 
 ![](./images/AlexaSkill_8.png)
 
+## Configure Alexa Skill backend
+
 11. Now that you have the interaction model, you require to join the backend deployed in the cloudformation with your Alexa Skills. For this, you will include the Lambda Function into the endpoint cofiguration. On the left hand navigation panel, choose the **Endpoint** option, and you will the Service Endpoint Type Configuration.
 
 ![](./images/AlexaSkill_9.png)
 
-Now, you will replace the Default Region ARN in the Lambda with the ARN of the Lambda deployed in the [Start lab 1 directly](./02_CloudFormation/README.md), you will have to copy the ARN from the Outputs, in this case, you will pick the one with the name: ---- . The you will have to click on **Save Endpoints** button.
+12. Copy your Skill ID, you will need this to setup your Lambda Triggers, you can click the **Copy to Clipboard** button. 
 
+![](./images/Endpoint2.png)
 
+13. Open your **AWS Console** - **AWS Lambda**, Search **alexa-bank-demo** Lambda Function, and click **Add Trigger** to enable your Alexa Skill call the Lambda Function
 
-12. After this 
+![](./images/Endpoint3.png)
 
+15. In the **Trigger Configuration**, select the **Alexa Skill Kit** option
 
-11. If your interaction model builds successfully, you are now able to test the interaction model
+![](./images/Endpoint4.png)
 
+16. Paste the Alexa Skill ID copied in the **Step 12**.
+
+![](./images/Endpoint5.png)
+
+17. Go back to the **Alexa Developer Console** and replace the **Default Region ARN** with the Lambda ARN created during the [step 2: Deploy Cloudformation](./02_CloudFormation/README.md), copy the **AlexaLambdaBackendARN** from the [Outputs](../02_CloudFormation/README.md#outputs). Finally, Click on **Save Endpoints** button in the upper menu.
+
+![](./images/Endpoint.png)
+
+18. After making this changes, go to **Invocation** and then click **Build Model**, It will take around 5 mins to finish, after this you are  able to test your Alexa Skill.
+
+![](./images/Endpoint6.png)
 
 You are now ready to go to step 4 : [Integrating your Amazon Lex Bot with Facebook Messenger](../04_FacebookMessenger/README.md)

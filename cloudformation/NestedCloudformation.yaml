@@ -1,32 +1,65 @@
 AWSTemplateFormatVersion: "2010-09-09"
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Amazon Connect Configuration"
+        Parameters:
+          - connectInstanceId
+          - ContactFlowId
+          - QueueId
+      - Label:
+          default: "General Configuration"
+        Parameters:
+          - DestinationPhoneNumber
+          - Currency
+          - Language
+          - S3BucketAssetsMain
+    ParameterLabels:
+      S3BucketAssetsMain:
+        default: "Deploy based on your region"
+      ContactFlowId:
+        default: "Contact Flow ID"
+      DestinationPhoneNumber:
+        default: "Phone Number"
+      connectInstanceId:
+        default: "Connect Instance ID"
+      QueueId:
+        default: "Queue ID"
+      Currency:
+        default: "What is your currency?"
+      Language:
+        default: "What is your prefered language?"
+
 Parameters:
-  ChatContactFlowId :
+  connectInstanceId:
     Type: String
-    Default: 81c1b782-1556-4065-a93a-e1612ae28cd3
-  DestinationPhoneNumber:
+    Description: "Connect Instance ID - It comes in a format similar to 11111111-1111-1111-1111-111111111111"
+  ContactFlowId:
     Type: String
-    Default: "+573108741528"
-  InstanceId:
-    Type: String
-    Default: 4ce3c38f-281e-4e25-90a6-77c93a5778e2
+    Description: "Contact Flow ID you created in the Amazon Connect setup - It comes in a format similar to 22222222-2222-2222-2222-222222222222"
   QueueId:
     Type: String
-    Default: 0924cc42-78ed-4c3e-b334-a3256261027f
+    Description: "Queue ID - It comes with this format 99999999-9999-9999-9999-999999999999"
+  DestinationPhoneNumber:
+    Type: String
+    Description: "Phone Number to receive SMS messages (PIN code), use your country code (e.g. +573001234567) "
   Currency:
     Type: String
     Default: USD
   Language:
     Type: String
     Default: en
-    AllowedValues: 
-        - en
-        - es
+    AllowedValues:
+      - en
+      - es
   S3BucketAssetsMain:
     Type: String
     Default: "omnichannel-assets-us-east-1"
-    AllowedValues: 
-        - omnichannel-assets-us-east-1
-        - omnichannel-assets-us-west-2
+    AllowedValues:
+      - omnichannel-assets-us-east-1
+      - omnichannel-assets-us-west-2
 
 Resources:
   stackAlexaLexBackend:
@@ -35,52 +68,51 @@ Resources:
       - stackCustomerPortalFrontEnd
     Type: AWS::CloudFormation::Stack
     Properties:
-        TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/alexaLexDynamo-backend.yaml"
-        Parameters: 
-          ContactFlowId: !Ref ChatContactFlowId 
-          DestinationPhoneNumber: !Ref DestinationPhoneNumber
-          InstanceId: !Ref InstanceId
-          QueueId: !Ref QueueId
-          Currency: !Ref Currency
-          Language: !Ref Language
-          S3BucketAssets: !Ref S3BucketAssetsMain
+      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/alexaLexDynamo-backend.yaml"
+      Parameters:
+        ContactFlowId: !Ref ContactFlowId
+        DestinationPhoneNumber: !Ref DestinationPhoneNumber
+        connectInstanceId: !Ref connectInstanceId
+        QueueId: !Ref QueueId
+        Currency: !Ref Currency
+        Language: !Ref Language
+        S3BucketAssets: !Ref S3BucketAssetsMain
 
   stackVoiceAnalytics:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/voiceAnalytics.yaml"
-      Parameters: 
+      Parameters:
         TableInteractionsVoice: !GetAtt stackAlexaLexBackend.Outputs.DynamoDBTableCustomerInteractionsVoice
         Language: !Ref Language
         S3BucketAssets: !Ref S3BucketAssetsMain
 
-  stackCustomerPortalFrontEnd: 
+  stackCustomerPortalFrontEnd:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/customer-portal-front-end.yaml"
-      Parameters: 
+      Parameters:
         S3BucketAssets: !Ref S3BucketAssetsMain
 
   stackAgentPortalFrontEnd:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/agent-portal-front-end.yaml"
-      Parameters: 
+      Parameters:
         S3BucketAssets: !Ref S3BucketAssetsMain
-
 
   stackConnectChatBackend:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/connect-chat-backend.yaml"
-      Parameters: 
+      Parameters:
         comprehendTranscriptLambdaArn: !GetAtt stackVoiceAnalytics.Outputs.comprehendTranscriptLambdaArn
         executeTranscriptionStateMachineArn: !GetAtt stackVoiceAnalytics.Outputs.executeTranscriptionStateMachineArn
         customerPortalUrl: !GetAtt stackCustomerPortalFrontEnd.Outputs.DomainName
-        connectContactFlowId: !Ref ChatContactFlowId 
-        connectInstanceId: !Ref InstanceId
+        connectContactFlowId: !Ref ContactFlowId
+        connectInstanceId: !Ref connectInstanceId
         connectS3BucketName: !GetAtt stackVoiceAnalytics.Outputs.S3Bucket
-        transcriptPath : "/ChatTranscripts"
+        transcriptPath: "/ChatTranscripts"
         S3BucketAssets: !Ref S3BucketAssetsMain
 
   stackAPIGatewayBackend:
@@ -104,7 +136,7 @@ Resources:
         cognitoCustomerPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientCustomer
         callbackLogOutCustomerURL: !GetAtt stackCustomerPortalFrontEnd.Outputs.DomainName
         cognitoAgentPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientAgent
-        callbackLogOutAgentURL: !GetAtt  stackAgentPortalFrontEnd.Outputs.DomainName
+        callbackLogOutAgentURL: !GetAtt stackAgentPortalFrontEnd.Outputs.DomainName
         S3BucketAssets: !Ref S3BucketAssetsMain
 
   stackCustomerPortalFrontEndSettings:
@@ -112,24 +144,23 @@ Resources:
     Properties:
       TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/customer-portal-config.yaml"
       Parameters:
-          S3BucketAssets: !Ref S3BucketAssetsMain
-          CustomerPortalS3Bucket: !GetAtt stackCustomerPortalFrontEnd.Outputs.BucketName
-          AgentPortalS3Bucket: !GetAtt stackAgentPortalFrontEnd.Outputs.BucketName
-          CustomerPortalUrl: !GetAtt stackCustomerPortalFrontEnd.Outputs.DomainName
-          AgentPortalUrl: !GetAtt stackAgentPortalFrontEnd.Outputs.DomainName
-          cognitoIdentityPoolId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoIdP
-          cognitoCustomerPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientCustomer
-          cognitoAgentPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientAgent
-          cognitoDomain: !GetAtt stackAPIGatewayBackend.Outputs.UrlCustomDomainCognito
-          connectInstanceId: !Ref InstanceId
-          connectContactFlowId: !Ref ChatContactFlowId
-          apiGatewayEndpoint: !GetAtt stackAPIGatewayBackend.Outputs.URIApiGateway
-          kinesisStreamName: !GetAtt stackAPIGatewayBackend.Outputs.KinesisClickStreamName
-          pinPointAppId: !GetAtt stackAPIGatewayBackend.Outputs.pinpointAppId
-          cognitoUserPoolId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoUserPool
+        S3BucketAssets: !Ref S3BucketAssetsMain
+        CustomerPortalS3Bucket: !GetAtt stackCustomerPortalFrontEnd.Outputs.BucketName
+        AgentPortalS3Bucket: !GetAtt stackAgentPortalFrontEnd.Outputs.BucketName
+        CustomerPortalUrl: !GetAtt stackCustomerPortalFrontEnd.Outputs.DomainName
+        AgentPortalUrl: !GetAtt stackAgentPortalFrontEnd.Outputs.DomainName
+        cognitoIdentityPoolId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoIdP
+        cognitoCustomerPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientCustomer
+        cognitoAgentPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientAgent
+        cognitoDomain: !GetAtt stackAPIGatewayBackend.Outputs.UrlCustomDomainCognito
+        connectInstanceId: !Ref connectInstanceId
+        connectContactFlowId: !Ref ContactFlowId
+        apiGatewayEndpoint: !GetAtt stackAPIGatewayBackend.Outputs.URIApiGateway
+        kinesisStreamName: !GetAtt stackAPIGatewayBackend.Outputs.KinesisClickStreamName
+        pinPointAppId: !GetAtt stackAPIGatewayBackend.Outputs.pinpointAppId
+        cognitoUserPoolId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoUserPool
 
-Outputs: 
-
+Outputs:
   AgentDomainName:
     Value: !GetAtt stackAgentPortalFrontEnd.Outputs.DomainName
     Description: Web site endpoint for Agent Portal
@@ -141,3 +172,7 @@ Outputs:
   S3ConnectBucket:
     Value: !GetAtt stackVoiceAnalytics.Outputs.S3Bucket
     Description: S3 Bucket to store call recording/transcript/comprehend outputs
+
+  AlexaLambdaBackendARN:
+    Value: !GetAtt stackAlexaLexBackend.Outputs.LambdaAlexa
+    Description: This is the Lambda ARN you will require to setup your Alexa Skill
