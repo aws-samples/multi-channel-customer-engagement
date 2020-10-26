@@ -88,3 +88,24 @@ Now that we have gather data from different sources (calls recorded, chats using
 
 If you’re done experimenting and want to delete all the resources created to avoid incurring future charges, go to step 6: [Cleaning Up](../06_CleanUp/README.md)
 
+
+# Customer Walktrought
+
+A customer uses their Alexa to find out about their credit card balance
+
+![agents-portal](./images/alexa.png)
+
+Customer does not understand why 1500 USD, so they decide to go to their customer portal and check the transactions and accounts. Customer still does not understand, they decide to use the chat in the customer portal to speak to an agent. When the call or chat session gets routed to the agent, the agent can see all the different interactions that the customer had and their frustration
+
+First, the agent can see all the clickstreaming done by the customer
+
+![agents-portal](./images/example1.png)
+
+Then, it can see the call to the Alexa bot. 
+
+![agents-portal](./images/example2.png)
+
+It may mean that the customer is being struggling to find out why they owe USD 1,500. Therefore, the agent can react proactively
+
+![agents-portal](./images/Picture1.png)
+
