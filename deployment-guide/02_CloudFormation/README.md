@@ -9,11 +9,11 @@ In the AWS Management Console, navigate to the [Amazon Connect](https://console.
 
 **Connect Instance ID**: This is the id of the Amazon Connect instance you want to use. You can find this on the Amazon Connect console or when viewing the contact flow. 
 
-> For example, if the arn for your flow is ```arn:aws:connect:us-west-2:123456789012:instance/11111111-1111-1111-1111-111111111111/contact-flow/22222222-2222-2222-2222-222222222222```, the Connect Instance ID is ```11111111-1111-1111-1111-111111111111```
+> For example, if the ARN for your flow is ```arn:aws:connect:us-west-2:123456789012:instance/11111111-1111-1111-1111-111111111111/contact-flow/22222222-2222-2222-2222-222222222222```, the Connect Instance ID is ```11111111-1111-1111-1111-111111111111```
 
 **Chat Flow ID**: 
 
-> For example, if the arn for your flow is ```arn:aws:connect:us-west-2:123456789012:instance/11111111-1111-1111-1111-111111111111/contact-flow/22222222-2222-2222-2222-222222222222```, the Chat Flow ID is ```22222222-2222-2222-2222-222222222222```
+> For example, if the ARN for your flow is ```arn:aws:connect:us-west-2:123456789012:instance/11111111-1111-1111-1111-111111111111/contact-flow/22222222-2222-2222-2222-222222222222```, the Chat Flow ID is ```22222222-2222-2222-2222-222222222222```
 
 ![connect](./images/Picture_info.png)
 
@@ -21,7 +21,7 @@ Then, go to **Routing** - **Queues**, select **Basic Queue**, click **Show addit
 
 **Queue ID**: 
 
-> For example, if the arn for your queue is ```arn:aws:connect:us-east-1:684859963665:instance/11111111-1111-1111-1111-111111111111/queue/99999999-9999-9999-9999-999999999999``` the queue id is ```99999999-9999-9999-9999-999999999999```
+> For example, if the ARN for your queue is ```arn:aws:connect:us-east-1:684859963665:instance/11111111-1111-1111-1111-111111111111/queue/99999999-9999-9999-9999-999999999999``` the queue id is ```99999999-9999-9999-9999-999999999999```
 
 Keep these values to be used in further steps.
 

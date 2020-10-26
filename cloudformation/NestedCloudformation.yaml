@@ -38,7 +38,7 @@ Parameters:
     Description: "Connect Instance ID - It comes in a format similar to 11111111-1111-1111-1111-111111111111"
   ChatFlowId:
     Type: String
-    Description: "Contact Flow ID - It's the flow that you created in the Amazon Connect setup - It comes in a format similar to 22222222-2222-2222-2222-222222222222"
+    Description: "Chat Flow ID - It's the flow that you created in the Amazon Connect setup - It comes in a format similar to 22222222-2222-2222-2222-222222222222"
   QueueId:
     Type: String
     Description: "Queue ID - It comes with this format 99999999-9999-9999-9999-999999999999"

@@ -1,161 +1,14 @@
 {
   "modules": [
     {
-      "id": "c7e01ac2-3787-45b8-9194-e6c8bd97aa7a",
-      "type": "SetVoice",
-      "branches": [
-        {
-          "condition": "Success",
-          "transition": "5b5bab1a-7b3a-43f9-9159-b61868403972"
-        }
-      ],
-      "parameters": [
-        {
-          "name": "GlobalVoice",
-          "value": "Mia"
-        }
-      ],
-      "metadata": {
-        "position": {
-          "x": 155,
-          "y": 211
-        }
-      }
-    },
-    {
-      "id": "5b5bab1a-7b3a-43f9-9159-b61868403972",
-      "type": "SetRecordingBehavior",
-      "branches": [
-        {
-          "condition": "Success",
-          "transition": "4cb86557-b541-46a3-a452-cee0b241a3cf"
-        }
-      ],
-      "parameters": [
-        {
-          "name": "RecordingBehaviorOption",
-          "value": "Enable"
-        },
-        {
-          "name": "RecordingParticipantOption",
-          "value": "Both"
-        }
-      ],
-      "metadata": {
-        "position": {
-          "x": 250,
-          "y": 20
-        }
-      }
-    },
-    {
-      "id": "4cb86557-b541-46a3-a452-cee0b241a3cf",
-      "type": "CheckAttribute",
-      "branches": [
-        {
-          "condition": "Evaluate",
-          "conditionType": "Equals",
-          "conditionValue": "true",
-          "transition": "98a70ec0-069b-44a4-ada6-2a1810b1c675"
-        },
-        {
-          "condition": "NoMatch",
-          "transition": "a456069e-9995-4119-9427-bd63308fa17f"
-        }
-      ],
-      "parameters": [
-        {
-          "name": "Attribute",
-          "value": "greetingPlayed"
-        },
-        {
-          "name": "Namespace",
-          "value": "User Defined"
-        }
-      ],
-      "metadata": {
-        "position": {
-          "x": 473,
-          "y": 225
-        },
-        "conditionMetadata": [
-          {
-            "id": "663d0209-e59c-4d86-b637-478d3fa6b0dd",
-            "operator": {
-              "name": "Equals",
-              "value": "Equals",
-              "shortDisplay": "="
-            },
-            "value": "true"
-          }
-        ]
-      }
-    },
-    {
-      "id": "a456069e-9995-4119-9427-bd63308fa17f",
-      "type": "SetAttributes",
-      "branches": [
-        {
-          "condition": "Success",
-          "transition": "6063b277-5cd1-41fc-a069-ae76887f2a23"
-        },
-        {
-          "condition": "Error",
-          "transition": "6063b277-5cd1-41fc-a069-ae76887f2a23"
-        }
-      ],
-      "parameters": [
-        {
-          "name": "Attribute",
-          "value": "true",
-          "key": "greetingPlayed",
-          "namespace": null
-        }
-      ],
-      "metadata": {
-        "position": {
-          "x": 292,
-          "y": 527
-        }
-      }
-    },
-    {
-      "id": "6063b277-5cd1-41fc-a069-ae76887f2a23",
-      "type": "PlayPrompt",
-      "branches": [
-        {
-          "condition": "Success",
-          "transition": "98a70ec0-069b-44a4-ada6-2a1810b1c675"
-        }
-      ],
-      "parameters": [
-        {
-          "name": "Text",
-          "value": "Hola. Buenos dias, gracias por llamar a Banca Nube. Este es un ejemplo de lo que pueden hacer con los servicios de Amazon.",
-          "namespace": null
-        },
-        {
-          "name": "TextToSpeechType",
-          "value": "text"
-        }
-      ],
-      "metadata": {
-        "position": {
-          "x": 563,
-          "y": 477
-        },
-        "useDynamic": false
-      }
-    },
-    {
       "id": "83b76e76-52cc-4732-81ff-1519b0c0f132",
       "type": "Disconnect",
       "branches": [],
       "parameters": [],
       "metadata": {
         "position": {
-          "x": 2042,
-          "y": 432
+          "x": 2038.5,
+          "y": 432.5
         }
       }
     },
@@ -175,8 +28,8 @@
       "parameters": [],
       "metadata": {
         "position": {
-          "x": 1064,
-          "y": 648
+          "x": 1060.5,
+          "y": 648.5
         },
         "useDynamic": false,
         "queue": null
@@ -206,8 +59,8 @@
       ],
       "metadata": {
         "position": {
-          "x": 801,
-          "y": 848
+          "x": 797.5,
+          "y": 848.5
         },
         "useDynamic": false,
         "queue": {
@@ -234,8 +87,8 @@
       ],
       "metadata": {
         "position": {
-          "x": 1290,
-          "y": 883
+          "x": 1286.5,
+          "y": 883.5
         },
         "useDynamic": false,
         "ContactFlow": {
@@ -283,8 +136,8 @@
       ],
       "metadata": {
         "position": {
-          "x": 1833,
-          "y": 35
+          "x": 1829.5,
+          "y": 35.5
         },
         "conditionMetadata": [],
         "useDynamic": false,
@@ -314,8 +167,8 @@
       ],
       "metadata": {
         "position": {
-          "x": 1900,
-          "y": 822
+          "x": 1896.5,
+          "y": 822.5
         },
         "useDynamic": false
       }
@@ -376,26 +229,172 @@
       ],
       "metadata": {
         "position": {
-          "x": 1566,
-          "y": 365
+          "x": 1562.5,
+          "y": 365.5
         },
         "conditionMetadata": [
           {
-            "id": "7c62342f-ed7e-452f-9a4b-fdd77fecfc27",
+            "id": "d7264b9b-2f0b-49be-b795-486941f7bae6",
             "value": "1"
           },
           {
-            "id": "78749c60-05e1-43d3-be55-a3a5fef43298",
+            "id": "9f93617d-dbdb-43ba-925a-8361a7e8d54f",
             "value": "2"
           },
           {
-            "id": "c61aae21-2684-4000-8bff-caa81bee07b0",
+            "id": "19d07409-8692-427f-9c6a-51e2b743d92d",
             "value": "3"
           }
         ],
         "useDynamic": false
       },
       "target": "Digits"
+    },
+    {
+      "id": "3bc47d87-bc93-48a6-970a-c3067c3afe7f",
+      "type": "GetUserInput",
+      "branches": [
+        {
+          "condition": "NoMatch",
+          "transition": "1b54b460-df2e-4e36-a390-80137ac9a089"
+        },
+        {
+          "condition": "Error",
+          "transition": "7c0a92c0-3a0d-4941-9d0e-2ae0e16ce58b"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "¿Qué preguntas tienes?",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        },
+        {
+          "name": "BotName",
+          "value": "CallCenterCallRouting_es"
+        },
+        {
+          "name": "BotAlias",
+          "value": "$LATEST"
+        },
+        {
+          "name": "BotRegion",
+          "value": "us-east-1"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 1053.5,
+          "y": 15.5
+        },
+        "conditionMetadata": [],
+        "useDynamic": false,
+        "dynamicMetadata": {}
+      },
+      "target": "Lex"
+    },
+    {
+      "id": "c7e01ac2-3787-45b8-9194-e6c8bd97aa7a",
+      "type": "SetVoice",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "5b5bab1a-7b3a-43f9-9159-b61868403972"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "GlobalVoice",
+          "value": "Lupe"
+        },
+        {
+          "name": "GlobalEngine",
+          "value": "Neural"
+        },
+        {
+          "name": "SpeakingStyle",
+          "value": "None"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 151.5,
+          "y": 211.5
+        }
+      }
+    },
+    {
+      "id": "5b5bab1a-7b3a-43f9-9159-b61868403972",
+      "type": "SetRecordingBehavior",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "4cb86557-b541-46a3-a452-cee0b241a3cf"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "RecordingBehaviorOption",
+          "value": "Enable"
+        },
+        {
+          "name": "RecordingParticipantOption",
+          "value": "Both"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 246.5,
+          "y": 20.5
+        }
+      }
+    },
+    {
+      "id": "4cb86557-b541-46a3-a452-cee0b241a3cf",
+      "type": "CheckAttribute",
+      "branches": [
+        {
+          "condition": "Evaluate",
+          "conditionType": "Equals",
+          "conditionValue": "true",
+          "transition": "98a70ec0-069b-44a4-ada6-2a1810b1c675"
+        },
+        {
+          "condition": "NoMatch",
+          "transition": "a456069e-9995-4119-9427-bd63308fa17f"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Attribute",
+          "value": "greetingPlayed"
+        },
+        {
+          "name": "Namespace",
+          "value": "User Defined"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 470,
+          "y": 226
+        },
+        "conditionMetadata": [
+          {
+            "id": "3a6b3b84-0ca1-4225-86a6-b53a4a02ee23",
+            "operator": {
+              "name": "Equals",
+              "value": "Equals",
+              "shortDisplay": "="
+            },
+            "value": "true"
+          }
+        ]
+      }
     },
     {
       "id": "98a70ec0-069b-44a4-ada6-2a1810b1c675",
@@ -453,20 +452,20 @@
       ],
       "metadata": {
         "position": {
-          "x": 799,
-          "y": 267
+          "x": 795.5,
+          "y": 267.5
         },
         "conditionMetadata": [
           {
-            "id": "40ff9f72-9a62-47df-8877-874cbfc238eb",
+            "id": "52487c1f-de84-43a9-adb4-c18ad6a41b66",
             "value": "1"
           },
           {
-            "id": "29aac69a-e461-4d58-bfc7-1ba596338dfe",
+            "id": "0225719f-c8a5-4976-9f02-22010003d490",
             "value": "2"
           },
           {
-            "id": "bec387ef-00ee-40f2-b828-f6584031a254",
+            "id": "6274fc99-f87c-423f-b752-00086659b6c4",
             "value": "3"
           }
         ],
@@ -475,51 +474,60 @@
       "target": "Digits"
     },
     {
-      "id": "3bc47d87-bc93-48a6-970a-c3067c3afe7f",
-      "type": "GetUserInput",
+      "id": "a456069e-9995-4119-9427-bd63308fa17f",
+      "type": "SetAttributes",
       "branches": [
         {
-          "condition": "NoMatch",
-          "transition": "1b54b460-df2e-4e36-a390-80137ac9a089"
+          "condition": "Success",
+          "transition": "6063b277-5cd1-41fc-a069-ae76887f2a23"
         },
         {
           "condition": "Error",
-          "transition": "7c0a92c0-3a0d-4941-9d0e-2ae0e16ce58b"
+          "transition": "6063b277-5cd1-41fc-a069-ae76887f2a23"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Attribute",
+          "value": "true",
+          "key": "greetingPlayed",
+          "namespace": null
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 288.5,
+          "y": 527.5
+        }
+      }
+    },
+    {
+      "id": "6063b277-5cd1-41fc-a069-ae76887f2a23",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "98a70ec0-069b-44a4-ada6-2a1810b1c675"
         }
       ],
       "parameters": [
         {
           "name": "Text",
-          "value": "¿Qué preguntas tienes?",
+          "value": "Hola. Buenos dias, gracias por llamar a Banca Nube. Este es un ejemplo de lo que pueden hacer con los servicios de Amazon.",
           "namespace": null
         },
         {
           "name": "TextToSpeechType",
           "value": "text"
-        },
-        {
-          "name": "BotName",
-          "value": "CallCenterCallRouting_es"
-        },
-        {
-          "name": "BotAlias",
-          "value": "$LATEST"
-        },
-        {
-          "name": "BotRegion",
-          "value": "us-east-1"
         }
       ],
       "metadata": {
         "position": {
-          "x": 1057,
-          "y": 15
+          "x": 560,
+          "y": 478
         },
-        "conditionMetadata": [],
-        "useDynamic": false,
-        "dynamicMetadata": {}
-      },
-      "target": "Lex"
+        "useDynamic": false
+      }
     }
   ],
   "version": "1",
@@ -527,14 +535,14 @@
   "start": "c7e01ac2-3787-45b8-9194-e6c8bd97aa7a",
   "metadata": {
     "entryPointPosition": {
-      "x": 19,
-      "y": 209
+      "x": 15.5,
+      "y": 209.5
     },
     "snapToGrid": false,
-    "name": "[es-MX] Contact Inbound flow",
+    "name": "[es-MX] Contact Inboud flow",
     "description": "First call experience",
     "type": "contactFlow",
-    "status": "published",
-    "hash": "39757d0ef9ccb309fd1ed0867b8e7a84de7f009343e0231932d5ab5d880252fc"
+    "status": "saved",
+    "hash": "fdbc85c0a4c22681f2df70e110b72950319ae0c719fd86b6f4be6125364e87ff"
   }
 }
