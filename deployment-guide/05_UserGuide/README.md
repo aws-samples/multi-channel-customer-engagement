@@ -84,8 +84,7 @@ Now that we have gather data from different sources (calls recorded, chats using
 
 3. Now, you can see all the voice, bot, and other interaction we just created.
 
-<<<<<<< HEAD
-If you’re done experimenting and want to delete all the resources created to avoid incurring future charges, go to step 6: [Cleaning Up](../06_CleanUp/README.md)
-=======
 ![agents-portal](./images/agentsportal.png)
->>>>>>> ce0c7960b1b47bfdf69a9391f093fce1f1a524d8
+
+If you’re done experimenting and want to delete all the resources created to avoid incurring future charges, go to step 6: [Cleaning Up](../06_CleanUp/README.md)
+
