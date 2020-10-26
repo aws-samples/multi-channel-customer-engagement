@@ -41,8 +41,8 @@ US West (Oregon) | us-west-2 | [![Launch Stack](https://cdn.rawgit.com/buildkite
 Parameter | Description |
 --- | --- | 
 **Connect Instance ID** | Amazon Connect Instance ID |
-**Chat Contact Flow ID**| Amazon Connect - Chat Contat Flow ID |
-**QueueId**| Amazon Connect Queue ID |
+**Chat Flow ID**| Amazon Connect - Basic Chat Flow ID |
+**Queue ID**| Amazon Connect Queue ID |
 **Phone Number** | Phone number to send SMS notifications |
 **Currency** | [ISO Currency Code](https://en.wikipedia.org/wiki/ISO_4217ISO) to use in the solution |
 **Language** | Language to be used by Amazon Lex and Alexa Skill (English or Spanish) |
@@ -57,7 +57,7 @@ Deployment can take about 15 - 20 to complete
 
 ![connect](./images/image%20(22).png)
 
-## Outputs
+## Outputs 
 
 After stack creation is complete, go to the **Outputs** tab and get the values.
 

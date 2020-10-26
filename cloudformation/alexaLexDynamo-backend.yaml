@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: ""
 Parameters:
-  ContactFlowId: 
+  ChatFlowId: 
     Type: String
   DestinationPhoneNumber: 
     Type: Number
-  connectInstanceId: 
+  ConnectInstanceId: 
     Type: String
   QueueId: 
     Type: String
@@ -20,7 +20,6 @@ Parameters:
         - es
   S3BucketAssets: 
     Type: String 
-
     
 Mappings: 
   LanguageMap: 
@@ -201,9 +200,9 @@ Resources:
                     "SKILL_NAME": "Banca Nube - Bot"
                     "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
                     "CONNECT_CONTACT_FLOW_ID": 
-                      Ref: ContactFlowId
+                      Ref: ChatFlowId
                     "CONNECT_INSTANCE_ID": 
-                      Ref: connectInstanceId
+                      Ref: ConnectInstanceId
                     "CONNECT_QUEUE_ID": 
                       Ref: QueueId
                     "LOCALE" : !FindInMap
@@ -237,9 +236,9 @@ Resources:
                     "SKILL_NAME": "Banca Nube - Bot"
                     "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
                     "CONNECT_CONTACT_FLOW_ID": 
-                      Ref: ContactFlowId
+                      Ref: ChatFlowId
                     "CONNECT_INSTANCE_ID": 
-                      Ref: connectInstanceId
+                      Ref: ConnectInstanceId
                     "CONNECT_QUEUE_ID": 
                       Ref: QueueId
                     "ENABLE_OMNICHANNEL_INTEGRATION": "1"
