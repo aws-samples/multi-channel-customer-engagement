@@ -36,7 +36,7 @@
 
 6. Without closing the CCP - Go back to your CustomerDomainName portal and in the chat type *I would like to speak with an agent* or *talk to an agent* - This should innitiate a new chat incoming in the CCP.
 
-![clickstreaming](./images/image%20(5).png)
+<img src="./images/image%20(5).png" alt="drawing" width="750"/>
 
 7. Accept the chat - now your agent is chatting with the end user in the banking portal.
 
@@ -85,3 +85,27 @@ Now that we have gather data from different sources (calls recorded, chats using
 3. Now, you can see all the voice, bot, and other interaction we just created.
 
 ![agents-portal](./images/agentsportal.png)
+
+If you’re done experimenting and want to delete all the resources created to avoid incurring future charges, go to step 6: [Cleaning Up](../06_CleanUp/README.md)
+
+
+# Example Customer Walktrought
+
+A customer uses their Alexa to find out about their credit card balance
+
+<img src="./images/alexa.png" alt="drawing" width="500"/>
+
+Customer does not understand why USD 1500, so they decide to go to their customer portal and check the transactions and accounts. Customer still does not understand, they decide to use the chat in the customer portal to speak to an agent. When the call or chat session gets routed to the agent, the agent can see all the different interactions that the customer had and their frustration
+
+First, the agent can see all the clickstreaming done by the customer
+
+![agents-portal](./images/example1.png)
+
+Then, it can see the call to the Alexa bot. 
+
+![agents-portal](./images/example2.png)
+
+It may mean that the customer is being struggling to find out why they owe USD 1,500. Therefore, the agent can react proactively
+
+<img src="./images/Picture1.png" alt="drawing" width="800"/>
+
