@@ -36,7 +36,7 @@
 
 6. Without closing the CCP - Go back to your CustomerDomainName portal and in the chat type *I would like to speak with an agent* or *talk to an agent* - This should innitiate a new chat incoming in the CCP.
 
-![clickstreaming](./images/image%20(5).png)
+<img src="./images/image%20(5).png" alt="drawing" width="750"/>
 
 7. Accept the chat - now your agent is chatting with the end user in the banking portal.
 
@@ -107,5 +107,5 @@ Then, it can see the call to the Alexa bot.
 
 It may mean that the customer is being struggling to find out why they owe USD 1,500. Therefore, the agent can react proactively
 
-![agents-portal](./images/Picture1.png)
+<img src="./images/Picture1.png" alt="drawing" width="800"/>
 
