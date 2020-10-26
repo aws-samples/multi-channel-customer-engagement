@@ -83,3 +83,5 @@ Remember you can say, Alexa, send me a pin and it will send you a PIN to the mob
 2. Go to the open CustomerDomainName's Url. Please sign in (if register in example #1) or sign up with a valid email. It opens the agent portal.
 
 3. Now, you can see all the voice, bot, and other interaction we just created.
+
+If you’re done experimenting and want to delete all the resources created to avoid incurring future charges, go to step 6: [Cleaning Up](../06_CleanUp/README.md)
