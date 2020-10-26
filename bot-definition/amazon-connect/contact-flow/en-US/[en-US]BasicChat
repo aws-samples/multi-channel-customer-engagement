@@ -1,1 +1,206 @@
-{"modules":[{"id":"2badefc0-ae32-4707-9080-59bdc0fd2ae3","type":"Disconnect","branches":[],"parameters":[],"metadata":{"position":{"x":1356,"y":339}}},{"id":"2db78269-2720-41b1-8928-5a5684d7788f","type":"PlayPrompt","branches":[{"condition":"Success","transition":"3113b669-41ef-41b0-9358-6318ae7deb5f"}],"parameters":[{"name":"Text","value":"Hello Welcome! How can I help?","namespace":null},{"name":"TextToSpeechType","value":"text"}],"metadata":{"position":{"x":195,"y":6},"useDynamic":false}},{"id":"b9362d6b-eb16-42c9-8184-256617a71588","type":"Transfer","branches":[{"condition":"AtCapacity","transition":"2badefc0-ae32-4707-9080-59bdc0fd2ae3"},{"condition":"Error","transition":"2badefc0-ae32-4707-9080-59bdc0fd2ae3"}],"parameters":[],"metadata":{"position":{"x":1101,"y":397},"useDynamic":false,"queue":null},"target":"Queue"},{"id":"69bc29a2-100a-41ff-b0a7-59d8ecc246b5","type":"CheckAttribute","branches":[{"condition":"Evaluate","conditionType":"Contains","conditionValue":"transferToAgent","transition":"57827b66-13bf-44fc-bec6-369c13dad6e4"},{"condition":"NoMatch","transition":"3113b669-41ef-41b0-9358-6318ae7deb5f"}],"parameters":[{"name":"Attribute","value":"Lex.IntentName"},{"name":"Namespace","value":"System"}],"metadata":{"position":{"x":518,"y":447},"conditionMetadata":[{"id":"e592fc1b-72d9-4def-b94a-3e6eaa704a51","operator":{"name":"Contains","value":"Contains","shortDisplay":"contains"},"value":"transferToAgent"}]}},{"id":"3113b669-41ef-41b0-9358-6318ae7deb5f","type":"GetUserInput","branches":[{"condition":"NoMatch","transition":"69bc29a2-100a-41ff-b0a7-59d8ecc246b5"},{"condition":"Error","transition":"57827b66-13bf-44fc-bec6-369c13dad6e4"}],"parameters":[{"name":"Text","value":"If you want help say agent","namespace":null},{"name":"TextToSpeechType","value":"text"},{"name":"BotName","value":"LexOmnichannel"},{"name":"BotAlias","value":"$LATEST"},{"name":"BotRegion","value":"us-west-2"}],"metadata":{"position":{"x":512,"y":86},"conditionMetadata":[],"useDynamic":false,"dynamicMetadata":{}},"target":"Lex"},{"id":"57827b66-13bf-44fc-bec6-369c13dad6e4","type":"SetQueue","branches":[{"condition":"Success","transition":"b9362d6b-eb16-42c9-8184-256617a71588"},{"condition":"Error","transition":"b9362d6b-eb16-42c9-8184-256617a71588"}],"parameters":[{"name":"Queue","value":"arn:aws:connect:us-east-1:694790713081:instance/1c0cd4a8-632b-4c56-8c17-a5032a27e02f/queue/c9a721ab-1fd3-4de8-be67-680cc9e20efc","namespace":null,"resourceName":"BasicQueue"}],"metadata":{"position":{"x":819,"y":443},"useDynamic":false,"queue":{"id":"arn:aws:connect:us-east-1:694790713081:instance/1c0cd4a8-632b-4c56-8c17-a5032a27e02f/queue/c9a721ab-1fd3-4de8-be67-680cc9e20efc","text":"BasicQueue"}}}],"version":"1","type":"contactFlow","start":"2db78269-2720-41b1-8928-5a5684d7788f","metadata":{"entryPointPosition":{"x":20,"y":20},"snapToGrid":false,"name":"[en-US] Basic Chat","description":null,"type":"contactFlow","status":"published","hash":"599e1b1ca9a21754d7feadfa76fdd503b1196f22522190ce668857e3014413d4"}}
+{
+  "modules": [
+    {
+      "id": "2badefc0-ae32-4707-9080-59bdc0fd2ae3",
+      "type": "Disconnect",
+      "branches": [],
+      "parameters": [],
+      "metadata": {
+        "position": {
+          "x": 1356,
+          "y": 339
+        }
+      }
+    },
+    {
+      "id": "2db78269-2720-41b1-8928-5a5684d7788f",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "3113b669-41ef-41b0-9358-6318ae7deb5f"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Hello Welcome! How can I help?",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 195,
+          "y": 6
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "b9362d6b-eb16-42c9-8184-256617a71588",
+      "type": "Transfer",
+      "branches": [
+        {
+          "condition": "AtCapacity",
+          "transition": "2badefc0-ae32-4707-9080-59bdc0fd2ae3"
+        },
+        {
+          "condition": "Error",
+          "transition": "2badefc0-ae32-4707-9080-59bdc0fd2ae3"
+        }
+      ],
+      "parameters": [],
+      "metadata": {
+        "position": {
+          "x": 1101,
+          "y": 397
+        },
+        "useDynamic": false,
+        "queue": null
+      },
+      "target": "Queue"
+    },
+    {
+      "id": "69bc29a2-100a-41ff-b0a7-59d8ecc246b5",
+      "type": "CheckAttribute",
+      "branches": [
+        {
+          "condition": "Evaluate",
+          "conditionType": "Contains",
+          "conditionValue": "transferToAgent",
+          "transition": "57827b66-13bf-44fc-bec6-369c13dad6e4"
+        },
+        {
+          "condition": "NoMatch",
+          "transition": "3113b669-41ef-41b0-9358-6318ae7deb5f"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Attribute",
+          "value": "Lex.IntentName"
+        },
+        {
+          "name": "Namespace",
+          "value": "System"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 518,
+          "y": 447
+        },
+        "conditionMetadata": [
+          {
+            "id": "e592fc1b-72d9-4def-b94a-3e6eaa704a51",
+            "operator": {
+              "name": "Contains",
+              "value": "Contains",
+              "shortDisplay": "contains"
+            },
+            "value": "transferToAgent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3113b669-41ef-41b0-9358-6318ae7deb5f",
+      "type": "GetUserInput",
+      "branches": [
+        {
+          "condition": "NoMatch",
+          "transition": "69bc29a2-100a-41ff-b0a7-59d8ecc246b5"
+        },
+        {
+          "condition": "Error",
+          "transition": "57827b66-13bf-44fc-bec6-369c13dad6e4"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "If you want help say agent",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        },
+        {
+          "name": "BotName",
+          "value": "LexOmnichannel"
+        },
+        {
+          "name": "BotAlias",
+          "value": "$LATEST"
+        },
+        {
+          "name": "BotRegion",
+          "value": "us-west-2"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 512,
+          "y": 86
+        },
+        "conditionMetadata": [],
+        "useDynamic": false,
+        "dynamicMetadata": {}
+      },
+      "target": "Lex"
+    },
+    {
+      "id": "57827b66-13bf-44fc-bec6-369c13dad6e4",
+      "type": "SetQueue",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "b9362d6b-eb16-42c9-8184-256617a71588"
+        },
+        {
+          "condition": "Error",
+          "transition": "b9362d6b-eb16-42c9-8184-256617a71588"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Queue",
+          "value": "arn:aws:connect:us-east-1:694790713081:instance/1c0cd4a8-632b-4c56-8c17-a5032a27e02f/queue/c9a721ab-1fd3-4de8-be67-680cc9e20efc",
+          "namespace": null,
+          "resourceName": "BasicQueue"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 819,
+          "y": 443
+        },
+        "useDynamic": false,
+        "queue": {
+          "id": "arn:aws:connect:us-east-1:694790713081:instance/1c0cd4a8-632b-4c56-8c17-a5032a27e02f/queue/c9a721ab-1fd3-4de8-be67-680cc9e20efc",
+          "text": "BasicQueue"
+        }
+      }
+    }
+  ],
+  "version": "1",
+  "type": "contactFlow",
+  "start": "2db78269-2720-41b1-8928-5a5684d7788f",
+  "metadata": {
+    "entryPointPosition": {
+      "x": 20,
+      "y": 20
+    },
+    "snapToGrid": false,
+    "name": "[en-US] Basic Chat",
+    "description": null,
+    "type": "contactFlow",
+    "status": "published",
+    "hash": "599e1b1ca9a21754d7feadfa76fdd503b1196f22522190ce668857e3014413d4"
+  }
+}
