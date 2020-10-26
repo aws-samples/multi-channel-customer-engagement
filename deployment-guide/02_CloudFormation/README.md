@@ -5,16 +5,15 @@ Before you launch this template, you must have an existing Amazon Connect instan
 ## Find Your Amazon Connect Instance ID, Contact Flow ID and Queue ID
 
 This solution requires an Amazon Connect InstanceId, QueueId and ContactFlowId. Use this procedure to find them.
-
-In the AWS Management Console, navigate to the [Amazon Connect](https://console.aws.amazon.com/connect) console and go to **Routing** - **Contact Flows**, select the "Basic Chat flow" and click on the 'Additional information' link.
+In the AWS Management Console, navigate to the [Amazon Connect](https://console.aws.amazon.com/connect) console and go to **Routing** - **Contact Flows**, select the "[en-US] Basic Chat flow" or "[es-MX] Basic Chat flow " and click on **Show additional flow information** link.
 
 **Connect Instance ID**: This is the id of the Amazon Connect instance you want to use. You can find this on the Amazon Connect console or when viewing the contact flow. 
 
 > For example, if the arn for your flow is ```arn:aws:connect:us-west-2:123456789012:instance/11111111-1111-1111-1111-111111111111/contact-flow/22222222-2222-2222-2222-222222222222```, the Connect Instance ID is ```11111111-1111-1111-1111-111111111111```
 
-**Contact Flow ID**: 
+**Chat Flow ID**: 
 
-> For example, if the arn for your flow is ```arn:aws:connect:us-west-2:123456789012:instance/11111111-1111-1111-1111-111111111111/contact-flow/22222222-2222-2222-2222-222222222222```, the Contact Flow ID is ```22222222-2222-2222-2222-222222222222```
+> For example, if the arn for your flow is ```arn:aws:connect:us-west-2:123456789012:instance/11111111-1111-1111-1111-111111111111/contact-flow/22222222-2222-2222-2222-222222222222```, the Chat Flow ID is ```22222222-2222-2222-2222-222222222222```
 
 ![connect](./images/Picture_info.png)
 
@@ -40,9 +39,9 @@ US West (Oregon) | us-west-2 | [![Launch Stack](https://cdn.rawgit.com/buildkite
 
 Parameter | Description |
 --- | --- | 
-**Connect Instance ID** | Amazon Connect Instance ID |
+**Connect Instance ID** | Amazon Connect - Instance ID |
 **Chat Flow ID**| Amazon Connect - Basic Chat Flow ID |
-**Queue ID**| Amazon Connect Queue ID |
+**Queue ID**| Amazon Connect - Queue ID |
 **Phone Number** | Phone number to send SMS notifications |
 **Currency** | [ISO Currency Code](https://en.wikipedia.org/wiki/ISO_4217ISO) to use in the solution |
 **Language** | Language to be used by Amazon Lex and Alexa Skill (English or Spanish) |
