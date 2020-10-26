@@ -8,31 +8,31 @@ Mappings:
       S3Key: "deployment/"
 
 Parameters:
-  customerPortalUrl:
+  CustomerPortalUrl:
     Type: String
     Description: domain name (without https://) of the Customer Portal CloudFront distribution.
-  connectContactFlowId:
+  ConnectChatFlowId:
     Type: String
     Description: The contact flow id that the customer will interact with while chatting. This should be the id of the Basic Contact Flow you uploaded.
     AllowedPattern: '\w{8}-\w{4}-\w{4}-\w{4}-\w{12}'
-  connectInstanceId:
+  ConnectInstanceId:
     Type: String
     Description: The instance id of the Amazon Connect instance that the customer will interact with while chatting. You can find this in the Amazon Connect console when viewing your instance details.
     AllowedPattern: '\w{8}-\w{4}-\w{4}-\w{4}-\w{12}'
-  connectS3BucketName:
+  ConnectS3BucketName:
     Type: String
     Default: "chat-transcript-s3-bucket"
     Description: >
       Enter the name of the bucket that holds the chat transcripts for your Amazon Connect instance. You can find this in the Amazon Connect console when viewing the Data Storage section in your instance details. E.g. If your instance has connect-xxx/connect/instanceName/ChatTranscripts, enter 'connect-xxx'
     AllowedPattern: '(?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)'
-  transcriptPath:
+  TranscriptPath:
     Type: String
     Description: >
       The path in the S3 bucket that contains the chat transcripts. You can find this in the Amazon Connect console when viewing the Data Storage section in your instance details. E.g. If your instance has connect-xxx/connect/instanceName/ChatTranscripts, enter 'connect/instanceName/ChatTranscripts'
     Default: connect/instanceName/ChatTranscripts
-  comprehendTranscriptLambdaArn:
+  ComprehendTranscriptLambdaArn:
     Type: String
-  executeTranscriptionStateMachineArn:
+  ExecuteTranscriptionStateMachineArn:
     Type: String
   S3BucketAssets:
     Type: String
@@ -70,9 +70,9 @@ Resources:
         - !Ref ChatSDKLayer
       Environment:
         Variables:
-          INSTANCE_ID: !Ref connectInstanceId
-          CONTACT_FLOW_ID: !Ref connectContactFlowId
-          CF_DISTRIBUTION: !Ref customerPortalUrl
+          INSTANCE_ID: !Ref ConnectInstanceId
+          CONTACT_FLOW_ID: !Ref ConnectChatFlowId
+          CF_DISTRIBUTION: !Ref CustomerPortalUrl
           CHAT_DATA_TABLE: !Ref chatContactDataTable
       Code:
         S3Bucket: !Join
@@ -117,8 +117,8 @@ Resources:
                 Action:
                   - "connect:StartChatContact"
                 Resource:
-                  - !Sub "arn:${AWS::Partition}:connect:${AWS::Region}:${AWS::AccountId}:instance/${connectInstanceId}"
-                  - !Sub "arn:${AWS::Partition}:connect:${AWS::Region}:${AWS::AccountId}:instance/${connectInstanceId}/*"
+                  - !Sub "arn:${AWS::Partition}:connect:${AWS::Region}:${AWS::AccountId}:instance/${ConnectInstanceId}"
+                  - !Sub "arn:${AWS::Partition}:connect:${AWS::Region}:${AWS::AccountId}:instance/${ConnectInstanceId}/*"
               - Effect: "Allow"
                 Action:
                   - "dynamodb:Query"
@@ -139,7 +139,7 @@ Resources:
       Timeout: 30
       Environment:
         Variables:
-          S3_BUCKET_NAME: !Ref connectS3BucketName
+          S3_BUCKET_NAME: !Ref ConnectS3BucketName
           CHAT_DATA_TABLE: !Ref chatContactDataTable
       Code:
         S3Bucket: !Join
@@ -195,11 +195,11 @@ Resources:
     Properties:
       customAction: "configureNotification"
       ServiceToken: !GetAtt S3BucketConfigurationLambda.Arn
-      Bucket: !Ref connectS3BucketName
-      Prefix: !Ref transcriptPath
+      Bucket: !Ref ConnectS3BucketName
+      Prefix: !Ref TranscriptPath
       LambdaFunctionArnChatTranscripts: !GetAtt UpdateDdbWithS3LocationLambda.Arn
-      LambdaFunctionArnTranscripts: !Ref comprehendTranscriptLambdaArn
-      LambdaFunctionArnRecordings: !Ref executeTranscriptionStateMachineArn
+      LambdaFunctionArnTranscripts: !Ref ComprehendTranscriptLambdaArn
+      LambdaFunctionArnRecordings: !Ref ExecuteTranscriptionStateMachineArn
 
   S3BucketConfigurationLambda:
     Type: AWS::Lambda::Function
@@ -235,7 +235,7 @@ Resources:
                 Action:
                   - "s3:putBucketNotification"
                 Resource:
-                  - !Sub "arn:aws:s3:::${connectS3BucketName}"
+                  - !Sub "arn:aws:s3:::${ConnectS3BucketName}"
               - Effect: "Allow"
                 Action:
                   - "logs:CreateLogGroup"
@@ -251,7 +251,7 @@ Resources:
       FunctionName: !Ref UpdateDdbWithS3LocationLambda
       Principal: s3.amazonaws.com
       SourceAccount: !Ref "AWS::AccountId"
-      SourceArn: !Sub "arn:aws:s3:::${connectS3BucketName}"
+      SourceArn: !Sub "arn:aws:s3:::${ConnectS3BucketName}"
 
   #### DynamoDb ####
   chatContactDataTable:

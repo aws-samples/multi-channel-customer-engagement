@@ -2,9 +2,9 @@
 
 ## Example 1 - Interact with the bot and simulate clickstreaming
 
-1. Go to CloudFormation - outputs and you should see 2 URLs: AgentDomainName	and CustomerDomainName
+1. Go to CloudFormation -> outputs, you should see 2 URLs: AgentDomainName	and CustomerDomainName
 
-2. Go to the open CustomerDomainName's Url. Please sign up with a valid email. It opens the banking portal.
+2. Open the CustomerDomainName's Url and sign up with a valid email. It will open the customer portal
 
 3. Let's emulate a few clicks that an user can do on the page, you can click on the following buttons to capture the clickstreams.
 
@@ -18,7 +18,7 @@
  - pay balance of my credit card
  - what are the openning hours for the new york branch
 
-    Y   ou can also go to Amazon Lex and check the different intents configured.
+    You can also go to Amazon Lex console and check the different intents configured.
 
     Every interaction is going to request a PIN (except for the questions about the branches openning hours). You can request to send a pin (Just type *send me a pin*), it will send a PIN to the mobile phone configured in the CloudFormation, or you can also check it at the top right of the website.
 
@@ -76,12 +76,16 @@ Remember you can say, Alexa, send me a pin and it will send you a PIN to the mob
  
  ## Analyze all Data
 
- Now that you have some calls recorded, that we have interacted with Lex using voice and text and with Alexa. Also, we emulated some clickstreaming, let's log in the agent portal to visualise all the different data.
+Now that we have gather data from different sources (calls recorded, chats using Lex, voice using Alexa and clickstreaming), let's log in the agent portal to have a end to end visualization of the customer's interactions.
 
-1. Go to CloudFormation - outputs and you should see 2 URLs: AgentDomainName and CustomerDomainName.
+1. Go to CloudFormation -> outputs. You should see 2 URLs: AgentDomainName and CustomerDomainName.
 
-2. Go to the open CustomerDomainName's Url. Please sign in (if register in example #1) or sign up with a valid email. It opens the agent portal.
+2. Open the AgentDomainName's URL and sign in (if register in example #1) or sign up with a valid email. It will open the agent portal.
 
 3. Now, you can see all the voice, bot, and other interaction we just created.
 
+<<<<<<< HEAD
 If you’re done experimenting and want to delete all the resources created to avoid incurring future charges, go to step 6: [Cleaning Up](../06_CleanUp/README.md)
+=======
+![agents-portal](./images/agentsportal.png)
+>>>>>>> ce0c7960b1b47bfdf69a9391f093fce1f1a524d8

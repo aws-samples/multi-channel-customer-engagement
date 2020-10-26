@@ -16,33 +16,33 @@ Parameters:
   AgentPortalUrl:
     Type: String
     Description: URL of the Agent Portal Website Domain (Cloudfront Domain).
-  cognitoIdentityPoolId:
+  CognitoIdentityPoolId:
     Type: String
     Description: Cognito Identity Pool Id
-  cognitoUserPoolId:
+  CognitoUserPoolId:
     Type: String
     Description: Cognito Identity Pool Id URL
-  cognitoDomain:
+  CognitoDomain:
     Type: String
-  cognitoCustomerPortalClientId:
+  CognitoCustomerPortalClientId:
     Type: String
     Description: Cognito Identity Customer Portal App Client Id
-  cognitoAgentPortalClientId:
+  CognitoAgentPortalClientId:
     Type: String
     Description: Cognito Identity Agent Portal App Client Id    
-  apiGatewayEndpoint:
+  ApiGatewayEndpoint:
     Type: String
     Description: API Gateway Endpoint URL
-  connectInstanceId:
+  ConnectInstanceId:
     Type: String
     Description: Connect Instance Id
-  connectContactFlowId:
+  ConnectChatFlowId:
     Type: String
     Description: Connect Contact Flow Id
-  kinesisStreamName:
+  KinesisStreamName:
     Type: String
     Description: Kinesis Stream Name
-  pinPointAppId:
+  PinpointAppId:
     Type: String
     Description: PinPoint Application ID
 
@@ -115,15 +115,15 @@ Resources:
       siteBucketName: !Ref CustomerPortalS3Bucket
       region: !Ref "AWS::Region"
       siteUrl: !Ref CustomerPortalUrl
-      cognitoIdentityPoolId: !Ref cognitoIdentityPoolId
-      cognitoUserPoolId: !Ref cognitoUserPoolId
-      cognitoDomain: !Ref cognitoDomain
-      cognitoClientId: !Ref cognitoCustomerPortalClientId
-      apiGatewayEndpoint: !Ref apiGatewayEndpoint
-      connectInstanceId: !Ref connectInstanceId
-      connectContactFlowId: !Ref connectContactFlowId
-      kinesisStreamName: !Ref kinesisStreamName
-      pinPointAppId: !Ref pinPointAppId
+      cognitoIdentityPoolId: !Ref CognitoIdentityPoolId
+      cognitoUserPoolId: !Ref CognitoUserPoolId
+      cognitoDomain: !Ref CognitoDomain
+      cognitoClientId: !Ref CognitoCustomerPortalClientId
+      apiGatewayEndpoint: !Ref ApiGatewayEndpoint
+      connectInstanceId: !Ref ConnectInstanceId
+      connectContactFlowId: !Ref ConnectChatFlowId
+      kinesisStreamName: !Ref KinesisStreamName
+      pinPointAppId: !Ref PinpointAppId
 
   AgentPortalCreateConfigFile:
     Type: AWS::Lambda::Function
@@ -148,13 +148,13 @@ Resources:
       siteBucketName: !Ref AgentPortalS3Bucket
       region: !Ref "AWS::Region"
       siteUrl: !Ref AgentPortalUrl
-      cognitoIdentityPoolId: !Ref cognitoIdentityPoolId
-      cognitoUserPoolId: !Ref cognitoUserPoolId
-      cognitoDomain: !Ref cognitoDomain
-      cognitoClientId: !Ref cognitoAgentPortalClientId
-      apiGatewayEndpoint: !Ref apiGatewayEndpoint
-      connectInstanceId: !Ref connectInstanceId
-      connectContactFlowId: !Ref connectContactFlowId
-      kinesisStreamName: !Ref kinesisStreamName
-      pinPointAppId: !Ref pinPointAppId
+      cognitoIdentityPoolId: !Ref CognitoIdentityPoolId
+      cognitoUserPoolId: !Ref CognitoUserPoolId
+      cognitoDomain: !Ref CognitoDomain
+      cognitoClientId: !Ref CognitoAgentPortalClientId
+      apiGatewayEndpoint: !Ref ApiGatewayEndpoint
+      connectInstanceId: !Ref ConnectInstanceId
+      connectContactFlowId: !Ref ConnectChatFlowId
+      kinesisStreamName: !Ref KinesisStreamName
+      pinPointAppId: !Ref PinpointAppId
 
