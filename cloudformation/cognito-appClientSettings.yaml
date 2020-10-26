@@ -5,23 +5,23 @@ Parameters:
     Default: "omnichannel-assets-us-east-1"
     Description: You can update this value if you have changed the original code
 
-  cognitoUserPoolId:
+  CognitoUserPoolId:
     Type: String
     Description: UserPool Id to be modified
 
-  cognitoCustomerPortalClientId:
+  CognitoCustomerPortalClientId:
     Type: String
     Description: Customer App Client Id to be modified
 
-  callbackLogOutCustomerURL:
+  CallbackLogOutCustomerURL:
     Type: String
     Description: "CallBackURL and LogOutURL for Customer App Client Settings"
 
-  cognitoAgentPortalClientId:
+  CognitoAgentPortalClientId:
     Type: String
     Description: Agent App Client Id to be modified
 
-  callbackLogOutAgentURL:
+  CallbackLogOutAgentURL:
     Type: String
     Description: "CallBackURL and LogOutURL for Agent App Client Settings"
 
@@ -114,12 +114,12 @@ Resources:
         Fn::GetAtt:
           - LambdaCustomResourceUserPoolAppClientSettings
           - Arn
-      UserPoolId: !Ref cognitoUserPoolId
-      UserPoolClientId: !Ref cognitoCustomerPortalClientId
+      UserPoolId: !Ref CognitoUserPoolId
+      UserPoolClientId: !Ref CognitoCustomerPortalClientId
       SupportedIdentityProviders:
         - COGNITO
-      CallbackURL: !Sub "https://${callbackLogOutCustomerURL}"
-      LogoutURL: !Sub "https://${callbackLogOutCustomerURL}"
+      CallbackURL: !Sub "https://${CallbackLogOutCustomerURL}"
+      LogoutURL: !Sub "https://${CallbackLogOutCustomerURL}"
       AllowedOAuthFlowsUserPoolClient: true
       AllowedOAuthFlows:
         - implicit
@@ -137,12 +137,12 @@ Resources:
         Fn::GetAtt:
           - LambdaCustomResourceUserPoolAppClientSettings
           - Arn
-      UserPoolId: !Ref cognitoUserPoolId
-      UserPoolClientId: !Ref cognitoAgentPortalClientId
+      UserPoolId: !Ref CognitoUserPoolId
+      UserPoolClientId: !Ref CognitoAgentPortalClientId
       SupportedIdentityProviders:
         - COGNITO
-      CallbackURL: !Sub "https://${callbackLogOutAgentURL}"
-      LogoutURL: !Sub "https://${callbackLogOutAgentURL}"
+      CallbackURL: !Sub "https://${CallbackLogOutAgentURL}"
+      LogoutURL: !Sub "https://${CallbackLogOutAgentURL}"
       AllowedOAuthFlowsUserPoolClient: true
       AllowedOAuthFlows:
         - implicit
