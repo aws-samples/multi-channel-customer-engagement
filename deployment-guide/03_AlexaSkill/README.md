@@ -1,6 +1,6 @@
 # Alexa Skill setup
 
-The Omnichannel architecture includes Alexa Skills as one of the channels that enables the customers to communicate with Cloud Bank. In this guidance you will create an Alexa Skill, and you will setup this skill to have the same interaction model that already have with Amazon Lex, this Lex bot was deployed with the cloudformation template from the previous step. 
+The Multichannel Customer Engagement for Financial Services solution includes Alexa Skills as one of the channels that enables the customers to communicate with Cloud Bank. In this guidance you will create an Alexa Skill, and you will setup this skill to have the same interaction model that already have with Amazon Lex, this Lex bot was deployed with the cloudformation template from the previous step. 
 
 ## Create Alexa Skill
 

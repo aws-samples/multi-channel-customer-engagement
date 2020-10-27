@@ -2,7 +2,6 @@ AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
   S3BucketAssets:
     Type: String
-    Default: "omnichannel-assets-us-east-1"
     Description: You can update this value if you have changed the original code
 
   CognitoUserPoolId:
@@ -78,7 +77,6 @@ Resources:
   LambdaCustomResourceSendResponse:
     Type: AWS::Lambda::Function
     Properties:
-      #      FunctionName: !Sub "omnichannel-customerResourceSEND-${AWS::AccountId}"
       Runtime: nodejs12.x
       Code:
         S3Bucket: !Ref S3BucketAssets
@@ -92,7 +90,6 @@ Resources:
   LambdaCustomResourceUserPoolAppClientSettings:
     Type: AWS::Lambda::Function
     Properties:
-      #      FunctionName: !Sub "omnichannel-userPool-AppClientSettings-${AWS::AccountId}"
       Environment:
         Variables:
           "LAMBDA_SEND_FUNCTION": !Ref LambdaCustomResourceSendResponse

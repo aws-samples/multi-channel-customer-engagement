@@ -4,32 +4,26 @@ Description: Cloudformation for setting all the backend functions (AWS Lambda) a
 Parameters:
   TableCustomerInfo:
     Type: String
-    Default: "alexa-bank-demo"
     Description: DynamoDB Table with customer data
 
   TableAppInteractions:
     Type: String
-    Default: "customer-interactions-app"
     Description: DynamoDB Table with App Interactions
 
   TableVoiceInteraction:
     Type: String
-    Default: "customer-interactions-voice"
     Description: DynamoDB Table with Voice Interactions 
 
   TableChatInteraction:
     Type: String
-    Default: "customer-interactions-chatbot"
     Description: DynamoDB Table with Chatbot Interactions  
 
   LambdaConnectChatARN:
     Type: String
-    Default: "arn:aws:lambda:us-east-1:217458111991:function:backend-PopulateDynamoLambda-1G763V688DNB4"
     Description: "Lambda Function that connect to a chat session in Connect"
 
   S3BucketAssets:
     Type: String
-    Default: "omnichannel-assets-us-east-1"
     Description: You can update this value if you have changed the original code
        
 Resources:
@@ -42,10 +36,10 @@ Resources:
       EndpointConfiguration:
         Types:
           - REGIONAL
-      Name: customer-omnichannel
+      Name: multichannel-solution
       Tags:
         - Key: "solution"
-          Value: "omnichannel-solution"
+          Value: "multichannel-solution"
 
   ApiGatewayIamRole:
     Type: "AWS::IAM::Role"
@@ -554,7 +548,6 @@ Resources:
       Environment: 
         Variables: 
           "TABLE_INTERACTION_CHATBOT": !Ref TableChatInteraction
-      FunctionName: omnichannel-getChatbot
       Handler: lambda_function.lambda_handler
       MemorySize: 128
       Role: !GetAtt IAMRoleLambdaGetData.Arn
@@ -565,7 +558,7 @@ Resources:
         S3Key: "omnichannel-getChatbot.zip"
       Tags:
         - Key: "solution"
-          Value: "omnichannel-solution"
+          Value: "multichannel-solution"
 
   LambdaGetVoice:
     Type: AWS::Lambda::Function
@@ -574,7 +567,6 @@ Resources:
       Environment: 
         Variables: 
           "TABLE_INTERACTION_VOICE": !Ref TableVoiceInteraction
-      FunctionName: omnichannel-getVoice
       Handler: lambda_function.lambda_handler
       MemorySize: 128
       Role: !GetAtt IAMRoleLambdaGetData.Arn
@@ -585,7 +577,7 @@ Resources:
         S3Key: "omnichannel-getVoice.zip"
       Tags:
         - Key: "solution"
-          Value: "omnichannel-solution"
+          Value: "multichannel-solution"
 
   LambdaGetCustomerInfo:
     Type: AWS::Lambda::Function
@@ -594,7 +586,6 @@ Resources:
       Environment: 
         Variables: 
           "TABLE_CUSTOMER_DATA": !Ref TableCustomerInfo
-      FunctionName: omnichannel-getCustomerInfo
       Handler: lambda_function.lambda_handler
       MemorySize: 128
       Role: !GetAtt IAMRoleLambdaGetData.Arn
@@ -605,7 +596,7 @@ Resources:
         S3Key: "omnichannel-getCustomerInfo.zip"
       Tags:
         - Key: "solution"
-          Value: "omnichannel-solution"
+          Value: "multichannel-solution"
 
   LambdaGetClickstream:
     Type: AWS::Lambda::Function
@@ -614,7 +605,6 @@ Resources:
       Environment: 
         Variables: 
           "TABLE_INTERACTION_APP": !Ref TableAppInteractions
-      FunctionName: !Sub 'omnichannel-getClickStream'
       Handler: lambda_function.lambda_handler
       MemorySize: 128
       Role: !GetAtt IAMRoleLambdaGetData.Arn
@@ -625,7 +615,7 @@ Resources:
         S3Key: "omnichannel-getClickStream.zip"
       Tags:
         - Key: "solution"
-          Value: "omnichannel-solution"
+          Value: "multichannel-solution"
 
 ## LAMBDA PERMISSIONS - INTEGRATION FROM API GATEWAY TO BACKEND LAMBDAS
 
@@ -674,8 +664,6 @@ Resources:
   KinesisClickStream:
     Type: "AWS::Kinesis::Stream"
     Properties:
-      #Name: !Sub "omnichannel-KinesisClickstream-${AWS::AccountId}"
-      Name: !Sub "omnichannel-KinesisClickstream"
       RetentionPeriodHours: 24
       ShardCount: 1
 
@@ -686,7 +674,6 @@ Resources:
       Environment: 
         Variables: 
           "TABLE_INTERACTION_APP": !Ref TableAppInteractions
-      FunctionName: omnichannel-saveClickStream
       Handler: lambda_function.lambda_handler
       MemorySize: 128
       Role: !GetAtt IAMRoleLambdaSaveData.Arn
@@ -697,7 +684,7 @@ Resources:
         S3Key: "omnichannel-saveClickStream.zip"
       Tags:
         - Key: "solution"
-          Value: "omnichannel-solution"
+          Value: "multichannel-solution"
 
   LambdaEventSourceMapKinesisClickstream:
     Type: "AWS::Lambda::EventSourceMapping"
@@ -718,7 +705,7 @@ Resources:
   CognitoUserPool:
     Type: "AWS::Cognito::UserPool"
     Properties:
-      UserPoolName: "omnichannel"
+      UserPoolName: "multichannel-solution"
       Policies:
         PasswordPolicy:
           MinimumLength: 8
@@ -945,7 +932,7 @@ Resources:
     Type: "AWS::Cognito::UserPoolDomain"
     Properties:
       UserPoolId: !Ref CognitoUserPool
-      Domain: !Sub "omnichannel-${AWS::AccountId}"
+      Domain: !Sub "multichannel-${AWS::AccountId}"
 
   ##Cognito IDP
 
@@ -1056,7 +1043,7 @@ Resources:
   PinpointApp:
     Type: "AWS::Pinpoint::App"
     Properties:
-      Name: "omnichannel-app"
+      Name: "multichannel-app"
 
 Outputs:
   URIApiGateway:

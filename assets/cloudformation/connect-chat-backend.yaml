@@ -257,7 +257,7 @@ Resources:
   chatContactDataTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "omnichannel-chat-history"
+      TableName: "multichannel-chat-history"
       AttributeDefinitions:
         - AttributeName: "contactId"
           AttributeType: "S"

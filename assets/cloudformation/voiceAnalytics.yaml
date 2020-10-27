@@ -55,7 +55,6 @@ Parameters:
 
   S3BucketAssets:
     Type: String
-    Default: "omnichannel-assets-us-east-1"
     Description: You can update this value if you have changed the original code
 
 Resources:

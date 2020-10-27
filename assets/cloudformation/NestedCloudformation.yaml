@@ -56,7 +56,6 @@ Parameters:
       - es
   S3BucketAssetsMain:
     Type: String
-    Default: "omnichannel-assets-us-east-1"
     AllowedValues:
       - omnichannel-assets-us-east-1
       - omnichannel-assets-us-west-2

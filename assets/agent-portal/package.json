@@ -1,7 +1,7 @@
 {
-    "name": "omnichannel-agent-portal",
+    "name": "multichannel-agent-portal",
     "version": "1.0.0",
-    "description": "Omnichannel Agent Portal",
+    "description": "Multichannel Agent Portal",
     "dependencies": {
         "amazon-cognito-auth-js": "latest",
         "amazon-cognito-identity-js": "latest",
