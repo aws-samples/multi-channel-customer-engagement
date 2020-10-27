@@ -108,17 +108,8 @@ Please repeat the previous steps and import the following flows as well.
 - [[es-MX] Basic Chat flow](../../bot-definition/amazon-connect/contact-flow/es-MX/[es-MX]BasicChat)
 - [Basic Chat Disconnect Flow](../../bot-definition/amazon-connect/contact-flow/BasicChatDisconnectFlow)
 
-### Step 2. Setup Queues
 
-1. In the left-hand menu, choose **Routing** - **Queues**, then click  *BasicQueue*.
-
-2. Assign the queue to the routing profile; for information, see Create a routing profile. The routing profile links the queue and agents together.
-
-![connect](./images/image%20(17).png)
-
-![connect](./images/image%20(18).png)
-
-### Step 3. Configure your phone number
+### Step 2. Configure your phone number
 
 After you create an Amazon Connect instance, you can claim a phone number to use for your contact center. You can use this phone number to place a test call in to your contact center to confirm that it is working correctly. You can also use it in your production environment.
 
@@ -139,3 +130,13 @@ To claim a number for your contact center:
 Now you have a phone number for your customers to contact you.
 
 You are now ready to go to step 2 : [Deploy CloudFormation](../02_CloudFormation/README.md)
+
+### Step 3. Setup Queues
+
+1. In the left-hand menu, choose **Routing** - **Queues**, then click  *BasicQueue*.
+
+2. Assign the Outbound caller ID to the queue
+
+![connect](./images/image%20(17).png)
+
+![connect](./images/image%20(18).png)
