@@ -706,7 +706,6 @@ Resources:
     Type: "AWS::Cognito::UserPool"
     Properties:
       UserPoolName: "multichannel-solution"
-      MfaConfiguration: OPTIONAL
       Policies:
         PasswordPolicy:
           MinimumLength: 8
@@ -801,7 +800,7 @@ Resources:
       EmailVerificationMessage: "Your verification code is {####}. "
       EmailVerificationSubject: "Your verification code"
       SmsAuthenticationMessage: "Your authentication code is {####}. "
-      MfaConfiguration: "OFF"
+      MfaConfiguration: "OPTIONAL"
       EmailConfiguration:
         EmailSendingAccount: "COGNITO_DEFAULT"
       AdminCreateUserConfig:

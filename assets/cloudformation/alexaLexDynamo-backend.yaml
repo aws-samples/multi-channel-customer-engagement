@@ -558,7 +558,6 @@ Resources:
 ## CodeBuild
     CodeBuildProject:
         Type: "AWS::CodeBuild::Project"
-        DependsOn: ['executeCodeBuildRole']
         Properties:
             Name: "Omnichannel-CodeBuild-Lex"
             Source: 
