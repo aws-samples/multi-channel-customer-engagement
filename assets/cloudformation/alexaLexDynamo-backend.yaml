@@ -184,6 +184,7 @@ Resources:
         Type: AWS::Lambda::Function
         DependsOn: [ "LambdalexRole"]
         Properties:
+          FunctionName: multichannel-lex-bot
           Role: !GetAtt 'LambdalexRole.Arn'
           Runtime: "python3.7"
           Timeout: 20
@@ -219,6 +220,7 @@ Resources:
         Type: AWS::Lambda::Function
         DependsOn: [ "LambdalexRole"]
         Properties:
+          FunctionName: multichannel-alexa-bot
           Role: !GetAtt 'LambdalexRole.Arn'
           Runtime: "python3.7"
           Timeout: 20

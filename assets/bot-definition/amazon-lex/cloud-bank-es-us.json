@@ -5,7 +5,7 @@
     "importFormat": "JSON"
   },
   "resource": {
-    "name": "cloud-bank-en-US",
+    "name": "multichannel_bot_es_us",
     "version": "26",
     "intents": [
       {

@@ -18,7 +18,7 @@ zip bot.zip cloud-bank-en-us.json
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
-    --function-name lex-bank-demo \
+    --function-name multichannel-lex-bot \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
@@ -26,7 +26,7 @@ aws lambda add-permission \
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
-    --function-name lex-bank-demo \
+    --function-name multichannel-lex-bot \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
@@ -34,7 +34,7 @@ aws lambda add-permission \
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
-    --function-name lex-bank-demo \
+    --function-name multichannel-lex-bot \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
@@ -42,7 +42,7 @@ aws lambda add-permission \
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
-    --function-name lex-bank-demo \
+    --function-name multichannel-lex-bot \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
@@ -50,7 +50,7 @@ aws lambda add-permission \
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
-    --function-name lex-bank-demo \
+    --function-name multichannel-lex-bot \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
@@ -58,7 +58,7 @@ aws lambda add-permission \
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
-    --function-name lex-bank-demo \
+    --function-name multichannel-lex-bot \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
@@ -66,7 +66,7 @@ aws lambda add-permission \
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
-    --function-name lex-bank-demo \
+    --function-name multichannel-lex-bot \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
@@ -74,7 +74,7 @@ aws lambda add-permission \
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
-    --function-name lex-bank-demo \
+    --function-name multichannel-lex-bot \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
@@ -100,17 +100,17 @@ state=$(aws lex-models get-import --import-id $import_id --output text --query '
 test "$state" = "COMPLETE"
 
 # Build the model
-aws lex-models put-bot-alias --name prod --bot-name ommnichannel_bot --bot-version "\$LATEST" || true
+aws lex-models put-bot-alias --name prod --bot-name multichannel_bot --bot-version "\$LATEST" || true
 
-checksum=$(aws lex-models get-bot --name ommnichannel_bot --version-or-alias "\$LATEST" --query 'checksum' --output text)
+checksum=$(aws lex-models get-bot --name multichannel_bot --version-or-alias "\$LATEST" --query 'checksum' --output text)
 
 aws lex-models put-bot --name ommnichannel_bot --cli-input-json file://intents.json --checksum $checksum --detect-sentiment
 
-while state=$(aws lex-models get-bot --name ommnichannel_bot --version-or-alias "\$LATEST" --output text --query 'status'); test "$state" = "BUILDING"; do
+while state=$(aws lex-models get-bot --name multichannel_bot --version-or-alias "\$LATEST" --output text --query 'status'); test "$state" = "BUILDING"; do
   sleep 5; echo -n '.'
 done;
 
-state=$(aws lex-models get-bot --name ommnichannel_bot --version-or-alias "\$LATEST" --output text --query 'status')
+state=$(aws lex-models get-bot --name multichannel_bot --version-or-alias "\$LATEST" --output text --query 'status')
 
 test "$state" = "READY"
 

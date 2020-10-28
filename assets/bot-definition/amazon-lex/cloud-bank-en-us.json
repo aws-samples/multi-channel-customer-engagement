@@ -5,7 +5,7 @@
     "importFormat": "JSON"
   },
   "resource": {
-    "name": "ommnichannel_bot",
+    "name": "multichannel_bot_en_us",
     "version": "1",
     "intents": [
       {
@@ -13,7 +13,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
@@ -66,7 +66,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
@@ -103,7 +103,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
@@ -122,7 +122,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
@@ -139,7 +139,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
@@ -177,7 +177,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
@@ -234,7 +234,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
@@ -288,7 +288,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:lex-bank-demo",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
