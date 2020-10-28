@@ -40,7 +40,7 @@ Resources:
               - 
                 AttributeName: "interactionDateTime"
                 AttributeType: "S"
-            TableName: "omnichannel-interactions-app"
+            TableName: "multichannel-interactions-app"
             KeySchema: 
               - 
                 AttributeName: "customerId"
@@ -62,7 +62,7 @@ Resources:
               - 
                 AttributeName: "interactionId"
                 AttributeType: "S"
-            TableName: "omnichannel-interactions-voice"
+            TableName: "multichannel-interactions-voice"
             KeySchema: 
               - 
                 AttributeName: "customerId"
@@ -84,7 +84,7 @@ Resources:
               - 
                 AttributeName: "interactionDateTime"
                 AttributeType: "S"
-            TableName: "omnichannel-interactions-chatbot"
+            TableName: "multichannel-interactions-chatbot"
             KeySchema: 
               - 
                 AttributeName: "customerId"
@@ -103,7 +103,7 @@ Resources:
               - 
                 AttributeName: "name"
                 AttributeType: "S"
-            TableName: "omnichannel-offices"
+            TableName: "multichannel-offices"
             KeySchema: 
               - 
                 AttributeName: "name"
@@ -120,7 +120,7 @@ Resources:
                 AttributeName: "Id"
                 AttributeType: "S"
 
-            TableName: "omnichannel-customer-info"
+            TableName: "multichannel-customer-info"
             KeySchema: 
               - 
                 AttributeName: "Id"
@@ -139,7 +139,7 @@ Resources:
               - 
                 AttributeName: "locale"
                 AttributeType: "S"
-            TableName: "omnichannel-localization"
+            TableName: "multichannel-localization"
             KeySchema: 
               - 
                 AttributeName: "messageId"
@@ -274,12 +274,12 @@ Resources:
                   if event['RequestType'] == "Delete" :
                       try:
                           bot= client.get_bot(
-                          name='ommnichannel_bot',
+                          name='multichannel_bot',
                           versionOrAlias='prod',
                           )
-                          response = client.delete_bot_alias(name='prod', botName='ommnichannel_bot')
+                          response = client.delete_bot_alias(name='prod', botName='multichannel_bot')
                           time.sleep(1)
-                          response2 = client.delete_bot(name='ommnichannel_bot')
+                          response2 = client.delete_bot(name='multichannel_bot')
                           print ('Lex Deleted')
                           print (response2)
                           cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
@@ -663,7 +663,7 @@ Resources:
     SNSTopic:
         Type: "AWS::SNS::Topic"
         Properties:
-            DisplayName: "SNS_Omnichannel"
+            DisplayName: "SNS_Multichannel_Notification"
             TopicName: "SNS_Multichannel_Notification"
 
     SNSTopicPolicy:
@@ -698,11 +698,11 @@ Outputs:
     Description: Customer Interactions Chatbot Table
     Value: !Ref 'TableInteractionsChat'
   DynamoDBTableOffices:
-    Description: Omnichannel 360 oficinas
+    Description: Cloud Bank Office Information
     Value: !Ref 'TableOffices'
   DynamoDBTableCustomerInfo:
-    Description: Bank Demo CRM Table
+    Description: Cloud Bank Customer Information
     Value: !Ref 'TableCustomerInfo'
   DynamoDBTableLocalization:
-    Description: Omnichannel Localization Table
+    Description: Cloud Bank Message Localization
     Value: !Ref 'TableLocalization'
