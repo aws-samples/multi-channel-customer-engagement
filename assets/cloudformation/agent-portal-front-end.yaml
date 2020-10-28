@@ -64,7 +64,7 @@ Resources:
     Properties:
       Bucket: !Ref WebSiteS3Bucket
       PolicyDocument:
-        Version: "2008-10-17"
+        Version: "2012-10-17"
         Id: "PolicyForCloudFrontPrivateContent"
         Statement:
           - Sid: "1"
@@ -139,7 +139,6 @@ Resources:
 
   CopyWebSite:
     Type: AWS::Lambda::Function
-    DependsOn: ["LambdaExecutionRole"]
     Properties:
       Role: !GetAtt LambdaExecutionRole.Arn
       Runtime: "python3.7"
@@ -159,7 +158,6 @@ Resources:
 
   CustomResourceCopyWebSite:
     Type: "Custom::CopyWebSiteContent"
-    DependsOn: ["CopyWebSite"]
     Properties:
       ServiceToken: !GetAtt "CopyWebSite.Arn"
 

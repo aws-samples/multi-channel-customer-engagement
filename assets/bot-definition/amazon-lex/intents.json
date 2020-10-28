@@ -37,7 +37,7 @@
             "intentName": "officeSchedule"
         }
     ],
-    "name": "ommnichannel_bot",
+    "name": "multichannel_bot",
     "locale": "en-US",
     "checksum": "###checksum###",
     "abortStatement": {

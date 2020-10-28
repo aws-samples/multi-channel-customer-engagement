@@ -5,7 +5,7 @@
     "importFormat": "JSON"
   },
   "resource": {
-    "name": "multichannel_bot_en_us",
+    "name": "multichannel_bot",
     "version": "1",
     "intents": [
       {

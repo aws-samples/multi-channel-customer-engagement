@@ -104,7 +104,7 @@ aws lex-models put-bot-alias --name prod --bot-name multichannel_bot --bot-versi
 
 checksum=$(aws lex-models get-bot --name multichannel_bot --version-or-alias "\$LATEST" --query 'checksum' --output text)
 
-aws lex-models put-bot --name ommnichannel_bot --cli-input-json file://intents.json --checksum $checksum --detect-sentiment
+aws lex-models put-bot --name multichannel_bot --cli-input-json file://intents.json --checksum $checksum --detect-sentiment
 
 while state=$(aws lex-models get-bot --name multichannel_bot --version-or-alias "\$LATEST" --output text --query 'status'); test "$state" = "BUILDING"; do
   sleep 5; echo -n '.'

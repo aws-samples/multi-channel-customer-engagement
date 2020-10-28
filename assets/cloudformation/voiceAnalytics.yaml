@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Description: Template to create a pipeline for transcribe and comprehend (sentiment
   analysis)
 Outputs:

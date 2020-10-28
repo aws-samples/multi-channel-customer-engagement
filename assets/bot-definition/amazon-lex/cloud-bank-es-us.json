@@ -5,8 +5,8 @@
     "importFormat": "JSON"
   },
   "resource": {
-    "name": "multichannel_bot_es_us",
-    "version": "26",
+    "name": "multichannel_bot",
+    "version": "1",
     "intents": [
       {
         "name": "creditAdvance",
