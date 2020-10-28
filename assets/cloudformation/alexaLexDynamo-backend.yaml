@@ -164,11 +164,11 @@ Resources:
           Handler: "index.handler"
           Code: 
             S3Bucket: !Ref S3BucketAssets
-            S3Key: PopulateDynamoLambda.zip
+            S3Key: lambda-functions/populateDynamoDB.zip
           Environment: 
                 Variables: 
                     "bucketName": !Ref S3BucketAssets
-                    "key" : "omnichannel360-localization.csv"
+                    "key" : "data/localization.csv"
                     "tableNameLocalization" : !Ref TableLocalization
                     "tableNameCustomer" : !Ref TableCustomerInfo
                     "Phone" : !Ref DestinationPhoneNumber
@@ -184,14 +184,13 @@ Resources:
         Type: AWS::Lambda::Function
         DependsOn: [ "LambdalexRole"]
         Properties:
-          FunctionName: lex-bank-demo
           Role: !GetAtt 'LambdalexRole.Arn'
           Runtime: "python3.7"
           Timeout: 20
           Handler: "lambda_function.lambda_handler"
           Code: 
             S3Bucket: !Ref S3BucketAssets
-            S3Key: omnichannel-lambda-lex.zip
+            S3Key: lambda-functions/botLex.zip
           Layers: 
             - !Ref LambdaLayer
           Environment: 
@@ -220,7 +219,6 @@ Resources:
         Type: AWS::Lambda::Function
         DependsOn: [ "LambdalexRole"]
         Properties:
-          FunctionName: alexa-bank-demo
           Role: !GetAtt 'LambdalexRole.Arn'
           Runtime: "python3.7"
           Timeout: 20
@@ -229,7 +227,7 @@ Resources:
           Handler: "lambda_function.lambda_handler"
           Code: 
             S3Bucket: !Ref S3BucketAssets
-            S3Key: banca-nube-alexa-skill.zip
+            S3Key: lambda-functions/botAlexa.zip
           Environment: 
                 Variables: 
                     "EVENT_TABLE_NAME": !Ref TableInteractionsChat
@@ -316,7 +314,7 @@ Resources:
             LayerName: "DynamoBackend"
             Content: 
               S3Bucket: !Ref S3BucketAssets
-              S3Key: backend.zip
+              S3Key: lambda-functions/botBackendLayer.zip
 
 ##IAM Roles and policies
 
@@ -635,7 +633,7 @@ Resources:
                         # - paths
 
                 InsecureSsl: false
-                Location: !Sub "${S3BucketAssets}/cloudformation/lex/"
+                Location: !Sub "${S3BucketAssets}/bot-definition/amazon-lex/"
                 Type: "S3"
             Artifacts: 
                 Type: "NO_ARTIFACTS"
@@ -663,8 +661,8 @@ Resources:
     SNSTopic:
         Type: "AWS::SNS::Topic"
         Properties:
-            DisplayName: "SNS_Alexa_BankDemo"
-            TopicName: "SNSBankDemoNotification"
+            DisplayName: "SNS_Omnichannel"
+            TopicName: "SNS_Multichannel_Notification"
 
     SNSTopicPolicy:
         Type: "AWS::SNS::TopicPolicy"

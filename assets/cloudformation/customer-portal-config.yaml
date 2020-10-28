@@ -87,7 +87,7 @@ Resources:
         - python3.7
       Content:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: crhelper_lambda_layer.zip
+        S3Key: lambda-functions/crhelperLambdaLayer.zip
       Description: CloudFormation Custom Resource Helper
       LayerName: cr-helper
       LicenseInfo: MIT                   
@@ -103,7 +103,7 @@ Resources:
       Handler: "lambda_function.lambda_handler"
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: "function_create_config.zip"
+        S3Key: "lambda-functions/createConfigFile.zip"
       Layers:
         - {Ref: crhelperLayer}    
 
@@ -136,7 +136,7 @@ Resources:
       Handler: "lambda_function.lambda_handler"
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: "function_create_config.zip"
+        S3Key: "lambda-functions/createConfigFile.zip"
       Layers:
         - {Ref: crhelperLayer}    
 

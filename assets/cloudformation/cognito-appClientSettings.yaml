@@ -80,7 +80,7 @@ Resources:
       Runtime: nodejs12.x
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: omnichannel-customResourceResponse.zip
+        S3Key: lambda-functions/customResourceResponse.zip
       Handler: index.handler
       Role:
         Fn::GetAtt:
@@ -96,7 +96,7 @@ Resources:
       Runtime: nodejs12.x
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: omnichannel-cognitoUserPool-ClientSettings.zip
+        S3Key: lambda-functions/cognitoUserPoolClientSettings.zip
       Handler: CloudFormationCognitoUserPoolClientSettings.handler
       Role:
         Fn::GetAtt:

@@ -6,7 +6,7 @@ At the end, you will have a ready-to-use solution to improve multichannel strate
 
 ## Considerations
 
-The solution uses Amazon Connect, Amazon Alexa Skills, Amazon Lex, Amazon Transcribe, Amazon Comprehend which are currently available in specific AWS Regions only. Therefore, you must launch this solution in an AWS Region where these services are available. For the most current service availability by region, see the AWS service offerings by region (https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) (https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/). This solution has been successfully tested in US East (N. Virginia) and US West (Oregon).
+The solution uses Amazon Connect, Amazon Alexa Skills, Amazon Lex, Amazon Transcribe, Amazon Comprehend which are currently available in specific AWS Regions only. Therefore, you must launch this solution in an AWS Region where these services are available. For the most current service availability by region, see the [AWS service offerings by region](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/). This solution has been successfully tested in US East (N. Virginia) and US West (Oregon).
 
 ## Getting Started 
 Ready to get started ?

@@ -62,7 +62,7 @@ Resources:
     Properties:
       CodeUri:
         Bucket: !Ref S3BucketAssets
-        Key: comprehend_transcript_lambda.zip
+        Key: lambda-functions/comprehendTranscript.zip
       Description: lambda to submit a transcribe job
       Environment:
         Variables:
@@ -83,7 +83,6 @@ Resources:
                   Value:
                     Ref: TranscriptsPrefix
           Type: S3
-      FunctionName: comprehend_transcript_lambda
       Handler: index.lambda_handler
       MemorySize: 128
       Role:
@@ -156,14 +155,13 @@ Resources:
         - Ref: "SaveTranscriptionToS3LambdaTaskRole"
         - Ref: "StartTranscribeExecutionLambdaRole"
         - Ref: "SubmitTranscribeJobLambdaTaskRole"
+
   GetTranscribeJobLambdaTask:
     Properties:
       CodeUri:
         Bucket: !Ref S3BucketAssets
-        Key: get_transcribe_job_status.zip     
-#       !Sub "s3://${S3BucketAssets}/get_transcribe_job_status.zip"
+        Key: lambda-functions/getTranscribeJobStatus.zip     
       Description: lambda to get a transcribe job status
-      FunctionName: get_transcribe_job_status
       Handler: index.lambda_handler
       MemorySize: 128
       Role:
@@ -173,6 +171,7 @@ Resources:
       Runtime: python3.6
       Timeout: 3
     Type: AWS::Serverless::Function
+
   GetTranscribeJobLambdaTaskRole:
     Properties:
       AssumeRolePolicyDocument:
@@ -192,8 +191,7 @@ Resources:
     Properties:
       CodeUri:
         Bucket: !Ref S3BucketAssets
-        Key: S3BucketCustomResourceLambda.zip
-#       !Sub "s3://${S3BucketAssets}/S3BucketCustomResourceLambda.zip"
+        Key: lambda-functions/S3BucketCustomResourceLambda.zip
       Description: custom resoure to create s3 bucket on the fly
       FunctionName: s3_bucket_custom_resource_for_recordings_lambda
       Handler: index.lambda_handler
@@ -248,10 +246,8 @@ Resources:
     Properties:
       CodeUri:
         Bucket: !Ref S3BucketAssets
-        Key: save_transcription_to_s3.zip
-#       !Sub "s3://${S3BucketAssets}/save_transcription_to_s3.zip"
+        Key: lambda-functions/saveTranscriptiontoS3.zip
       Description: lambda to save transcription to S3
-      FunctionName: save_transcription_to_s3
       Handler: index.lambda_handler
       MemorySize: 128
       Role:
@@ -319,8 +315,7 @@ Resources:
     Properties:
       CodeUri:
         Bucket: !Ref S3BucketAssets
-        Key: execute_transcription_state_machine.zip
-#       !Sub "s3://${S3BucketAssets}/execute_transcription_state_machine.zip"
+        Key: lambda-functions/executeTranscriptionStateMachine.zip
       Description: lambda to save transcription to S3
       Environment:
         Variables:
@@ -347,7 +342,6 @@ Resources:
                   Value:
                     Ref: RecordingsPrefix
           Type: S3
-      FunctionName: execute_transcription_state_machine
       Handler: index.lambda_handler
       MemorySize: 128
       Role:
@@ -403,14 +397,13 @@ Resources:
           Version: '2012-10-17'
       Roles:
         - Ref: "StartTranscribeExecutionLambdaRole"
+
   SubmitTranscribeJobLambdaTask:
     Properties:
       CodeUri:
         Bucket: !Ref S3BucketAssets
-        Key: submit_transcribe_job.zip
-#       !Sub "s3://${S3BucketAssets}/submit_transcribe_job.zip"
+        Key: lambda-functions/submitTranscribeJob.zip
       Description: lambda to submit a transcribe job
-      FunctionName: submit_transcribe_job
       Handler: index.lambda_handler
       MemorySize: 128
       Role:
@@ -420,6 +413,7 @@ Resources:
       Runtime: python3.6
       Timeout: 3
     Type: AWS::Serverless::Function
+
   SubmitTranscribeJobLambdaTaskRole:
     Properties:
       AssumeRolePolicyDocument:
@@ -451,6 +445,7 @@ Resources:
           Version: '2012-10-17'
         PolicyName: submit_transcribe_job_transcribe_s3_policy
     Type: AWS::IAM::Role
+
   submittranscribes3Policy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
@@ -520,6 +515,7 @@ Resources:
         - TranscribeStatesExecutionRole
         - Arn
     Type: AWS::StepFunctions::StateMachine
+
   TranscribeStatesExecutionRole:
     Properties:
       AssumeRolePolicyDocument:

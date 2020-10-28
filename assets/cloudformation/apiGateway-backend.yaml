@@ -555,7 +555,7 @@ Resources:
       Timeout: 3
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: "omnichannel-getChatbot.zip"
+        S3Key: "lambda-functions/getChatbot.zip"
       Tags:
         - Key: "solution"
           Value: "multichannel-solution"
@@ -574,7 +574,7 @@ Resources:
       Timeout: 3
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: "omnichannel-getVoice.zip"
+        S3Key: "lambda-functions/getVoice.zip"
       Tags:
         - Key: "solution"
           Value: "multichannel-solution"
@@ -593,7 +593,7 @@ Resources:
       Timeout: 3
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: "omnichannel-getCustomerInfo.zip"
+        S3Key: "lambda-functions/getCustomerInfo.zip"
       Tags:
         - Key: "solution"
           Value: "multichannel-solution"
@@ -612,7 +612,7 @@ Resources:
       Timeout: 3
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: "omnichannel-getClickStream.zip"
+        S3Key: "lambda-functions/getClickStream.zip"
       Tags:
         - Key: "solution"
           Value: "multichannel-solution"
@@ -681,7 +681,7 @@ Resources:
       Timeout: 3
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: "omnichannel-saveClickStream.zip"
+        S3Key: "lambda-functions/saveClickStream.zip"
       Tags:
         - Key: "solution"
           Value: "multichannel-solution"

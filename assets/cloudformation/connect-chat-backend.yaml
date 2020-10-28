@@ -74,19 +74,9 @@ Resources:
           CONTACT_FLOW_ID: !Ref ConnectChatFlowId
           CF_DISTRIBUTION: !Ref CustomerPortalUrl
           CHAT_DATA_TABLE: !Ref chatContactDataTable
-      Code:
-        S3Bucket: !Join
-          - "."
-          - - !Ref "AWS::Region"
-            - !FindInMap [FunctionMap, Configuration, S3Bucket]
-        S3Key:
-          !Join [
-            "",
-            [
-              !FindInMap [FunctionMap, Configuration, S3Key],
-              "start-chat-contact.zip",
-            ],
-          ]
+      Code: 
+        S3Bucket: !Ref S3BucketAssets
+        S3Key: lambda-functions/initiateChat.zip
 
   InitiateChatLambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -209,7 +199,7 @@ Resources:
       Role: !GetAtt S3BucketConfigurationLambdaExecutionRole.Arn
       Code:
         S3Bucket: !Ref S3BucketAssets
-        S3Key: "S3BucketConfigurationLambda.zip"
+        S3Key: "lambda-functions/S3BucketConfigurationLambda.zip"
       Timeout: 30
       Runtime: "nodejs10.x"
 

@@ -1,7 +1,7 @@
 {
-    "name": "amplify-js-app",
+    "name": "multichannel-customer-portal",
     "version": "1.0.0",
-    "description": "Amplify JavaScript Example",
+    "description": "Multichannel Customer Portal",
     "dependencies": {
         "amazon-cognito-auth-js": "latest",
         "amazon-cognito-identity-js": "latest",
