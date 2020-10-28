@@ -247,6 +247,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: "multichannel-chat-history"
+      BillingMode: "PAY_PER_REQUEST"
       AttributeDefinitions:
         - AttributeName: "contactId"
           AttributeType: "S"
@@ -257,9 +258,6 @@ Resources:
       KeySchema:
         - AttributeName: "contactId"
           KeyType: "HASH"
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
       GlobalSecondaryIndexes:
         - IndexName: "userDisplayHash-nextContactId-index"
           KeySchema:
