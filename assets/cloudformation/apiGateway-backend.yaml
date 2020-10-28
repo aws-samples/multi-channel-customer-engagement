@@ -706,6 +706,7 @@ Resources:
     Type: "AWS::Cognito::UserPool"
     Properties:
       UserPoolName: "multichannel-solution"
+      MfaConfiguration: OPTIONAL
       Policies:
         PasswordPolicy:
           MinimumLength: 8
@@ -1022,7 +1023,7 @@ Resources:
               - !Sub "arn:aws:mobiletargeting:${AWS::Region}:${AWS::AccountId}:apps/${PinpointApp}/*"
       Roles:
         - !Ref IAMRoleIDPUnAuthenticated
-      PolicyName: !Sub "Pinpoint"
+      PolicyName: "Pinpoint_Auth"
 
   IAMPolicyUnAuthenticatedKinesis:
     Type: "AWS::IAM::Policy"

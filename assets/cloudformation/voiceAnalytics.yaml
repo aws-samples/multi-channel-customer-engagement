@@ -467,15 +467,6 @@ Resources:
           Version: '2012-10-17'
       Roles:
         - Ref: "SubmitTranscribeJobLambdaTaskRole"
-  
-  S3Bucket:
-    DeletionPolicy: Retain
-    Properties:
-      BucketName:
-        Fn::GetAtt:
-        - S3BucketNameResource
-        - BucketName
-    Type: AWS::S3::Bucket
 
   TranscribeStateMachine:
     Properties:

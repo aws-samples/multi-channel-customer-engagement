@@ -181,7 +181,6 @@ Resources:
     Type: Custom::LoadLambda
     DependsOn:
       - BucketPermission
-      - UpdateDdbWithS3LocationLambda
     Properties:
       customAction: "configureNotification"
       ServiceToken: !GetAtt S3BucketConfigurationLambda.Arn
