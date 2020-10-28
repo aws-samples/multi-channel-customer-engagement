@@ -156,7 +156,6 @@ Resources:
 
     PopulateDynamoLambda:
         Type: AWS::Lambda::Function
-        DependsOn: [ "LambdaPopulateRole"]
         Properties:
           Role: !GetAtt 'LambdaPopulateRole.Arn'
           Runtime: "nodejs12.x"
@@ -175,14 +174,12 @@ Resources:
   
     MyCustomResource1:
         Type: "Custom::LambdatoDynamoStart"
-        DependsOn: ['PopulateDynamoLambda']
         Properties: 
           ServiceToken:
             !GetAtt 'PopulateDynamoLambda.Arn'
 
     LambdaLex:
         Type: AWS::Lambda::Function
-        DependsOn: [ "LambdalexRole"]
         Properties:
           FunctionName: multichannel-lex-bot
           Role: !GetAtt 'LambdalexRole.Arn'
@@ -218,7 +215,6 @@ Resources:
 
     LambdaAlexa:
         Type: AWS::Lambda::Function
-        DependsOn: [ "LambdalexRole"]
         Properties:
           FunctionName: multichannel-alexa-bot
           Role: !GetAtt 'LambdalexRole.Arn'
@@ -250,7 +246,6 @@ Resources:
 
     DeleteLambdaLex:
       Type: AWS::Lambda::Function
-      DependsOn: [ "DeleteCodeBuildRole"]
       Properties:
           Role: !GetAtt 'DeleteCodeBuildRole.Arn'
           Runtime: "python3.7"
@@ -302,7 +297,7 @@ Resources:
 
     MyCustomResource2: 
       Type: "Custom::DeleteLambdaLex"
-      DependsOn: ['DeleteLambdaLex','CodeBuildProject']
+      DependsOn: ['CodeBuildProject']
       Properties: 
         ServiceToken:
           !GetAtt 'DeleteLambdaLex.Arn'
