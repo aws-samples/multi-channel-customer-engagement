@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: "2010-09-09"
 Description: Cloudformation for setting all the backend functions (AWS Lambda) and the API gateway that will receive all the Function's requests.
 
 Parameters:

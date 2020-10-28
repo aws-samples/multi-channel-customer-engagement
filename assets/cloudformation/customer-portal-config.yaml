@@ -94,7 +94,6 @@ Resources:
 
   CustomerPortalCreateConfigFile:
     Type: AWS::Lambda::Function
-    DependsOn: ["LambdaExecutionRole"]
     Properties:
       Role: !GetAtt LambdaExecutionRole.Arn
       Runtime: "python3.7"
@@ -109,7 +108,6 @@ Resources:
 
   CustomResourceCustomerPortalCreateConfigFile:
     Type: "Custom::CustomerPortalCreateConfigFile"
-    DependsOn: ["CustomerPortalCreateConfigFile"]
     Properties:
       ServiceToken: !GetAtt "CustomerPortalCreateConfigFile.Arn"
       siteBucketName: !Ref CustomerPortalS3Bucket
@@ -127,7 +125,6 @@ Resources:
 
   AgentPortalCreateConfigFile:
     Type: AWS::Lambda::Function
-    DependsOn: ["LambdaExecutionRole"]
     Properties:
       Role: !GetAtt LambdaExecutionRole.Arn
       Runtime: "python3.7"
@@ -142,7 +139,6 @@ Resources:
 
   CustomResourceAgentPortalCreateConfigFile:
     Type: "Custom::AgentPortalCreateConfigFile"
-    DependsOn: ["AgentPortalCreateConfigFile"]
     Properties:
       ServiceToken: !GetAtt "AgentPortalCreateConfigFile.Arn"
       siteBucketName: !Ref AgentPortalS3Bucket
