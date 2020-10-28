@@ -51,6 +51,7 @@ Resources:
             ProvisionedThroughput: 
                 ReadCapacityUnits: 10
                 WriteCapacityUnits: 10
+            BillingMode: "PROVISIONED"
 
     TableInteractionsVoice:
         Type: "AWS::DynamoDB::Table"
@@ -73,6 +74,7 @@ Resources:
             ProvisionedThroughput: 
                 ReadCapacityUnits: 5
                 WriteCapacityUnits: 5
+            BillingMode: "PROVISIONED"
 
     TableInteractionsChat:
         Type: "AWS::DynamoDB::Table"
@@ -95,7 +97,8 @@ Resources:
             ProvisionedThroughput: 
                 ReadCapacityUnits: 5
                 WriteCapacityUnits: 5
-
+            BillingMode: "PROVISIONED"
+            
     TableOffices:
         Type: "AWS::DynamoDB::Table"
         Properties:
@@ -111,6 +114,7 @@ Resources:
             ProvisionedThroughput: 
                 ReadCapacityUnits: 5
                 WriteCapacityUnits: 5
+            BillingMode: "PROVISIONED"
 
     TableCustomerInfo:
         Type: "AWS::DynamoDB::Table"
@@ -128,7 +132,8 @@ Resources:
             ProvisionedThroughput: 
                 ReadCapacityUnits: 5
                 WriteCapacityUnits: 5
-    
+            BillingMode: "PROVISIONED"
+
     TableLocalization:
         Type: "AWS::DynamoDB::Table"
         Properties:
@@ -147,11 +152,11 @@ Resources:
               - 
                 AttributeName: "locale"
                 KeyType: "RANGE"
-
             ProvisionedThroughput: 
                 ReadCapacityUnits: 5
                 WriteCapacityUnits: 5
-
+            BillingMode: "PROVISIONED"
+            
 ##Lambda Functions
 
     PopulateDynamoLambda:
