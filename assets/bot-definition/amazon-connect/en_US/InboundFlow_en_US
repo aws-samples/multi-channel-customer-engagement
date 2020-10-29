@@ -12,7 +12,7 @@
       "parameters": [
         {
           "name": "GlobalVoice",
-          "value": "Ivy"
+          "value": "Joanna"
         }
       ],
       "metadata": {
@@ -131,7 +131,7 @@
       "parameters": [
         {
           "name": "Text",
-          "value": "Hello, thank you for calling Cloud Banking. This is an example of what you can do with Amazon services.",
+          "value": "Hello, thank you for calling Cloud Bank. This is an example of what you can do with Amazon's services.",
           "namespace": null
         },
         {
@@ -232,7 +232,7 @@
       "parameters": [
         {
           "name": "Text",
-          "value": "Press 1, to speak to an agent or Press 2, to answer frequently asked questions.",
+          "value": "Press 1, to speak to an agent, or Press 2, to answer frequently asked questions.",
           "namespace": null
         },
         {
@@ -365,7 +365,7 @@
         },
         {
           "name": "BotName",
-          "value": "CallCenterCallRouting_es"
+          "value": "multichannel-lex-bot"
         },
         {
           "name": "BotAlias",
@@ -425,7 +425,7 @@
       "parameters": [
         {
           "name": "Text",
-          "value": "Do you have any more questions? Press 1, for YES, 2 to hang up, 3 to speak to an agent.",
+          "value": "If you have more questions Press 1. Press 2 to hang up or press 3 to speak to an agent.",
           "namespace": null
         },
         {
@@ -474,8 +474,8 @@
       "y": 244
     },
     "snapToGrid": false,
-    "name": "[en-US] Contact Inboud flow",
-    "description": "First call experience",
+    "name": "InboundFlow_en_US",
+    "description": "Multichannel Inbound Flow",
     "type": "contactFlow",
     "status": "saved",
     "hash": "f3fbfaffef43e0a8738b981385c3bc1ec052a584c554ca94b18d1372f070ffe5"

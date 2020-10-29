@@ -24,7 +24,7 @@
       "parameters": [
         {
           "name": "Text",
-          "value": "Hello Welcome! How can I help?",
+          "value": "Hi. Welcome to Cloud Bank. How can we help you?",
           "namespace": null
         },
         {
@@ -123,7 +123,7 @@
       "parameters": [
         {
           "name": "Text",
-          "value": "If you want help say agent",
+          "value": "If you want personalized help, type \"Agent\", otherwise, ask our BOT a question.",
           "namespace": null
         },
         {
@@ -132,7 +132,7 @@
         },
         {
           "name": "BotName",
-          "value": "LexOmnichannel"
+          "value": "multichannel-lex-bot"
         },
         {
           "name": "BotAlias",
@@ -140,7 +140,7 @@
         },
         {
           "name": "BotRegion",
-          "value": "us-west-2"
+          "value": "us-east-1"
         }
       ],
       "metadata": {
@@ -197,8 +197,8 @@
       "y": 20
     },
     "snapToGrid": false,
-    "name": "[en-US] Basic Chat",
-    "description": null,
+    "name": "ChatFlow_en_US",
+    "description": "Multichannel Chat Flow",
     "type": "contactFlow",
     "status": "published",
     "hash": "599e1b1ca9a21754d7feadfa76fdd503b1196f22522190ce668857e3014413d4"

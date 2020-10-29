@@ -211,7 +211,7 @@
       "parameters": [
         {
           "name": "Text",
-          "value": "¿Tienes más preguntas? Presiona 1, para SI, 2 para colgar, 3 para ser atendido por uno de nuestros agentes.",
+          "value": "Si tienes más preguntas, Presiona 1. Presiona 2 para colgar, o presiona 3 para ser atendido por uno de nuestros agentes.",
           "namespace": null
         },
         {
@@ -275,7 +275,7 @@
         },
         {
           "name": "BotName",
-          "value": "CallCenterCallRouting_es"
+          "value": "multichannel-lex-bot"
         },
         {
           "name": "BotAlias",
@@ -434,7 +434,7 @@
       "parameters": [
         {
           "name": "Text",
-          "value": "Presiona 1, para ser atendido por un agente. Presiona 2, para responder preguntas frecuentes, y 3, para validar un requerimiento en documentación.",
+          "value": "Presiona 1, para ser atendido por un agente. Presiona 2, para responder preguntas frecuentes",
           "namespace": null
         },
         {
@@ -513,7 +513,7 @@
       "parameters": [
         {
           "name": "Text",
-          "value": "Hola. Buenos dias, gracias por llamar a Banca Nube. Este es un ejemplo de lo que pueden hacer con los servicios de Amazon.",
+          "value": "Hola. Gracias por llamar a Banca Nube. Este es un ejemplo de lo que puedes hacer con los servicios de Amazon.",
           "namespace": null
         },
         {
@@ -539,8 +539,8 @@
       "y": 209.5
     },
     "snapToGrid": false,
-    "name": "[es-MX] Contact Inboud flow",
-    "description": "First call experience",
+    "name": "InboundFlow_es_US",
+    "description": "Multichannel Inbound Flow",
     "type": "contactFlow",
     "status": "saved",
     "hash": "fdbc85c0a4c22681f2df70e110b72950319ae0c719fd86b6f4be6125364e87ff"

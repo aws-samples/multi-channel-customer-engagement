@@ -146,8 +146,8 @@
       "y": 20
     },
     "snapToGrid": false,
-    "name": "Basic Chat Disconnect Flow",
-    "description": null,
+    "name": "DisconnectChatFlow",
+    "description": "Multichannel Chat Disconnect Flow",
     "type": "contactFlow",
     "status": "published",
     "hash": "aaa38c28c9054fcb6c4a9ff90d2dbf3c2d6375e749c10b2d26b72cf6c00cfddf"
