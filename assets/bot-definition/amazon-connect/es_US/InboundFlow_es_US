@@ -275,7 +275,7 @@
         },
         {
           "name": "BotName",
-          "value": "multichannel-lex-bot"
+          "value": "multichannel_lex_bot"
         },
         {
           "name": "BotAlias",

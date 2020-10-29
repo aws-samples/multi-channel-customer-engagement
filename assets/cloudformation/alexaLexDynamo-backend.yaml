@@ -256,12 +256,12 @@ Resources:
                   if event['RequestType'] == "Delete" :
                       try:
                           bot= client.get_bot(
-                          name='multichannel_bot',
+                          name='multichannel_lex_bot',
                           versionOrAlias='prod',
                           )
-                          response = client.delete_bot_alias(name='prod', botName='multichannel_bot')
+                          response = client.delete_bot_alias(name='prod', botName='multichannel_lex_bot')
                           time.sleep(1)
-                          response2 = client.delete_bot(name='multichannel_bot')
+                          response2 = client.delete_bot(name='multichannel_lex_bot')
                           print ('Lex Deleted')
                           print (response2)
                           cfnresponse.send(event, context, cfnresponse.SUCCESS, {})

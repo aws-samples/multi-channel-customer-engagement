@@ -100,17 +100,17 @@ state=$(aws lex-models get-import --import-id $import_id --output text --query '
 test "$state" = "COMPLETE"
 
 # Build the model
-aws lex-models put-bot-alias --name prod --bot-name multichannel-lex-bot --bot-version "\$LATEST" || true
+aws lex-models put-bot-alias --name prod --bot-name multichannel_lex_bot --bot-version "\$LATEST" || true
 
-checksum=$(aws lex-models get-bot --name multichannel-lex-bot --version-or-alias "\$LATEST" --query 'checksum' --output text)
+checksum=$(aws lex-models get-bot --name multichannel_lex_bot --version-or-alias "\$LATEST" --query 'checksum' --output text)
 
-aws lex-models put-bot --name multichannel-lex-bot --cli-input-json file://intents.json --checksum $checksum --detect-sentiment
+aws lex-models put-bot --name multichannel_lex_bot --cli-input-json file://intents.json --checksum $checksum --detect-sentiment
 
-while state=$(aws lex-models get-bot --name multichannel-lex-bot --version-or-alias "\$LATEST" --output text --query 'status'); test "$state" = "BUILDING"; do
+while state=$(aws lex-models get-bot --name multichannel_lex_bot --version-or-alias "\$LATEST" --output text --query 'status'); test "$state" = "BUILDING"; do
   sleep 5; echo -n '.'
 done;
 
-state=$(aws lex-models get-bot --name multichannel-lex-bot --version-or-alias "\$LATEST" --output text --query 'status')
+state=$(aws lex-models get-bot --name multichannel_lex_bot --version-or-alias "\$LATEST" --output text --query 'status')
 
 test "$state" = "READY"
 

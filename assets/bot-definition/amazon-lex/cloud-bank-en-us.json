@@ -5,7 +5,7 @@
     "importFormat": "JSON"
   },
   "resource": {
-    "name": "multichannel-lex-bot",
+    "name": "multichannel_lex_bot",
     "version": "1",
     "intents": [
       {

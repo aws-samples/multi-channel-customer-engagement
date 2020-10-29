@@ -800,7 +800,7 @@ Resources:
       EmailVerificationMessage: "Your verification code is {####}. "
       EmailVerificationSubject: "Your verification code"
       SmsAuthenticationMessage: "Your authentication code is {####}. "
-      MfaConfiguration: "OPTIONAL"
+      MfaConfiguration: "OFF"
       EmailConfiguration:
         EmailSendingAccount: "COGNITO_DEFAULT"
       AdminCreateUserConfig:
