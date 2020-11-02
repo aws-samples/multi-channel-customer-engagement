@@ -54,7 +54,7 @@ Choose **Next step**.
 ![connect](./images/image%20(7).png)
 
 ### Step 5: Review and create
-When you are finished configuring your instance, you can create it.
+When you are finished configuring your instance, review the configuration and click Create Instance
 
 
 ## Connect to your Amazon Connect Instance
