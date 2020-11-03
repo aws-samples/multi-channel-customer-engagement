@@ -94,7 +94,7 @@ NOTE - After we deploy the Cloudformation in the next step, we will come back to
 
 Once created, you should be seeing something similar to this flow
 
-![connect](./images/image%201(16).png)
+![connect](./images/image%20201(16).png)
 
 Please repeat the previous steps and import the following flows as well.
 
@@ -110,7 +110,7 @@ Please repeat the previous steps and import the following flows as well.
 
 Click - **show additional flow information**, open a notepad and grab the InstanceID and FlowID and save them for later.
 
-![connect](./images/image%201(17).png)
+![connect](./images/image%20201(17).png)
 
 
 ### Step 2. Configure your phone number
@@ -127,7 +127,7 @@ To claim a number for your contact center:
 
 3. Enter a description for the number and, attach it to the contact flow created in Step .1 (Probably It's called InboundFlow_en_US, depending on the language you chose)
 
-![connect](./images/image%201(44)2.png)
+![connect](./images/image%20201(44)2.png)
 
 4. Choose **Save**.
 
@@ -141,11 +141,11 @@ Now you have a phone number for your customers to contact you.
 
 2. Assign the Outbound caller ID to the queue
 
-![connect](./images/image%201(18).png)
+![connect](./images/image%20201(18).png)
 
 3. Click in **Show additional queue information** and copy/paste the queueID on the same notepad
 
-![connect](./images/image%201(19).png)
+![connect](./images/image%20201(19).png)
 
 
 You are now ready to go to step 2 : [Deploy CloudFormation](../02_CloudFormation/README.md)
