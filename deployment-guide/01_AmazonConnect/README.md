@@ -54,7 +54,7 @@ Choose **Next step**.
 ![connect](./images/image%20(7).png)
 
 ### Step 5: Review and create
-When you are finished configuring your instance, you can create it.
+When you are finished configuring your instance, review the configuration and click Create Instance
 
 
 ## Connect to your Amazon Connect Instance
@@ -80,13 +80,13 @@ Log in to your contact center using your access URL, provided by Amazon Connect 
 
 4. Select the Contact flow file based on your case:
 
-- [Download Contact Flow in English](../../bot-definition/amazon-connect/contact-flow/en-US/[en-US]InboudCallwLex) 
+- [Download Contact Flow in English](../../assets/bot-definition/amazon-connect/en_US/InboundFlow_en_US) 
 
-- [Descargar Contact Flow en Español](../../bot-definition/amazon-connect/contact-flow/es-MX/[es-MX]InboudCallwLex) 
+- [Descargar Contact Flow en Español](../../assets/bot-definition/amazon-connect/es_US/InboundFlow_es_US) 
 
    To import, select your file, and click **Import**. When the contact flow is imported into an existing contact flow, the name of the existing contact flow is updated, too.
 
-5. To save the imported flow, choose **Save**. To publish, choose **Publish**.
+5. To save & publish the imported flow, choose **Save & Publish**.
 
 NOTE - After we deploy the Cloudformation in the next step, we will come back to this contact flow to add our Amazon lex bot.
 
@@ -94,19 +94,23 @@ NOTE - After we deploy the Cloudformation in the next step, we will come back to
 
 Once created, you should be seeing something similar to this flow
 
-![connect](./images/image%20(16).png)
+![connect](./images/image%20201(16).png)
 
 Please repeat the previous steps and import the following flows as well.
 
 #### For English
 
-- [[en-US] Basic Chat flow](../../bot-definition/amazon-connect/contact-flow/en-US/[en-US]BasicChat)
-- [Basic Chat Disconnect Flow](../../bot-definition/amazon-connect/contact-flow/BasicChatDisconnectFlow)
+- [[en-US] Basic Chat flow](../../assets/bot-definition/amazon-connect/en_US/ChatFlow_en_US)
+- [Basic Chat Disconnect Flow](../../assets/bot-definition/amazon-connect/DisconnectChatFlow)
 
 #### Para Español
 
-- [[es-MX] Basic Chat flow](../../bot-definition/amazon-connect/contact-flow/es-MX/[es-MX]BasicChat)
-- [Basic Chat Disconnect Flow](../../bot-definition/amazon-connect/contact-flow/BasicChatDisconnectFlow)
+- [[es-MX] Basic Chat flow](../../assets/bot-definition/amazon-connect/es_US/ChatFlow_es_US)
+- [Basic Chat Disconnect Flow](../../assets/bot-definition/amazon-connect/DisconnectChatFlow)
+
+Click - **show additional flow information**, open a notepad and grab the InstanceID and FlowID and save them for later.
+
+![connect](./images/image%20201(17).png)
 
 
 ### Step 2. Configure your phone number
@@ -121,22 +125,27 @@ To claim a number for your contact center:
 
 2. Choose **Claim a number**. Select the country and choose a toll free number or a Direct Inward Dialing (DID) number.
 
-3. Enter a description for the number and, attach it to the contact flow created in Step .1 (Probably It's called [ENGLISH]/ [SPANISH]InboudCallwLex, depending on the language you chose)
+3. Enter a description for the number and, attach it to the contact flow created in Step .1 (Probably It's called InboundFlow_en_US, depending on the language you chose)
 
-![connect](./images/image%20(44)2.png)
+![connect](./images/image%20201(44)2.png)
 
 4. Choose **Save**.
 
 Now you have a phone number for your customers to contact you.
 
-You are now ready to go to step 2 : [Deploy CloudFormation](../02_CloudFormation/README.md)
-
 ### Step 3. Setup Queues
 
 1. In the left-hand menu, choose **Routing** - **Queues**, then click  *BasicQueue*.
 
-2. Assign the Outbound caller ID to the queue
-
 ![connect](./images/image%20(17).png)
 
-![connect](./images/image%20(18).png)
+2. Assign the Outbound caller ID to the queue
+
+![connect](./images/image%20201(18).png)
+
+3. Click in **Show additional queue information** and copy/paste the queueID on the same notepad
+
+![connect](./images/image%20201(19).png)
+
+
+You are now ready to go to step 2 : [Deploy CloudFormation](../02_CloudFormation/README.md)
