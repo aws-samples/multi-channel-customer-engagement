@@ -188,7 +188,7 @@
           "what time does the {location} branch close",
           "what time does the {location} open",
           "what time does the {location} close",
-          "what are the openning hours for the {location} branch",
+          "what are the opening hours for the {location} branch",
           "openning hours {location}",
           "business hours",
           "office schedule",
@@ -316,28 +316,28 @@
             "value": "london"
           },
           {
-            "value": "L.A"
+            "value": "los angeles"
           },
           {
-            "value": "Miami"
+            "value": "miami"
           },
           {
-            "value": "Chicago"
+            "value": "chicago"
           },
           {
-            "value": "Orlando"
+            "value": "orlando"
           },
           {
-            "value": "Toronto"
+            "value": "toronto"
           },
           {
-            "value": "Seattle"
+            "value": "seattle"
           }
         ],
         "valueSelectionStrategy": "ORIGINAL_VALUE"
       }
     ],
-    "voiceId": "Matthew",
+    "voiceId": "Joanna",
     "childDirected": false,
     "locale": "en-US",
     "idleSessionTTLInSeconds": 120,

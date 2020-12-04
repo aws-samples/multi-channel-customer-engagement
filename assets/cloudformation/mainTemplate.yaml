@@ -61,6 +61,7 @@ Parameters:
       - multichannel-customer-engagement-us-west-2
       - multichannel-customer-engagement-eu-west-2
       - multichannel-customer-engagement-ap-southeast-1
+      - multichannel-customer-engagement-eu-central-1
 
 Resources:
   stackAlexaLexBackend:

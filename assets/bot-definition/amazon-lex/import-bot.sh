@@ -10,11 +10,12 @@ echo $Account
 #AWS_DEFAULT_REGION=$(aws configure get profile.default.region) 
 
 file=cloud-bank-$1-us.json
+echo $file
 
 sed -i "s/Account/$Account/g" $file
 sed -i "s/region/$AWS_DEFAULT_REGION/g" $file
 
-zip bot.zip cloud-bank-en-us.json
+zip bot.zip $file
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \

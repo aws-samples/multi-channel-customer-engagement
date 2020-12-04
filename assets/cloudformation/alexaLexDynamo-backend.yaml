@@ -546,7 +546,7 @@ Resources:
     CodeBuildProject:
         Type: "AWS::CodeBuild::Project"
         Properties:
-            Name: "Omnichannel-CodeBuild-Lex"
+            Name: "multichannel-codebuild-lex"
             Source: 
                 BuildSpec:  
                   !Sub |

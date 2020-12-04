@@ -10,7 +10,7 @@
     "intents": [
       {
         "name": "creditAdvance",
-        "version": "4",
+        "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
             "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
@@ -62,8 +62,46 @@
         ]
       },
       {
+        "name": "savingsAcctBalance",
+        "version": "1",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "saldo de mi cuenta de ahorros",
+          "saldo en cuenta de ahorros",
+          "cuanto tengo en mi cuenta de ahorros",
+          "balance de mi cuenta de ahorros",
+          "mi cuenta ahorros",
+          "saldo cuenta de ahorros"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Por favor dame tu PIN. Si no tienes uno, puedes pedirme que te envíe un PIN."
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "pin"
+          }
+        ]
+      },
+      {
         "name": "startSession",
-        "version": "2",
+        "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
             "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
@@ -82,7 +120,7 @@
       },
       {
         "name": "callRequest",
-        "version": "4",
+        "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
             "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
@@ -99,7 +137,7 @@
       },
       {
         "name": "creditCardBalance",
-        "version": "3",
+        "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
             "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
@@ -108,15 +146,14 @@
           "type": "CodeHook"
         },
         "sampleUtterances": [
-          "cual es mi cupo de tarjeta de credito",
-          "saldo disponible de tarjeta de credito",
-          "cual es la deuda de mi tarjeta de credito",
-          "fecha de pago de mi tarjeta de credito",
+          "cual es mi cupo de tarjeta de crédito",
+          "saldo disponible de tarjeta de crédito",
+          "cual es la deuda de mi tarjeta de crédito",
           "fecha de pago de tarjeta de crédito",
-          "saldo tarjeta de credito",
-          "cuanto tengo en mi tarjeta de credito",
-          "saldo a pagar tarjeta de credito",
-          "mi tarjeta de credito"
+          "saldo tarjeta de crédito",
+          "cuanto tengo en mi tarjeta de crédito",
+          "saldo a pagar tarjeta de crédito",
+          "mi tarjeta de crédito"
         ],
         "slots": [
           {
@@ -141,7 +178,7 @@
       },
       {
         "name": "officeSchedule",
-        "version": "2",
+        "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
             "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
@@ -182,57 +219,20 @@
         ]
       },
       {
-        "name": "savingsAccountBalance",
-        "version": "4",
-        "fulfillmentActivity": {
-          "codeHook": {
-            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
-            "messageVersion": "1.0"
-          },
-          "type": "CodeHook"
-        },
-        "sampleUtterances": [
-          "saldo de mi cuenta de ahorros",
-          "saldo en cuenta de ahorros",
-          "cuanto tengo en mi cuenta de ahorros",
-          "balance de mi cuenta de ahorros",
-          "mi cuenta ahorros",
-          "saldo cuenta de ahorros"
-        ],
-        "slots": [
-          {
-            "sampleUtterances": [],
-            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
-            "obfuscationSetting": "NONE",
-            "slotConstraint": "Required",
-            "valueElicitationPrompt": {
-              "messages": [
-                {
-                  "contentType": "PlainText",
-                  "content": "Por favor dame tu PIN. Si no tienes uno, puedes pedirme que te envíe un PIN."
-                }
-              ],
-              "maxAttempts": 2
-            },
-            "priority": 1,
-            "name": "pin"
-          }
-        ]
-      },
-      {
         "name": "transferToAgent",
         "version": "1",
         "fulfillmentActivity": {
           "type": "ReturnIntent"
         },
         "sampleUtterances": [
-          "agente"
+          "agente",
+          "hablar con un agente"
         ],
         "slots": []
       },
       {
         "name": "creditCardPay",
-        "version": "3",
+        "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
             "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
@@ -289,7 +289,7 @@
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {
-            "uri": "arn:aws:lambda:us-east-1:684859963665:function:multichannel-lex-bot",
+            "uri": "arn:aws:lambda:region:Account:function:multichannel-lex-bot",
             "messageVersion": "1.0"
           },
           "type": "CodeHook"
@@ -311,39 +311,36 @@
         "version": "1",
         "enumerationValues": [
           {
-            "value": "norte"
+            "value": "new york"
           },
           {
-            "value": "centro"
+            "value": "london"
           },
           {
-            "value": "usaquen"
+            "value": "los angeles"
           },
           {
-            "value": "centro"
+            "value": "miami"
           },
           {
-            "value": "calle 100"
+            "value": "chicago"
           },
           {
-            "value": "unicentro"
+            "value": "orlando"
           },
           {
-            "value": "chapinero"
+            "value": "toronto"
           },
           {
-            "value": "polanco"
-          },
-          {
-            "value": "santa fe"
+            "value": "seattle"
           }
         ],
         "valueSelectionStrategy": "ORIGINAL_VALUE"
       }
     ],
-    "voiceId": "Matthew",
+    "voiceId": "Lupe",
     "childDirected": false,
-    "locale": "en-US",
+    "locale": "es-US",
     "idleSessionTTLInSeconds": 120,
     "clarificationPrompt": {
       "messages": [
