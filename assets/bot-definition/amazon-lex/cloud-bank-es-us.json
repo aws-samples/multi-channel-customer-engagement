@@ -44,7 +44,7 @@
           },
           {
             "sampleUtterances": [],
-            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "slotType": "AMAZON.NUMBER",
             "obfuscationSetting": "NONE",
             "slotConstraint": "Required",
             "valueElicitationPrompt": {
@@ -82,7 +82,7 @@
         "slots": [
           {
             "sampleUtterances": [],
-            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "slotType": "AMAZON.NUMBER",
             "obfuscationSetting": "NONE",
             "slotConstraint": "Required",
             "valueElicitationPrompt": {
@@ -158,7 +158,7 @@
         "slots": [
           {
             "sampleUtterances": [],
-            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "slotType": "AMAZON.NUMBER",
             "obfuscationSetting": "NONE",
             "slotConstraint": "Required",
             "valueElicitationPrompt": {
@@ -267,7 +267,7 @@
           },
           {
             "sampleUtterances": [],
-            "slotType": "AMAZON.FOUR_DIGIT_NUMBER",
+            "slotType": "AMAZON.NUMBER",
             "obfuscationSetting": "NONE",
             "slotConstraint": "Required",
             "valueElicitationPrompt": {

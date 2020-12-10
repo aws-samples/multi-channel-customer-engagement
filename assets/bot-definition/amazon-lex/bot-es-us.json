@@ -1,0 +1,62 @@
+{
+    "intents": [
+        {
+            "intentVersion": "1",
+            "intentName": "transferToAgent"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "creditAdvance"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "callRequest"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "creditCardBalance"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "savingsAcctBalance"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "creditCardPay"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "welcomeMessage"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "startSession"
+        },
+        {
+            "intentVersion": "1",
+            "intentName": "officeSchedule"
+        }
+    ],
+    "name": "multichannel_lex_bot",
+    "locale": "es-US",
+    "checksum": "###checksum###",
+    "abortStatement": {
+        "messages": [
+            {
+                "content": "Disculpa, no te entiendo. Puedes repetirlo?",
+                "contentType": "PlainText"
+            }
+        ]
+    },
+    "clarificationPrompt": {
+        "maxAttempts": 5,
+        "messages": [
+            {
+                "content": "Lo siento, no pude entender tu solicitud. Intenta de nuevo.",
+                "contentType": "PlainText"
+            }
+        ]
+    },
+    "childDirected": false,
+    "idleSessionTTLInSeconds": 300
+}

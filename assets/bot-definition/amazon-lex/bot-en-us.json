@@ -52,7 +52,7 @@
         "maxAttempts": 5,
         "messages": [
             {
-                "content": "Sorry, can you please repeat that?",
+                "content": "Disculpa, no te entiendo. Puedes repetirlo?",
                 "contentType": "PlainText"
             }
         ]

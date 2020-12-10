@@ -8,14 +8,13 @@ echo $Account
 
 #Only to run out of CodeBuild
 #AWS_DEFAULT_REGION=$(aws configure get profile.default.region) 
+intentsFile=cloud-bank-$1-us.json
+botFile=bot-$1-us.json
 
-file=cloud-bank-$1-us.json
-echo $file
+sed -i "s/Account/$Account/g" $intentsFile
+sed -i "s/region/$AWS_DEFAULT_REGION/g" $intentsFile
 
-sed -i "s/Account/$Account/g" $file
-sed -i "s/region/$AWS_DEFAULT_REGION/g" $file
-
-zip bot.zip $file
+zip bot.zip $intentsFile
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
@@ -105,11 +104,13 @@ aws lex-models put-bot-alias --name prod --bot-name multichannel_lex_bot --bot-v
 
 checksum=$(aws lex-models get-bot --name multichannel_lex_bot --version-or-alias "\$LATEST" --query 'checksum' --output text)
 
-aws lex-models put-bot --name multichannel_lex_bot --cli-input-json file://intents.json --checksum $checksum --detect-sentiment
+aws lex-models put-bot --name multichannel_lex_bot --cli-input-json file://$botFile --checksum $checksum --detect-sentiment
 
 while state=$(aws lex-models get-bot --name multichannel_lex_bot --version-or-alias "\$LATEST" --output text --query 'status'); test "$state" = "BUILDING"; do
   sleep 5; echo -n '.'
 done;
+
+sleep 30; echo -n '.'
 
 state=$(aws lex-models get-bot --name multichannel_lex_bot --version-or-alias "\$LATEST" --output text --query 'status')
 
