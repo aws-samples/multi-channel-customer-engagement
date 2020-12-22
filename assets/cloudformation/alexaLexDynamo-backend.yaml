@@ -182,7 +182,7 @@ Resources:
                 Variables: 
                     "EVENT_TABLE_NAME": !Ref TableInteractionsChat
                     "SKILL_NAME": "Banca Nube - Bot"
-                    "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
+                    "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:multichannel_notification"
                     "CONNECT_CONTACT_FLOW_ID": 
                       Ref: ChatFlowId
                     "CONNECT_INSTANCE_ID": 
@@ -217,7 +217,7 @@ Resources:
                 Variables: 
                     "EVENT_TABLE_NAME": !Ref TableInteractionsChat
                     "SKILL_NAME": "Banca Nube - Bot"
-                    "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
+                    "SNS_TOPIC_ARN": !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:multichannel_notification"
                     "CONNECT_CONTACT_FLOW_ID": 
                       Ref: ChatFlowId
                     "CONNECT_INSTANCE_ID": 
@@ -468,7 +468,7 @@ Resources:
                               "Sid": "VisualEditor0",
                               "Effect": "Allow",
                               "Action": "sns:Publish",
-                              "Resource": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SNSBankDemoNotification"
+                              "Resource": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:multichannel_notification"
                           }
                       ]
                   }
@@ -644,8 +644,8 @@ Resources:
     SNSTopic:
         Type: "AWS::SNS::Topic"
         Properties:
-            DisplayName: "SNS_Multichannel_Notification"
-            TopicName: "SNS_Multichannel_Notification"
+            DisplayName: "multichannel_notification"
+            TopicName: "multichannel_notification"
 
     SNSTopicPolicy:
         Type: "AWS::SNS::TopicPolicy"
