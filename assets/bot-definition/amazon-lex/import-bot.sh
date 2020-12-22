@@ -110,7 +110,7 @@ while state=$(aws lex-models get-bot --name multichannel_lex_bot --version-or-al
   sleep 5; echo -n '.'
 done;
 
-sleep 30; echo -n '.'
+sleep 60; echo -n '.'
 
 state=$(aws lex-models get-bot --name multichannel_lex_bot --version-or-alias "\$LATEST" --output text --query 'status')
 

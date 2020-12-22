@@ -5,7 +5,6 @@
     "importFormat": "JSON"
   },
   "resource": {
-    "name": "multichannel_lex_bot",
     "version": "1",
     "intents": [
       {
@@ -337,10 +336,13 @@
         "valueSelectionStrategy": "ORIGINAL_VALUE"
       }
     ],
+    "name": "multichannel_lex_bot",
+    "locale": "en-US",
     "voiceId": "Joanna",
     "childDirected": false,
-    "locale": "en-US",
-    "idleSessionTTLInSeconds": 120,
+    "detectSentiment": false,
+    "enableModelImprovements": true,
+    "idleSessionTTLInSeconds": 300,
     "clarificationPrompt": {
       "messages": [
         {
@@ -357,7 +359,6 @@
           "content": "Sorry, I could not understand your request. Please start over again."
         }
       ]
-    },
-    "detectSentiment": true
+    }
   }
 }

@@ -38,8 +38,13 @@
         }
     ],
     "name": "multichannel_lex_bot",
-    "locale": "en-US",
     "checksum": "###checksum###",
+    "locale": "en-US",
+    "voiceId": "Joanna",
+    "childDirected": false,
+    "detectSentiment": false,
+    "enableModelImprovements": true,
+    "idleSessionTTLInSeconds": 300,
     "abortStatement": {
         "messages": [
             {
@@ -56,7 +61,5 @@
                 "contentType": "PlainText"
             }
         ]
-    },
-    "childDirected": false,
-    "idleSessionTTLInSeconds": 300
+    }
 }
