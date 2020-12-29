@@ -85,7 +85,7 @@ In the AWS Management Console, navigate to the [Amazon Connect](https://console.
 
 ![connect](./images/image%20(27).png)
 
-Add the Lex Bot **"omnichannel_bot"**
+Add the Lex Bot **"multichannel_lex_bot"**
 
 ![connect](./images/image%20(28).png)
 
