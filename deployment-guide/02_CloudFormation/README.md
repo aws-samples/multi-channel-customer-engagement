@@ -30,7 +30,9 @@ Keep these values to be used in further steps.
 Region name | Region code | Launch
 --- | --- | ---
 US East (N. Virginia) | us-east-1 | [![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://us-east-1.console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=MultiChannelCustomerEngagement&templateURL=https://multichannel-customer-engagement-us-east-1.s3.amazonaws.com/cloudformation/mainTemplate.yaml)
+US West (Oregon) | us-west-2 | [![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://us-west-2.console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=MultiChannelCustomerEngagement&templateURL=https://multichannel-customer-engagement-us-west-2.s3.amazonaws.com/cloudformation/mainTemplate.yaml)
 EU (Frankfurt) | eu-central-1 | [![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://eu-central-1.console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=MultiChannelCustomerEngagement&templateURL=https://multichannel-customer-engagement-eu-central-1.s3.eu-central-1.amazonaws.com/cloudformation/mainTemplate.yaml)
+Asia Pacific (Singapore) | ap-southeast-1 | [![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://ap-southeast-1.console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=MultiChannelCustomerEngagement&templateURL=https://multichannel-customer-engagement-ap-southeast-1.s3.amazonaws.com/cloudformation/mainTemplate.yaml)  
 
 ![connect](./images/image%20(20).png)
 
