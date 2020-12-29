@@ -78,11 +78,13 @@ Log in to your contact center using your access URL, provided by Amazon Connect 
 
 ![connect](./images/image%20(13).png)
 
-4. Select the Contact flow file based on your case:
+4. Select the Contact flow file:
 
-- [Download Contact Flow in English](../../assets/bot-definition/amazon-connect/en_US/InboundFlow_en_US) 
+#### English
+- [InboundFlow_en_US](../../assets/bot-definition/amazon-connect/en_US/InboundFlow_en_US) 
 
-- [Descargar Contact Flow en Español](../../assets/bot-definition/amazon-connect/es_US/InboundFlow_es_US) 
+#### Español
+- [InboundFlow_es_US](../../assets/bot-definition/amazon-connect/es_US/InboundFlow_es_US) 
 
    To import, select your file, and click **Import**. When the contact flow is imported into an existing contact flow, the name of the existing contact flow is updated, too.
 
@@ -98,15 +100,13 @@ Once created, you should be seeing something similar to this flow
 
 Please repeat the previous steps and import the following flows as well.
 
-#### For English
+#### English
 
-- [[en-US] Basic Chat flow](../../assets/bot-definition/amazon-connect/en_US/ChatFlow_en_US)
-- [Basic Chat Disconnect Flow](../../assets/bot-definition/amazon-connect/DisconnectChatFlow)
+- [ChatFlow_en_US](../../assets/bot-definition/amazon-connect/en_US/ChatFlow_en_US)
 
-#### Para Español
+#### Español
 
-- [[es-MX] Basic Chat flow](../../assets/bot-definition/amazon-connect/es_US/ChatFlow_es_US)
-- [Basic Chat Disconnect Flow](../../assets/bot-definition/amazon-connect/DisconnectChatFlow)
+- [ChatFlow_es_US](../../assets/bot-definition/amazon-connect/es_US/ChatFlow_es_US)
 
 Click - **show additional flow information**, open a notepad and grab the InstanceID and FlowID and save them for later.
 

@@ -260,7 +260,7 @@ Resources:
                           versionOrAlias='prod',
                           )
                           response = client.delete_bot_alias(name='prod', botName='multichannel_lex_bot')
-                          time.sleep(1)
+                          time.sleep(10)
                           response2 = client.delete_bot(name='multichannel_lex_bot')
                           print ('Lex Deleted')
                           print (response2)
@@ -276,7 +276,7 @@ Resources:
                               
                           raise
                   if event['RequestType'] == 'Create':
-                      response= cb.start_build(projectName='Omnichannel-CodeBuild-Lex')
+                      response= cb.start_build(projectName='multichannel-codebuild-lex')
                       print (response)
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
                       return ('Created')   

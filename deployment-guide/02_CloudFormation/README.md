@@ -5,7 +5,7 @@ Before you launch this template, you must have an existing Amazon Connect instan
 ## Find Your Amazon Connect Instance ID, Contact Flow ID and Queue ID
 
 This solution requires an Amazon Connect InstanceId, QueueId and ContactFlowId. Use this procedure to find them.
-In the AWS Management Console, navigate to the [Amazon Connect](https://console.aws.amazon.com/connect) console and go to **Routing** - **Contact Flows**, select the "[en-US] Basic Chat flow" or "[es-MX] Basic Chat flow " and click on **Show additional flow information** link.
+In the AWS Management Console, navigate to the [Amazon Connect](https://console.aws.amazon.com/connect) console and go to **Routing** - **Contact Flows**, select the "InboundFlow_en_US" or "InboundFlow_es_US" and click on **Show additional flow information** link.
 
 **Connect Instance ID**: This is the id of the Amazon Connect instance you want to use. You can find this on the Amazon Connect console or when viewing the contact flow. 
 
@@ -89,7 +89,7 @@ Add the Lex Bot **"omnichannel_bot"**
 
 ![connect](./images/image%20(28).png)
 
-Go to the **Basic Chat** Contact Flow created previously
+Go to the **InboundFlow** Contact Flow created previously
 
 ![connect](./images/image%20(31).png)
 
@@ -97,13 +97,13 @@ Select the box **Get Customer Input**
 
 ![connect](./images/image%20(32).png)
 
- Go to tab **Amazon Lex** and select the **omnichannel_bot**
+ Go to tab **Amazon Lex** and select the **multichannel_lex_bot**
 
 ![connect](./images/image%20(34).png)
 
 **Save** and **Publish** the Contact Flow.
 
-Now go to the **Main Flow** Contact Flow select the box **Get Customer Input** and set the Lex Bot in the same way as previous step
+Now go to the **InboundFlow** Contact Flow select the box **Get Customer Input** and set the Lex Bot in the same way as previous step
 
 ![connect](./images/image%20(35).png)
 
