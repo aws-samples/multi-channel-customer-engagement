@@ -53,7 +53,7 @@ slots and other attributes manually, however, we already use the interaction mod
 
 ![](./images/Endpoint2.png)
 
-13. Open your **AWS Console** - **AWS Lambda**, Search **alexa-bank-demo** Lambda Function, and click **Add Trigger** to enable your Alexa Skill call the Lambda Function
+13. Into another browser tab, open your **AWS Console**, then search for the **AWS Lambda** services, after this look for the **multichannel-alexa-bot** Lambda Function. It will open the function console editor, then click into the **Add Trigger** button to enable your Alexa Skill call the Lambda Function.
 
 ![](./images/Endpoint3.png)
 
