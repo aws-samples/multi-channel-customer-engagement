@@ -24,7 +24,7 @@ button at the top right.
 
 ![](./images/AlexaSkill_4.png)
 
-6. Choose "Hello World Skill" as the template to add to your skill. Click **Choose**
+6. Choose "Start from Scratch Skill" as the template to add to your skill. Click **Choose**
 
 ![](./images/AlexaSkill_5.png)
 
@@ -35,7 +35,7 @@ slots and other attributes manually, however, we already use the interaction mod
 
 ![](./images/AlexaSkill_6.png)
 
-9. Replace the entire code in the JSON Editor textfield with the Interaction model according to the Default Language you chose in the Step 4. [AlexaSkill English-US](../../bot-definition/amazon-alexa/en-US/alexa-skill-en-US.json) or [AlexaSkill Spanish-MX](../../bot-definition/amazon-alexa/es-MX/alexa-skill-es-MX.json).You can do it with the drag-and-drop tool in the upper-side of the JSON Editor, or manually replacing the code (Copy+Paste). After replacing the code you will see something similar as the following image:
+9. Replace the entire code in the JSON Editor textfield with the Interaction model according to the Default Language you chose in the Step 4. [AlexaSkill English-US](../../assets/bot-definition/amazon-alexa/alexa-skill-en-US.json) or [AlexaSkill Spanish-MX](../../assets/bot-definition/amazon-alexa/alexa-skill-es-MX.json).You can do it with the drag-and-drop tool in the upper-side of the JSON Editor, or manually replacing the code (Copy+Paste). After replacing the code you will see something similar as the following image:
 
 ![](./images/AlexaSkill_7.png)
 
@@ -53,7 +53,7 @@ slots and other attributes manually, however, we already use the interaction mod
 
 ![](./images/Endpoint2.png)
 
-13. Open your **AWS Console** - **AWS Lambda**, Search **alexa-bank-demo** Lambda Function, and click **Add Trigger** to enable your Alexa Skill call the Lambda Function
+13. Into another browser tab, open your **AWS Console**, then search for the **AWS Lambda** services, after this look for the **multichannel-alexa-bot** Lambda Function. It will open the function console editor, then click into the **Add Trigger** button to enable your Alexa Skill call the Lambda Function.
 
 ![](./images/Endpoint3.png)
 
