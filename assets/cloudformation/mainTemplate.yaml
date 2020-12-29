@@ -15,10 +15,7 @@ Metadata:
           - DestinationPhoneNumber
           - Currency
           - Language
-          - S3BucketAssetsMain
     ParameterLabels:
-      S3BucketAssetsMain:
-        default: "Deploy based on your region"
       ChatFlowId:
         default: "Chat Flow ID"
       DestinationPhoneNumber:
@@ -31,6 +28,17 @@ Metadata:
         default: "What is your currency?"
       Language:
         default: "What is your prefered language?"
+
+Mappings: 
+  RegionMap: 
+    us-east-1:
+      S3BucketAssetsMain: multichannel-customer-engagement-us-east-1
+    us-west-2:
+      S3BucketAssetsMain: multichannel-customer-engagement-us-west-2
+    eu-central-1:
+      S3BucketAssetsMain: multichannel-customer-engagement-eu-central-1
+    ap-southeast-1:
+      S3BucketAssetsMain: multichannel-customer-engagement-ap-southeast-1
 
 Parameters:
   ConnectInstanceId:
@@ -54,23 +62,45 @@ Parameters:
     AllowedValues:
       - en
       - es
-  S3BucketAssetsMain:
-    Type: String
-    AllowedValues:
-      - multichannel-customer-engagement-us-east-1
-      - multichannel-customer-engagement-us-west-2
-      - multichannel-customer-engagement-eu-west-2
-      - multichannel-customer-engagement-ap-southeast-1
-      - multichannel-customer-engagement-eu-central-1
 
 Resources:
+
+  stackAgentPortalFrontEnd:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        !Join
+          - ''
+          - - 'https://'
+            - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+            - '.s3.amazonaws.com/cloudformation/agent-portal-front-end.yaml'
+      Parameters:
+        S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+
+  stackCustomerPortalFrontEnd:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        !Join
+          - ''
+          - - 'https://'
+            - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+            - '.s3.amazonaws.com/cloudformation/customer-portal-front-end.yaml'
+      Parameters:
+        S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+
   stackAlexaLexBackend:
     DependsOn:
       - stackAgentPortalFrontEnd
       - stackCustomerPortalFrontEnd
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/alexaLexDynamo-backend.yaml"
+      TemplateURL:
+        !Join
+          - ''
+          - - 'https://'
+            - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+            - '.s3.amazonaws.com/cloudformation/alexaLexDynamo-backend.yaml' 
       Parameters:
         ChatFlowId: !Ref ChatFlowId
         DestinationPhoneNumber: !Ref DestinationPhoneNumber
@@ -78,35 +108,31 @@ Resources:
         QueueId: !Ref QueueId
         Currency: !Ref Currency
         Language: !Ref Language
-        S3BucketAssets: !Ref S3BucketAssetsMain
+        S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
 
   stackVoiceAnalytics:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/voiceAnalytics.yaml"
+      TemplateURL:
+        !Join
+          - ''
+          - - 'https://'
+            - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+            - '.s3.amazonaws.com/cloudformation/voiceAnalytics.yaml'
       Parameters:
         TableInteractionsVoice: !GetAtt stackAlexaLexBackend.Outputs.DynamoDBTableCustomerInteractionsVoice
         Language: !Ref Language
-        S3BucketAssets: !Ref S3BucketAssetsMain
-
-  stackCustomerPortalFrontEnd:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/customer-portal-front-end.yaml"
-      Parameters:
-        S3BucketAssets: !Ref S3BucketAssetsMain
-
-  stackAgentPortalFrontEnd:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/agent-portal-front-end.yaml"
-      Parameters:
-        S3BucketAssets: !Ref S3BucketAssetsMain
+        S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
 
   stackConnectChatBackend:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/connect-chat-backend.yaml"
+      TemplateURL:
+        !Join
+          - ''
+          - - 'https://'
+            - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+            - '.s3.amazonaws.com/cloudformation/connect-chat-backend.yaml'
       Parameters:
         ComprehendTranscriptLambdaArn: !GetAtt stackVoiceAnalytics.Outputs.comprehendTranscriptLambdaArn
         ExecuteTranscriptionStateMachineArn: !GetAtt stackVoiceAnalytics.Outputs.executeTranscriptionStateMachineArn
@@ -115,38 +141,53 @@ Resources:
         ConnectInstanceId: !Ref ConnectInstanceId
         ConnectS3BucketName: !GetAtt stackVoiceAnalytics.Outputs.S3Bucket
         TranscriptPath: "/ChatTranscripts"
-        S3BucketAssets: !Ref S3BucketAssetsMain
+        S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
 
   stackAPIGatewayBackend:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/apiGateway-backend.yaml"
+      TemplateURL:
+        !Join
+          - ''
+          - - 'https://'
+            - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+            - '.s3.amazonaws.com/cloudformation/apiGateway-backend.yaml'
       Parameters:
         TableCustomerInfo: !GetAtt stackAlexaLexBackend.Outputs.DynamoDBTableCustomerInfo
         TableAppInteractions: !GetAtt stackAlexaLexBackend.Outputs.DynamoDBTableCustomerInteractionsApp
         TableVoiceInteraction: !GetAtt stackAlexaLexBackend.Outputs.DynamoDBTableCustomerInteractionsVoice
         TableChatInteraction: !GetAtt stackAlexaLexBackend.Outputs.DynamoDBTableCustomerInteractionsChat
         LambdaConnectChatARN: !GetAtt stackConnectChatBackend.Outputs.initiateChatLambda
-        S3BucketAssets: !Ref S3BucketAssetsMain
+        S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
 
   stackCognitoAppClientSettings:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/cognito-appClientSettings.yaml"
+      TemplateURL:
+        !Join
+          - ''
+          - - 'https://'
+            - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+            - '.s3.amazonaws.com/cloudformation/cognito-appClientSettings.yaml'
       Parameters:
         CognitoUserPoolId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoUserPool
         CognitoCustomerPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientCustomer
         CallbackLogOutCustomerURL: !GetAtt stackCustomerPortalFrontEnd.Outputs.DomainName
         CognitoAgentPortalClientId: !GetAtt stackAPIGatewayBackend.Outputs.CognitoAppClientAgent
         CallbackLogOutAgentURL: !GetAtt stackAgentPortalFrontEnd.Outputs.DomainName
-        S3BucketAssets: !Ref S3BucketAssetsMain
+        S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
 
   stackCustomerPortalFrontEndSettings:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://${S3BucketAssetsMain}.s3.amazonaws.com/cloudformation/customer-portal-config.yaml"
+      TemplateURL:
+        !Join
+          - ''
+          - - 'https://'
+            - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
+            - '.s3.amazonaws.com/cloudformation/customer-portal-config.yaml'
       Parameters:
-        S3BucketAssets: !Ref S3BucketAssetsMain
+        S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
         CustomerPortalS3Bucket: !GetAtt stackCustomerPortalFrontEnd.Outputs.BucketName
         AgentPortalS3Bucket: !GetAtt stackAgentPortalFrontEnd.Outputs.BucketName
         CustomerPortalUrl: !GetAtt stackCustomerPortalFrontEnd.Outputs.DomainName
