@@ -68,16 +68,12 @@ Key | Value |
 **CustomerDomainName** | Web Portal for Customers |
 **S3ConnectBucket** | S3 Bucket that will be used to store Amazon Connect recordings and transcripts. |
 
-
 ![connect](./images/Outputs.png)
 
 :bangbang: | After deploying the stack if you see an S3 permission error when viewing the web portal urls, it means the domain is not ready yet. The CDN can take up to an hour to be ready. Be patient and meawhile continue with the next steps.
 :---: | :---
 
- 
-
 ![connect](./images/image%20(24).png)
-
 
 ---
 # Amazon Connect Post-Configuration
