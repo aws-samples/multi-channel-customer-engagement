@@ -112,14 +112,18 @@ Now go to the **InboundFlow** Contact Flow select the second box **Get Customer 
 
 ## Configure the Data storage
 
-1. Go to CloudFormation - outputs and you should see S3ConnectBucket. Go to the Amazon Connect Console, select you Instance and go to **Data storage** - **Call recordings** - **Call recording will be stored here** and click **Edit**
+1. Go to CloudFormation - outputs and you should see S3ConnectBucket - Please remember or write down this name.
 
-**Enable call recordings**, select the S3ConnectBucket name from the CloudFormation output and set **Path prefix** to **CallRecordings**
+2. Go to the Amazon Connect Console, select you Instance and go to **Data storage** - **Call recordings** - **Call recording will be stored here** and click **Edit** 
 
-**Enable chat transcripts**, select the S3ConnectBucket name from the CloudFormation output and set **Path prefix** to **ChatTranscripts**
+![connect](./images/image-datastorage.png)
+
+3. Tick **Enable call recordings** and click on **Select an existing S3 bucket** then search for the name of the bucket from Step 1. (S3ConnectBucket name from the CloudFormation output) and set **Path prefix** to **CallRecordings**
+
+4. Tick **Enable chat transcripts**, nd click on **Select an existing S3 bucket** then search for the name of the bucket from Step 1. (S3ConnectBucket name from the CloudFormation output) and set **Path prefix** to  **ChatTranscripts**
 
 **Save** the changes.
 
-![connect](./images/image-datastorage.png)
+
 
 You are now ready to continue with step 3: [Alexa Skill setup](../03_AlexaSkill/README.md)
