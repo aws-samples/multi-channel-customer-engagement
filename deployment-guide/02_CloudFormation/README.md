@@ -96,11 +96,11 @@ Go to the **ChatFlow** Contact Flow created previously
 
 Select the box **Get Customer Input**
 
-![connect](./images/image%20(32).png)
+![connect](./images/image%20(32)_2.png)
 
 Go to tab **Amazon Lex** and select the **multichannel_lex_bot**
 
-![connect](./images/image%20(34).png)
+![connect](./images/image%20(34)_2.png)
 
 **Save** and **Publish** the Contact Flow.
 
