@@ -93,7 +93,7 @@ Add the Lex Bot **"multichannel_lex_bot"**
 
 Go to the **ChatFlow** Contact Flow created previously
 
-![connect](./images/image%20(31).png)
+![connect](./images/image%20(31_2).png)
 
 Select the box **Get Customer Input**
 
