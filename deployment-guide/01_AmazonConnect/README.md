@@ -62,7 +62,7 @@ When you are finished configuring your instance, review the configuration and cl
 
 ### Step 1. Import the Contact Flow
 
-Log in to your contact center using your access URL, provided by Amazon Connect (https://your-domain.awsapps.com/connect/login), and login with your credentials created above. Or you can just click **Get started** Button. 
+Log in to your contact center using your access URL, provided by Amazon Connect (https://<your-domain>.awsapps.com/connect/login), and login with your credentials created above. Or you can just click **Get started** Button. 
 
 ![connect](./images/ConnectInstance_Created.png)
 
@@ -119,7 +119,7 @@ After you create an Amazon Connect instance, you can claim a phone number to use
 
 To claim a number for your contact center:
 
-1. Choose **Routing** - **Phone numbers**.
+1. Go  **Routing** and then **Phone numbers**.
 
 ![connect](./images/image%20(39)2.png)
 
