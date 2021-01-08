@@ -4,7 +4,9 @@ Parameters:
   ChatFlowId: 
     Type: String
   DestinationPhoneNumber: 
-    Type: Number
+    Type: String
+  ContactEmailAddress:
+    Type: String
   ConnectInstanceId: 
     Type: String
   QueueId: 
@@ -660,6 +662,14 @@ Resources:
             TopicArn: !Ref SNSTopic
             Endpoint: !Ref DestinationPhoneNumber
             Protocol: "sms"
+            Region: !Ref AWS::Region
+
+    SNSSubscriptionEmail:
+        Type: "AWS::SNS::Subscription"
+        Properties:
+            TopicArn: !Ref SNSTopic
+            Endpoint: !Ref ContactEmailAddress
+            Protocol: "email"
             Region: !Ref AWS::Region
 
 Outputs:

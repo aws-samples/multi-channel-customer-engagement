@@ -13,6 +13,7 @@ Metadata:
           default: "General Configuration"
         Parameters:
           - DestinationPhoneNumber
+          - ContactEmailAddress
           - Currency
           - Language
     ParameterLabels:
@@ -28,6 +29,8 @@ Metadata:
         default: "What is your currency?"
       Language:
         default: "What is your prefered language?"
+      ContactEmailAddress:
+        default: "Contact Email Address"
 
 Mappings: 
   RegionMap: 
@@ -53,6 +56,9 @@ Parameters:
   DestinationPhoneNumber:
     Type: String
     Description: "Phone Number to receive SMS messages (PIN code), use your country code (e.g. +573001234567) "
+  ContactEmailAddress:
+    Type: String
+    Description: "Provide a valid Contact Email to send the PIN code (e.g. username@emaildomain.co)"
   Currency:
     Type: String
     Default: USD
@@ -104,6 +110,7 @@ Resources:
       Parameters:
         ChatFlowId: !Ref ChatFlowId
         DestinationPhoneNumber: !Ref DestinationPhoneNumber
+        ContactEmailAddress: !Ref ContactEmailAddress
         ConnectInstanceId: !Ref ConnectInstanceId
         QueueId: !Ref QueueId
         Currency: !Ref Currency
