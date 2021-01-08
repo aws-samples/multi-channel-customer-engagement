@@ -71,7 +71,7 @@ Key | Value |
 
 ![connect](./images/Outputs.png)
 
-> After deploying the stack if you see an S3 permission error when viewing the web portal urls, it means the domain is not ready yet. The CDN can take up to an hour to be ready. Be patient and meawhile continue with the next steps.
+!! After deploying the stack if you see an S3 permission error when viewing the web portal urls, it means the domain is not ready yet. The CDN can take up to an hour to be ready. Be patient and meawhile continue with the next steps.
 
 ![connect](./images/image%20(24).png)
 
