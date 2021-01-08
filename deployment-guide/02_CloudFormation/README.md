@@ -5,7 +5,7 @@ Before you launch this template, you must have an existing Amazon Connect instan
 ## Find Your Amazon Connect Instance ID, Contact Flow ID and Queue ID
 
 This solution requires an Amazon Connect InstanceId, QueueId and ContactFlowId. Use this procedure to find them.
-In the AWS Management Console, navigate to the [Amazon Connect](https://console.aws.amazon.com/connect) console, use the Login URL and the admin credentials created in the Step 1, then use the left bar menu and select  **Routing** - **Contact Flows**, then open the "InboundFlow_en_US" or "InboundFlow_es_US" and click on **Show additional flow information** link.
+In the AWS Management Console, navigate to the [Amazon Connect](https://console.aws.amazon.com/connect) console, use the Login URL and the admin credentials created in the Step 1, then use the left bar menu and select  **Routing** - **Contact Flows**, then open the "ChatFlow_en_US" or "ChatFlow_es_US" and click on **Show additional flow information** link.
 
 **Connect Instance ID**: This is the id of the Amazon Connect instance you want to use. You can find this on the Amazon Connect console or when viewing the contact flow. 
 
