@@ -16,6 +16,10 @@ sed -i "s/region/$AWS_DEFAULT_REGION/g" $intentsFile
 
 zip bot.zip $intentsFile
 
+aws iam get-role --role-name AWSServiceRoleForLexBots 
+
+if [[ $? -eq 254 ]]; then aws iam create-service-linked-role --aws-service-name lex.amazonaws.com; echo 'Lex Linked Role created'; else echo 'Lex Linked Role already exists'; fi
+
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
     --function-name multichannel-lex-bot \
