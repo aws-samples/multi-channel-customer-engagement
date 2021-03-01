@@ -125,7 +125,7 @@ To claim a number for your contact center:
 
 2. Choose **Claim a number**. Select the country and choose a toll free number or a Direct Inward Dialing (DID) number.
 
-3. Enter a description for the number and, attach it to the contact flow created in Step .1 (Probably It's called InboundFlow_en_US, depending on the language you chose)
+3. Enter a description for the number and, attach it to the contact flow created in Step. 1 (It would be InboundFlow_en_US if you chose English, or InboundFlow_es_US if you chose Spanish)
 
 ![connect](./images/image%20201(44)2.png)
 
@@ -135,7 +135,7 @@ Now you have a phone number for your customers to contact you.
 
 ### Step 3. Setup Queues
 
-1. In the left-hand menu, choose **Routing** - **Queues**, then click  *BasicQueue*.
+1. In the left-hand menu at Connect Console, go to **Routing**, then **Queues**, and then click  **BasicQueue**.
 
 ![connect](./images/image%20(17).png)
 
