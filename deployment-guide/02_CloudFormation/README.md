@@ -46,7 +46,6 @@ Parameter | Description |
 **Phone Number** | Phone number to send SMS notifications |
 **Currency** | [ISO Currency Code](https://en.wikipedia.org/wiki/ISO_4217#Active_codes) to use in the solution |
 **Language** | Language to be used by Amazon Lex and Alexa Skill (English or Spanish) |
-**S3 Bucket** | Bucket where all resources for the solution deployment are hosted. Select according to the region you are deploying to |
 
 
 ![connect](./images/Cloudformation_Setup.png)
