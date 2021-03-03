@@ -26,7 +26,5 @@ For this walkthrough, you should have the following prerequisites:
 
 + An Amazon Alexa Developer account. [Create one here](https://developer.amazon.com/alexa)
 
-+ Have a **AWSServiceRoleForLexBots** service role created. You can check in IAM - Roles. If not, please create it following the instruction [here](https://docs.aws.amazon.com/lex/latest/dg/gs-create-role.html) 
-
 
 Go to step 1 [Amazon Connect setup](../01_AmazonConnect/README.md)
