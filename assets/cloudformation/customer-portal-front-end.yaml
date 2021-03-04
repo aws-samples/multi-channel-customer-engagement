@@ -14,7 +14,7 @@ Resources:
     Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: "CloudFrontOriginAccessIdentityConfig"
+        Comment: "CustomerPortal-OAI"
 
   CloudFrontDistribution:
     Type: "AWS::CloudFront::Distribution"
