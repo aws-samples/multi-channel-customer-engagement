@@ -283,7 +283,7 @@
         ]
       },
       {
-        "name": "welcomeMessage",
+        "name": "welcomeMultichannel",
         "version": "1",
         "fulfillmentActivity": {
           "codeHook": {

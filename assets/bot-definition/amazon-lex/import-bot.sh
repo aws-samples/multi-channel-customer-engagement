@@ -44,7 +44,7 @@ aws lambda add-permission \
     --statement-id $RANDOM \
     --action lambda:InvokeFunction \
     --principal lex.amazonaws.com \
-    --source-arn "arn:aws:lex:$AWS_DEFAULT_REGION:$Account:intent:welcomeMessage:*"
+    --source-arn "arn:aws:lex:$AWS_DEFAULT_REGION:$Account:intent:welcomeMultichannel:*"
 
 aws lambda add-permission \
     --region $AWS_DEFAULT_REGION \
