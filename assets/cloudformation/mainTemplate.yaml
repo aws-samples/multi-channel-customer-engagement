@@ -55,10 +55,10 @@ Parameters:
     Description: "Queue ID - It comes with this format 99999999-9999-9999-9999-999999999999"
   DestinationPhoneNumber:
     Type: String
-    Description: "Phone Number to receive SMS messages (PIN code), use your country code (e.g. +573001234567) "
+    Description: "Phone Number to receive SMS messages (PIN code), use your country code (e.g. +573001234567)"
   ContactEmailAddress:
     Type: String
-    Description: "Provide a valid Contact Email to send the PIN code (e.g. username@emaildomain.co)"
+    Description: "Provide a valid email address to receive notifications (PIN code). e.g. username@domain.com"
   Currency:
     Type: String
     Default: USD
