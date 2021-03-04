@@ -297,7 +297,7 @@ Resources:
             Description: ""
             CompatibleRuntimes: 
               - "python3.7"
-            LayerName: "DynamoBackend"
+            LayerName: "BotBackendLayer"
             Content: 
               S3Bucket: !Ref S3BucketAssets
               S3Key: lambda-functions/botBackendLayer.zip
@@ -321,10 +321,10 @@ Resources:
           ManagedPolicyArns:
             - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
             - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/DynamoDbPolicy-${AWS::Region}"
-            - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+            - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess      
 
     LambdalexRole:
-        DependsOn: ["IAMDynamoDBManagedPolicy","IAMSNSManagedPolicy"]
+        DependsOn: ["IAMDynamoDBManagedPolicy","IAMSNSManagedPolicy", "IAMConnectManagedPolicy"]
         Type: AWS::IAM::Role
         Properties:
           AssumeRolePolicyDocument:
@@ -339,9 +339,11 @@ Resources:
           Path: /
           ManagedPolicyArns:
             - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/DynamoDbPolicy-${AWS::Region}"
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/MultiChannelDynamoDbPolicy-${AWS::Region}"
             - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
-            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/SNSPolicy-${AWS::Region}"
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/MultiChannelSNSPolicy-${AWS::Region}"
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/MultiChannelConnectPolicy-${AWS::Region}"
+            
 
     executeQueryRoleConnect:
         Type: AWS::IAM::Role
@@ -412,33 +414,23 @@ Resources:
                     ]
                 }
 
-
     IAMDynamoDBManagedPolicy:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "DynamoDbPolicy-${AWS::Region}"
+            ManagedPolicyName: !Sub "MultiChannelDynamoDbPolicy-${AWS::Region}"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                   {
                       "Version": "2012-10-17",
                       "Statement": [
                           {
-                              "Sid": "VisualEditor0",
                               "Effect": "Allow",
                               "Action": [
-                                  "dynamodb:BatchGetItem",
-                                  "dynamodb:BatchWriteItem",
-                                  "dynamodb:ConditionCheckItem",
                                   "dynamodb:PutItem",
-                                  "dynamodb:DescribeContributorInsights",
                                   "dynamodb:Scan",
                                   "dynamodb:Query",
                                   "dynamodb:UpdateItem",
-                                  "dynamodb:DescribeTimeToLive",
-                                  "dynamodb:DescribeTable",
                                   "dynamodb:GetItem",
-                                  "dynamodb:DescribeContinuousBackups",
-                                  "dynamodb:UpdateTable",
                                   "dynamodb:GetRecords"
                               ],
                               "Resource": [
@@ -447,12 +439,6 @@ Resources:
                                   "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableInteractionsChat}",
                                   "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableLocalization}"
                               ]
-                          },
-                          {
-                              "Sid": "VisualEditor1",
-                              "Effect": "Allow",
-                              "Action": "dynamodb:ListTables",
-                              "Resource": "*"
                           }
                       ]
                   }
@@ -460,20 +446,36 @@ Resources:
     IAMSNSManagedPolicy:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "SNSPolicy-${AWS::Region}"
+            ManagedPolicyName: !Sub "MultiChannelSNSPolicy-${AWS::Region}"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                   {
                       "Version": "2012-10-17",
                       "Statement": [
                           {
-                              "Sid": "VisualEditor0",
                               "Effect": "Allow",
                               "Action": "sns:Publish",
                               "Resource": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:multichannel_notification"
                           }
                       ]
                   }
+
+    IAMConnectManagedPolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "MultiChannelConnectPolicy-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                  {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                          {
+                              "Effect": "Allow",
+                              "Action": "connect:StartOutboundVoiceContact",
+                              "Resource": "arn:aws:connect:${AWS::Region}:${AWS::AccountId}:instance/${ConnectInstanceId}/contact/*"
+                          }
+                      ]
+                  }                 
 
     IAMManagedPolicy2:
         Type: "AWS::IAM::ManagedPolicy"
