@@ -320,7 +320,7 @@ Resources:
           Path: /
           ManagedPolicyArns:
             - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/DynamoDbPolicy-${AWS::Region}"
+            - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/MultiChannelDynamoDbPolicy-${AWS::Region}"
             - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess      
 
     LambdalexRole:

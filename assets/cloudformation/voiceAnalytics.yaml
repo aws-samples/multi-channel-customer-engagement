@@ -31,8 +31,12 @@ Outputs:
         - StartTranscribeExecutionLambda
         - Arn
 Parameters:
+  ConnectInstanceName:
+    Default: CONNECT-INSTANCE-NAME 
+    Description: Name of your instance in connect
+    Type: String
   RecordingsPrefix:
-    Default: recordings/
+    Default: /recordings/
     Description: Name of folder where recordings would be stored
     Type: String
   TranscriptionJobCheckWaitTime:
@@ -40,7 +44,7 @@ Parameters:
     Description: Time between transcription job checks
     Type: Number
   TranscriptsPrefix:
-    Default: transcripts/
+    Default: /transcripts/
     Description: Name of folder where transcripts would be stored
     Type: String
   Language:
@@ -81,7 +85,11 @@ Resources:
                 Rules:
                 - Name: prefix
                   Value:
-                    Ref: TranscriptsPrefix
+                    Fn::Join:
+                      - ''
+                      - - 'connect/'
+                        - Ref: ConnectInstanceName
+                        - Ref: TranscriptsPrefix
           Type: S3
       Handler: index.lambda_handler
       MemorySize: 128
@@ -340,7 +348,11 @@ Resources:
                 Rules:
                 - Name: prefix
                   Value:
-                    Ref: RecordingsPrefix
+                    Fn::Join:
+                      - ''
+                      - - 'connect/'
+                        - Ref: ConnectInstanceName
+                        - Ref: RecordingsPrefix
           Type: S3
       Handler: index.lambda_handler
       MemorySize: 128

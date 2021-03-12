@@ -46,6 +46,9 @@ Mappings:
       S3BucketAssetsMain: multichannel-customer-engagement-ap-southeast-1
 
 Parameters:
+  ConnectInstanceName:
+    Type: String
+    Description: "Connect Instance Name"
   ConnectInstanceId:
     Type: String
     Description: "Connect Instance ID - It comes in a format similar to 11111111-1111-1111-1111-111111111111"
@@ -129,6 +132,7 @@ Resources:
             - !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
             - '.s3.amazonaws.com/cloudformation/voiceAnalytics.yaml'
       Parameters:
+        ConnectInstanceName : !Ref ConnectInstanceName
         TableInteractionsVoice: !GetAtt stackAlexaLexBackend.Outputs.DynamoDBTableCustomerInteractionsVoice
         Language: !Ref Language
         S3BucketAssets: !FindInMap [RegionMap, !Ref "AWS::Region", S3BucketAssetsMain]
