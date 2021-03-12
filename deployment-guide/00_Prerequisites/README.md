@@ -1,4 +1,4 @@
-# Prerequisitess
+# Prerequisites
 
 For this walkthrough, you should have the following prerequisites:
 
