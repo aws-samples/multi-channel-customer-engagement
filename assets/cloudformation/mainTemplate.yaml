@@ -23,6 +23,8 @@ Metadata:
         default: "Phone Number"
       ConnectInstanceId:
         default: "Connect Instance ID"
+      ConnectInstanceName:
+        default: "Connect Instance Name"
       QueueId:
         default: "Queue ID"
       Currency:
