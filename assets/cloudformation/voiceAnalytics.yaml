@@ -44,7 +44,7 @@ Parameters:
     Description: Time between transcription job checks
     Type: Number
   TranscriptsPrefix:
-    Default: /ChatTranscripts/
+    Default: /transcripts/
     Description: Name of folder where transcripts would be stored
     Type: String
   Language:
