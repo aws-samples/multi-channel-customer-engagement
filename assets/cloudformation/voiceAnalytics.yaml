@@ -36,7 +36,7 @@ Parameters:
     Description: Name of your instance in connect
     Type: String
   RecordingsPrefix:
-    Default: /recordings/
+    Default: /CallRecordings/
     Description: Name of folder where recordings would be stored
     Type: String
   TranscriptionJobCheckWaitTime:
@@ -44,7 +44,7 @@ Parameters:
     Description: Time between transcription job checks
     Type: Number
   TranscriptsPrefix:
-    Default: /transcripts/
+    Default: /ChatTranscripts/
     Description: Name of folder where transcripts would be stored
     Type: String
   Language:
