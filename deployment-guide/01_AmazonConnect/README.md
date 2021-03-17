@@ -103,6 +103,7 @@ Please repeat the previous steps and import the following flows as well.
 #### English
 
 - [ChatFlow_en_US](../../assets/bot-definition/amazon-connect/en_US/ChatFlow_en_US)
+- [Outbound_en_US](../../assets/bot-definition/amazon-connect/en_US/OutboundCall_en_US)
 
 #### Español
 
