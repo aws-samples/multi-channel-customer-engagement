@@ -25,7 +25,7 @@ Metadata:
       ConnectInstanceId:
         default: "Connect Instance ID"
       ConnectInstanceName:
-        default: "Connect Instance Name"
+        default: "Connect Instance Alias"
       QueueId:
         default: "Queue ID"
       Currency:
