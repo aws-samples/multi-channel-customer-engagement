@@ -7,6 +7,7 @@ Metadata:
           default: "Amazon Connect Configuration"
         Parameters:
           - ConnectInstanceId
+          - ConnectInstanceName
           - ChatFlowId
           - QueueId
       - Label:
