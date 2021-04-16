@@ -541,7 +541,7 @@ Resources:
               - sts:AssumeRole
           Path: "/service-role/"
           ManagedPolicyArns:
-            - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+            - arn:aws:iam::aws:policy/AWSLambda_FullAccess
             - arn:aws:iam::aws:policy/AmazonLexFullAccess
             - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/Omnichannel-CodeBuildS3ReadOnlyPolicy-bash-${AWS::Region}"
             - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/CodeBuildBasePolicy-bash-${AWS::Region}"
