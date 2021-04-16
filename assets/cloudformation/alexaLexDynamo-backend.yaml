@@ -490,7 +490,8 @@ Resources:
                             "Effect": "Allow",
                             "Resource": [
                                 "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/bash",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/bash:*"
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/bash:*",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
