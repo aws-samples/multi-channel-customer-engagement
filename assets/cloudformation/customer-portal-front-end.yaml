@@ -53,9 +53,6 @@ Resources:
         ViewerCertificate:
           CloudFrontDefaultCertificate: true
           MinimumProtocolVersion: "TLSv1"
-        Restrictions:
-          GeoRestriction:
-            RestrictionType: "none"
         HttpVersion: "http2"
         IPV6Enabled: true
 
