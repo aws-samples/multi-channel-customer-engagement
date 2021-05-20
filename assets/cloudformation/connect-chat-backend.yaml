@@ -43,7 +43,7 @@ Resources:
     Type: AWS::Lambda::LayerVersion
     Properties:
       CompatibleRuntimes:
-        - "nodejs10.x"
+        - "nodejs14.x"
         - "nodejs8.10"
       Content:
         S3Bucket: !Join
@@ -63,7 +63,7 @@ Resources:
       Description: AWS Lambda Function to initiate the chat with the end user
       Handler: "startChatContact.handler"
       Role: !GetAtt InitiateChatLambdaExecutionRole.Arn
-      Runtime: "nodejs10.x"
+      Runtime: "nodejs14.x"
       MemorySize: 128
       Timeout: 30
       Layers:
@@ -124,7 +124,7 @@ Resources:
       Description: AWS Lambda Function to update the DDB with the S3 location of the chat transcript
       Handler: "updateChatDdbWithS3Key.handler"
       Role: !GetAtt UpdateDdbWithS3LocationLambdaExecutionRole.Arn
-      Runtime: "nodejs10.x"
+      Runtime: "nodejs14.x"
       MemorySize: 128
       Timeout: 30
       Environment:
@@ -200,7 +200,7 @@ Resources:
         S3Bucket: !Ref S3BucketAssets
         S3Key: "lambda-functions/S3BucketConfigurationLambda.zip"
       Timeout: 30
-      Runtime: "nodejs10.x"
+      Runtime: "nodejs14.x"
 
   S3BucketConfigurationLambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -291,7 +291,7 @@ Resources:
       Handler: customResourceHelper.handler
       MemorySize: 256
       Role: !GetAtt CustomResourceHelperIamRole.Arn
-      Runtime: nodejs10.x
+      Runtime: nodejs14.x
       Timeout: 300
 
   CustomResourceHelperIamRole:
