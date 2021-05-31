@@ -9,6 +9,12 @@ Resources:
     Type: "AWS::S3::Bucket"
     Properties:
       AccessControl: Private
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
 
   CloudFrontCloudFrontOriginAccessIdentity:
     Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"

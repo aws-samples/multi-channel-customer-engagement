@@ -367,6 +367,12 @@ Resources:
   S3Bucket:
     DeletionPolicy: Retain
     Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
       BucketName:
         Fn::GetAtt:
         - S3BucketNameResource
