@@ -456,6 +456,11 @@ Resources:
                               "Effect": "Allow",
                               "Action": "sns:Publish",
                               "Resource": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:multichannel_notification"
+                          },
+                          {
+                              "Effect": "Allow",
+                              "Action": "kms:GenerateDataKey",
+                              "Resource": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/*"
                           }
                       ]
                   }
@@ -645,12 +650,56 @@ Resources:
                     EncryptionDisabled: false
 
 ## SNS Topic
+    SNSKMSKey:
+      Type: 'AWS::KMS::Key'
+      Properties:
+        Description: KMS Key Policy
+        Enabled: true
+        EnableKeyRotation: true
+        KeyPolicy:
+          Version: 2012-10-17
+          Id: KmsKeyPolicy
+          Statement:
+            - Sid: SimpleKeyPolicyAllowAccountAdmin
+              Effect: Allow
+              Principal:
+                AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+              Action:
+                - 'kms:*'
+              Resource: '*'
+            - Sid: SimpleKeyPolicyAllowAccountUsage
+              Effect: Allow
+              Principal:
+                AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+              Action:
+                - 'kms:Decrypt'
+                - 'kms:Encrypt'
+                - 'kms:GenerateDataKey*'
+                - 'kms:DescribeKey'
+              Resource: '*'
+            - Sid: LambaLexRole
+              Effect: Allow
+              Principal:
+                AWS: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdalexRole}"
+              Action:
+                - 'kms:Decrypt'
+                - 'kms:Encrypt'
+                - 'kms:GenerateDataKey*'
+                - 'kms:DescribeKey'
+              Resource: '*'
+
+    SNSKeyAlias:
+      Type: "AWS::KMS::Alias"
+      Properties:
+        AliasName: !Sub "alias/${AWS::StackName}-SNSEncryptionKey"
+        TargetKeyId: !Ref SNSKMSKey          
 
     SNSTopic:
         Type: "AWS::SNS::Topic"
         Properties:
             DisplayName: "multichannel_notification"
             TopicName: "multichannel_notification"
+            KmsMasterKeyId: !Ref SNSKMSKey
 
     SNSTopicPolicy:
         Type: "AWS::SNS::TopicPolicy"
