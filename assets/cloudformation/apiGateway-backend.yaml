@@ -666,6 +666,9 @@ Resources:
     Properties:
       RetentionPeriodHours: 24
       ShardCount: 1
+      StreamEncryption:
+        EncryptionType: KMS
+        KeyId: alias/aws/kinesis
 
   LambdaSaveClickStream:
     Type: AWS::Lambda::Function
