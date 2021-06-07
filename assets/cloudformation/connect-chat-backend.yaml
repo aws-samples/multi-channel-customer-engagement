@@ -44,7 +44,6 @@ Resources:
     Properties:
       CompatibleRuntimes:
         - "nodejs14.x"
-        - "nodejs8.10"
       Content:
         S3Bucket: !Join
           - "."

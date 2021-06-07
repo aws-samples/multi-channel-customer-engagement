@@ -97,7 +97,7 @@ Resources:
         Fn::GetAtt:
         - ComprehendTranscriptLambdaRole
         - Arn
-      Runtime: python3.6
+      Runtime: python3.7
       Timeout: 3
     Type: AWS::Serverless::Function
     
@@ -176,7 +176,7 @@ Resources:
         Fn::GetAtt:
         - GetTranscribeJobLambdaTaskRole
         - Arn
-      Runtime: python3.6
+      Runtime: python3.7
       Timeout: 3
     Type: AWS::Serverless::Function
 
@@ -208,7 +208,7 @@ Resources:
         Fn::GetAtt:
         - S3BucketResourceRole
         - Arn
-      Runtime: python3.6
+      Runtime: python3.7
       Timeout: 3
     Type: AWS::Serverless::Function
   S3BucketNameResource:
@@ -262,7 +262,7 @@ Resources:
         Fn::GetAtt:
         - SaveTranscriptionToS3LambdaTaskRole
         - Arn
-      Runtime: python3.6
+      Runtime: python3.7
       Timeout: 3
       Environment:
         Variables:
@@ -360,7 +360,7 @@ Resources:
         Fn::GetAtt:
         - StartTranscribeExecutionLambdaRole
         - Arn
-      Runtime: python3.6
+      Runtime: python3.7
       Timeout: 3
     Type: AWS::Serverless::Function
   
@@ -428,7 +428,7 @@ Resources:
         Fn::GetAtt:
         - SubmitTranscribeJobLambdaTaskRole
         - Arn
-      Runtime: python3.6
+      Runtime: python3.7
       Timeout: 3
     Type: AWS::Serverless::Function
 
