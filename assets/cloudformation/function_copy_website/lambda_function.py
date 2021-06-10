@@ -33,3 +33,6 @@ def copy_website(event, _):
 def delete_website(_, __):
     for object in s3_resource.Bucket(destinationbucket).objects.all():
         s3.delete_object(Bucket=destinationbucket, Key=object.key)
+
+    bucket = s3_resource.Bucket(destinationbucket)
+    bucket.object_versions.delete()    
